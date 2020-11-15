@@ -1,7 +1,5 @@
 package com.example.minirobots.fragments
 
-import ANIMATION_FAST_MILLIS
-import ANIMATION_SLOW_MILLIS
 import android.content.Context
 import android.content.res.Configuration
 import android.graphics.Color
@@ -31,6 +29,10 @@ import java.util.concurrent.Executors
 import kotlin.math.abs
 import kotlin.math.max
 import kotlin.math.min
+
+/** Milliseconds used for UI animations */
+const val ANIMATION_FAST_MILLIS = 50L
+const val ANIMATION_SLOW_MILLIS = 100L
 
 class CameraFragment : Fragment() {
 
@@ -134,7 +136,7 @@ class CameraFragment : Fragment() {
     /** Initialize CameraX, and prepare to bind the camera use cases  */
     private fun setUpCamera() {
         val cameraProviderFuture = ProcessCameraProvider.getInstance(requireContext())
-        cameraProviderFuture.addListener(Runnable {
+        cameraProviderFuture.addListener({
 
             // CameraProvider
             cameraProvider = cameraProviderFuture.get()
@@ -207,8 +209,6 @@ class CameraFragment : Fragment() {
     }
 
     /**
-     *  [androidx.camera.core.ImageAnalysisConfig] requires enum value of
-     *  [androidx.camera.core.AspectRatio]. Currently it has values of 4:3 & 16:9.
      *
      *  Detecting the most suitable ratio for dimensions provided in @params by counting absolute
      *  of preview ratio to one of the provided values.
@@ -248,9 +248,6 @@ class CameraFragment : Fragment() {
                             Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                         }
 
-                        override fun onCaptureSuccess(image: ImageProxy) {
-                            super.onCaptureSuccess(image)
-                        }
                     })
 
                 // We can only change the foreground Drawable using API level 23+ API
@@ -279,16 +276,8 @@ class CameraFragment : Fragment() {
     }
 
     companion object {
-
         private const val TAG = "Minirobots"
         private const val RATIO_4_3_VALUE = 4.0 / 3.0
         private const val RATIO_16_9_VALUE = 16.0 / 9.0
-
-        /** Helper function used to create a timestamped file */
-        private fun createFile(baseFolder: File, format: String, extension: String) =
-            File(
-                baseFolder, SimpleDateFormat(format, Locale.US)
-                    .format(System.currentTimeMillis()) + extension
-            )
     }
 }

@@ -1,13 +1,8 @@
 package com.example.minirobots
 
-import android.content.Context
-import android.content.Intent
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.view.KeyEvent
 import android.widget.FrameLayout
-import androidx.localbroadcastmanager.content.LocalBroadcastManager
-import java.io.File
+import androidx.appcompat.app.AppCompatActivity
 
 /**
  * Main entry point into our app. This app follows the single-activity pattern, and all
