@@ -13,6 +13,7 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageButton
+import android.widget.Toast
 import androidx.camera.core.*
 import androidx.camera.lifecycle.ProcessCameraProvider
 import androidx.camera.view.PreviewView
@@ -21,6 +22,8 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import androidx.navigation.Navigation
 import com.example.minirobots.R
+import com.google.mlkit.vision.common.InputImage
+import com.google.mlkit.vision.text.TextRecognition
 import java.io.File
 import java.text.SimpleDateFormat
 import java.util.*
@@ -248,6 +251,22 @@ class CameraFragment : Fragment() {
                             Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
                         }
 
+                        override fun onCaptureSuccess(image: ImageProxy) {
+                            super.onCaptureSuccess(image)
+                            val mediaImage = image.image
+                            if (mediaImage != null) {
+                                val inputImage = InputImage.fromMediaImage(mediaImage, image.imageInfo.rotationDegrees)
+                                val recognizer = TextRecognition.getClient()
+                                val result = recognizer.process(inputImage)
+                                    .addOnSuccessListener { visionText ->
+                                       Toast.makeText(activity, visionText.text, Toast.LENGTH_LONG).show()
+                                    }
+                                    .addOnFailureListener { e ->
+                                        // Task failed with an exception
+                                        // ...
+                                    }
+                            }
+                        }
                     })
 
                 // We can only change the foreground Drawable using API level 23+ API
