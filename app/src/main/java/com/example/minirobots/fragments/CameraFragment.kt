@@ -9,9 +9,7 @@ import android.os.Build
 import android.os.Bundle
 import android.util.DisplayMetrics
 import android.util.Log
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.ImageButton
 import android.widget.Toast
 import androidx.camera.core.*
@@ -24,8 +22,6 @@ import androidx.navigation.Navigation
 import com.example.minirobots.R
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.TextRecognition
-import java.io.File
-import java.text.SimpleDateFormat
 import java.util.*
 import java.util.concurrent.ExecutorService
 import java.util.concurrent.Executors
@@ -37,7 +33,8 @@ import kotlin.math.min
 const val ANIMATION_FAST_MILLIS = 50L
 const val ANIMATION_SLOW_MILLIS = 100L
 
-class CameraFragment : Fragment() {
+//Passing fragment_camera to the fragment constructor allows us to avoid overriding onCreateView() to inflate the view.
+class CameraFragment : Fragment(R.layout.fragment_camera) {
 
     private lateinit var container: ConstraintLayout
     private lateinit var viewFinder: PreviewView
@@ -92,9 +89,6 @@ class CameraFragment : Fragment() {
         // Unregister the broadcast receivers and listeners
         displayManager.unregisterDisplayListener(displayListener)
     }
-
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? =
-        inflater.inflate(R.layout.fragment_camera, container, false)
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -169,8 +163,7 @@ class CameraFragment : Fragment() {
         val rotation = viewFinder.display.rotation
 
         // CameraProvider
-        val cameraProvider = cameraProvider
-            ?: throw IllegalStateException("Camera initialization failed.")
+        val cameraProvider = cameraProvider ?: throw IllegalStateException("Camera initialization failed.")
 
         // CameraSelector
         val cameraSelector = CameraSelector.Builder().requireLensFacing(lensFacing).build()
@@ -259,7 +252,7 @@ class CameraFragment : Fragment() {
                                 val recognizer = TextRecognition.getClient()
                                 val result = recognizer.process(inputImage)
                                     .addOnSuccessListener { visionText ->
-                                       Toast.makeText(activity, visionText.text, Toast.LENGTH_LONG).show()
+                                        Toast.makeText(activity, visionText.text, Toast.LENGTH_LONG).show()
                                     }
                                     .addOnFailureListener { e ->
                                         // Task failed with an exception

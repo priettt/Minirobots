@@ -3,6 +3,7 @@ package com.example.minirobots
 import android.os.Bundle
 import android.widget.FrameLayout
 import androidx.appcompat.app.AppCompatActivity
+import com.example.minirobots.databinding.ActivityMainBinding
 
 /**
  * Main entry point into our app. This app follows the single-activity pattern, and all
@@ -13,7 +14,8 @@ class MainActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        setContentView(R.layout.activity_main)
-        container = findViewById(R.id.fragment_container)
+        val binding = ActivityMainBinding.inflate(layoutInflater)
+        container = binding.fragmentContainer
+        setContentView(binding.root)
     }
 }
