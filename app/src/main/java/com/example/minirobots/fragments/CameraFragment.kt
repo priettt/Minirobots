@@ -86,7 +86,7 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
         // Shut down our background executor
         cameraExecutor.shutdown()
 
-        // Unregister the broadcast receivers and listeners
+        // Unregister the displayListener
         displayManager.unregisterDisplayListener(displayListener)
     }
 
