@@ -205,7 +205,6 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
     }
 
     /**
-     *
      *  Detecting the most suitable ratio for dimensions provided in @params by counting absolute
      *  of preview ratio to one of the provided values.
      *
@@ -234,47 +233,50 @@ class CameraFragment : Fragment(R.layout.fragment_camera) {
 
         // Listener for button used to capture photo
         controls.findViewById<ImageButton>(R.id.camera_capture_button).setOnClickListener {
+            onCameraCaptureButtonPressed()
+        }
+    }
 
-            // Get a stable reference of the modifiable image capture use case
-            imageCapture?.let { imageCapture ->
-                // Setup image capture listener which is triggered after photo has been taken
-                imageCapture.takePicture(
-                    cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
-                        override fun onError(exc: ImageCaptureException) {
-                            Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
-                        }
+    private fun onCameraCaptureButtonPressed() {
+        // Get a stable reference of the modifiable image capture use case
+        imageCapture?.let { imageCapture ->
+            // Setup image capture listener which is triggered after photo has been taken
+            imageCapture.takePicture(cameraExecutor, object : ImageCapture.OnImageCapturedCallback() {
 
-                        override fun onCaptureSuccess(image: ImageProxy) {
-                            super.onCaptureSuccess(image)
-                            val mediaImage = image.image
-                            if (mediaImage != null) {
-                                val inputImage = InputImage.fromMediaImage(mediaImage, image.imageInfo.rotationDegrees)
-                                val recognizer = TextRecognition.getClient()
-                                val result = recognizer.process(inputImage)
-                                    .addOnSuccessListener { visionText ->
-                                        Toast.makeText(activity, visionText.text, Toast.LENGTH_LONG).show()
-                                    }
-                                    .addOnFailureListener { e ->
-                                        // Task failed with an exception
-                                        // ...
-                                    }
-                            }
-                        }
-                    })
-
-                // We can only change the foreground Drawable using API level 23+ API
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
-                    // Display flash animation to indicate that photo was captured
-                    container.postDelayed({
-                        container.foreground = ColorDrawable(Color.WHITE)
-                        container.postDelayed(
-                            { container.foreground = null }, ANIMATION_FAST_MILLIS
-                        )
-                    }, ANIMATION_SLOW_MILLIS)
+                override fun onError(exc: ImageCaptureException) {
+                    Log.e(TAG, "Photo capture failed: ${exc.message}", exc)
+                    Toast.makeText(requireContext(), "Photo capture failed", Toast.LENGTH_LONG).show()
                 }
+
+                @androidx.camera.core.ExperimentalGetImage
+                override fun onCaptureSuccess(imageProxy: ImageProxy) {
+                    super.onCaptureSuccess(imageProxy)
+                    imageProxy.image?.let { unwrappedImage ->
+                        val inputImage = InputImage.fromMediaImage(unwrappedImage, imageProxy.imageInfo.rotationDegrees)
+                        val recognizer = TextRecognition.getClient()
+                        val result = recognizer.process(inputImage)
+                            .addOnSuccessListener { visionText ->
+                                Toast.makeText(activity, visionText.text, Toast.LENGTH_LONG).show()
+                            }
+                            .addOnFailureListener { e ->
+                                // Task failed with an exception
+                                // ...
+                            }
+                    }
+                }
+            })
+
+            // We can only change the foreground Drawable using API level 23+ API
+            if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+                // Display flash animation to indicate that photo was captured
+                container.postDelayed({
+                    container.foreground = ColorDrawable(Color.WHITE)
+                    container.postDelayed(
+                        { container.foreground = null }, ANIMATION_FAST_MILLIS
+                    )
+                }, ANIMATION_SLOW_MILLIS)
             }
         }
-
     }
 
     /** Returns true if the device has an available back camera. False otherwise */
