@@ -17,32 +17,11 @@
 <navigation
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    app:startDestination="@id/permissions_fragment">
-
+    xmlns:tools="http://schemas.android.com/tools"
+    app:startDestination="@id/homeFragment">
     <fragment
-        android:id="@+id/permissions_fragment"
-        android:name="com.example.minirobots.fragments.PermissionsFragment"
-        android:label="PermissionsFragment" >
-
-        <action
-            android:id="@+id/action_permissions_to_camera"
-            app:destination="@id/camera_fragment"
-            app:popUpTo="@id/permissions_fragment"
-            app:popUpToInclusive="true" />
-
-    </fragment>
-
-    <fragment
-        android:id="@+id/camera_fragment"
-        android:name="com.example.minirobots.fragments.CameraFragment"
-        android:label="CameraFragment" >
-
-        <action
-            android:id="@+id/action_camera_to_permissions"
-            app:destination="@id/permissions_fragment"
-            app:popUpTo="@id/camera_fragment"
-            app:popUpToInclusive="true"/>
-
-    </fragment>
-
+        android:id="@+id/homeFragment"
+        android:name="com.example.minirobots.home.HomeFragment"
+        android:label="fragment_home"
+        tools:layout="@layout/fragment_home" />
 </navigation>
