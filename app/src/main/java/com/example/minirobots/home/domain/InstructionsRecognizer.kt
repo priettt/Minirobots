@@ -2,6 +2,7 @@ package com.example.minirobots.home.domain
 
 import android.content.Context
 import android.net.Uri
+import android.util.Log
 import com.example.minirobots.utilities.Result
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
@@ -39,9 +40,45 @@ class MlKitInstructionsRecognizer @Inject constructor(
 class MlKitTextInstructionsExtractor @Inject constructor() {
     fun gatherInstructions(mlKitText: Text): List<Instruction> {
         val listOfInstructions = mutableListOf<Instruction>()
-        mlKitText.textBlocks.forEach { _ ->
-            listOfInstructions.add(Instruction(InstructionType.BACKWARD))
+        val listOfInstructionsWithLocation = mutableListOf<InstructionWithLocation>()
+        for (block in mlKitText.textBlocks) {
+//            Log.d("MINIROBOTS", "Block ----------------------------------------------------------------------------------")
+//            Log.d("MINIROBOTS", "Block text: ${block.text}")
+//            Log.d("MINIROBOTS", "Block cornerPoints: ${block.cornerPoints?.get(0)?.x}")
+//            Log.d("MINIROBOTS", "Block frame: ${block.boundingBox}")
+            for (line in block.lines) {
+//                Log.d("MINIROBOTS", "Line -----------------------------------------")
+//                Log.d("MINIROBOTS", "Line text: ${line.text}")
+//                Log.d("MINIROBOTS", "Line cornerPoints: ${line.cornerPoints?.get(0)?.x}")
+////                Log.d("MINIROBOTS", "Line frame: ${line.boundingBox}")
+                for (element in line.elements) {
+//                    Log.d("MINIROBOTS", "Element -----------------------------------------")
+//                    Log.d("MINIROBOTS", "Element text: ${element.text}")
+//                    Log.d("MINIROBOTS", "Element cornerPoints: ${element.cornerPoints?.get(0)?.x}")
+//                    Log.d("MINIROBOTS", "Element frame: ${element.boundingBox}")
+                    listOfInstructionsWithLocation.add(
+                        InstructionWithLocation(
+                            element.text,
+                            element.cornerPoints?.get(0)?.x ?: 0,
+                            element.cornerPoints?.get(0)?.y ?: 0
+                        )
+                    )
+                }
+            }
+        }
+        listOfInstructionsWithLocation.sortBy { it.x }
+        listOfInstructionsWithLocation.forEach {
+            Log.d("MINIROBOTS", "Text: ${it.text} - X: ${it.x} - Y: ${it.y}")
+        }
+        listOfInstructionsWithLocation.sortBy { it.y }
+        listOfInstructionsWithLocation.forEach {
+            Log.d("MINIROBOTS", "Text: ${it.text} - X: ${it.x} - Y: ${it.y}")
         }
         return listOfInstructions
     }
 }
+
+data class InstructionWithLocation(
+    val text: String,
+    val x: Int, val y: Int
+)
