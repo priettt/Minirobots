@@ -21,18 +21,14 @@ class MlKitInstructionsService @Inject constructor(
 ) : InstructionsService {
     override suspend fun getInstructions(uri: Uri, context: Context): Result<List<Instruction>> =
         withContext(dispatcher) {
-            return@withContext try {
-                //Process with MLKit
+            try {
                 val recognizer = TextRecognition.getClient()
                 val inputImage = InputImage.fromFilePath(context, uri)
-                val recognizerResult = recognizer.process(inputImage).await()
-                recognizer.close()
-
-                //Translate MLKit Text to instructions
-                val instructionsList = MLKitTextMapper.getInstructions(recognizerResult)
-                Result.Success(instructionsList)
-            } catch (exception: IOException) {
-                Result.Error(exception)
+                val mlKitText = recognizer.process(inputImage).await()
+                    ?: return@withContext Result.Error(Exception("MlKitRecognizerFailure"))
+                return@withContext Result.Success(MLKitTextMapper.getInstructions(mlKitText))
+            } catch (e: Exception) {
+                return@withContext Result.Error(IOException())
             }
         }
 }

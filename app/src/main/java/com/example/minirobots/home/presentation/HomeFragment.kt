@@ -67,7 +67,7 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
 
     private fun goToInstructionRecognitionScreen(instructions: List<Instruction>) {
         Toast.makeText(requireContext(), instructions.joinToString { instruction ->
-            instruction.toString()
+            instruction.type.toString()
         }, Toast.LENGTH_SHORT).show()
     }
 

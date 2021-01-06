@@ -8,13 +8,13 @@ class MLKitTextMapper @Inject constructor(
     private val instructionTypeRecognizer: InstructionRecognizer
 ) {
     fun getInstructions(mlKitText: Text): List<Instruction> {
-        val listOfInstructions = mutableListOf<Instruction>()
+        Log.i("MINIROBOTS", "MAPPING ${System.nanoTime()}")
+        Log.i("MINIROBOTS", "MLKIT TEXT BLOCKS SIZE = ${mlKitText.textBlocks.size}")
         val listOfInstructionsWithLocation = mutableListOf<InstructionWithLocation>()
         for (block in mlKitText.textBlocks) {
             for (line in block.lines) {
                 val instructionType = instructionTypeRecognizer.getInstructionType(line.text)
                 instructionType?.let {
-                    listOfInstructions.add(Instruction(it))
                     listOfInstructionsWithLocation.add(
                         InstructionWithLocation(
                             it,
@@ -25,22 +25,15 @@ class MLKitTextMapper @Inject constructor(
                 }
             }
         }
-        listOfInstructionsWithLocation.sortBy { it.x }
-        listOfInstructionsWithLocation.forEach {
-            Log.i("MINIROBOTS", "Text: ${it.text} - X: ${it.x} - Y: ${it.y}")
-        }
-        Log.i("MINIROBOTS", "SORTING Y ---------------------------")
-        listOfInstructionsWithLocation.sortBy { it.y }
-        listOfInstructionsWithLocation.forEach {
-            Log.i("MINIROBOTS", "Text: ${it.text} - X: ${it.x} - Y: ${it.y}")
-        }
-        Log.d("MINIROBOTS", "Leaving Gatherer")
-        return listOfInstructions
+
+        return listOfInstructionsWithLocation
+            .sortedBy { it.x }
+            .map { Instruction(it.type) }
     }
 }
 
 data class InstructionWithLocation(
-    val text: InstructionType,
+    val type: InstructionType,
     val x: Int, val y: Int
 )
 

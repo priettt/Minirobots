@@ -32,7 +32,6 @@ class LevenshteinDistanceCalculator @Inject constructor() : StringDistanceCalcul
         }
         return newCost[second.length]
     }
-
 }
 
 interface StringDistanceCalculator {

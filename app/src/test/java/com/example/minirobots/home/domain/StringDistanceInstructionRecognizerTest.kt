@@ -1,8 +1,6 @@
 package com.example.minirobots.home.domain
 
-import io.mockk.MockKAnnotations
-import io.mockk.every
-import io.mockk.impl.annotations.MockK
+import junit.framework.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -10,21 +8,36 @@ internal class StringDistanceInstructionRecognizerTest {
 
     private lateinit var recognizer: StringDistanceInstructionRecognizer
 
-    @MockK
-    lateinit var stringDistanceCalculator: StringDistanceCalculator
-
     @Before
     fun setUp() {
-        MockKAnnotations.init(this, relaxUnitFun = true)
-        every { stringDistanceCalculator.getDistance(any(), any()) } returns 10
-        every { stringDistanceCalculator.getDistance(any(), "COLOR AZUL") } returns 0
-        recognizer = StringDistanceInstructionRecognizer(stringDistanceCalculator)
+        recognizer = StringDistanceInstructionRecognizer(LevenshteinDistanceCalculator())
     }
 
     @Test
-    fun givenEqualStrings_distanceShouldBeZero() {
+    fun givenSameInstructionString_shouldReturnInstruction() {
         val text = "COLOR AZUL"
         val instructionType = InstructionType.COLOR_AZUL
-        assert(recognizer.getInstructionType(text) == instructionType)
+        assertEquals(instructionType, recognizer.getInstructionType(text))
+    }
+
+    @Test
+    fun givenStringWithDistanceOne_shouldReturnInstruction() {
+        val text = "COLOR 4ZUL"
+        val instructionType = InstructionType.COLOR_AZUL
+        assertEquals(instructionType, recognizer.getInstructionType(text))
+    }
+
+    @Test
+    fun givenStringWithDistanceThree_shouldReturnInstruction() {
+        val text = "OR AZUL"
+        val instructionType = InstructionType.COLOR_AZUL.also {
+            assertEquals(recognizer.getInstructionType(text), it)
+        }
+    }
+
+    @Test
+    fun givenStringTooDifferent_shouldReturnNull() {
+        val text = "COL"
+        assertEquals(null, recognizer.getInstructionType(text))
     }
 }
