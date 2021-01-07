@@ -8,8 +8,6 @@ class MLKitTextMapper @Inject constructor(
     private val instructionTypeRecognizer: InstructionRecognizer
 ) {
     fun getInstructions(mlKitText: Text): List<Instruction> {
-        Log.i("MINIROBOTS", "MAPPING ${System.nanoTime()}")
-        Log.i("MINIROBOTS", "MLKIT TEXT BLOCKS SIZE = ${mlKitText.textBlocks.size}")
         val listOfInstructionsWithLocation = mutableListOf<InstructionWithLocation>()
         for (block in mlKitText.textBlocks) {
             for (line in block.lines) {

@@ -1,9 +1,15 @@
 package com.example.minirobots.home.domain
 
-data class Instruction(val type: InstructionType)
+import android.os.Parcelable
+import kotlinx.android.parcel.Parcelize
+
+@Parcelize
+data class Instruction(val type: InstructionType) : Parcelable
+
 data class InstructionWithCoordinates(val type: InstructionType, val xLocation: Int, val yLocation: Int)
 
-enum class InstructionType(val text: String) {
+@Parcelize
+enum class InstructionType(val text: String) : Parcelable {
     ANGULO_30("ANGULO 30"),
     ANGULO_36("ANGULO 36"),
     ANGULO_45("ANGULO 45"),

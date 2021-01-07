@@ -16,7 +16,7 @@ interface InstructionsService {
 }
 
 class MlKitInstructionsService @Inject constructor(
-    private val MLKitTextMapper: MLKitTextMapper,
+    private val mlKitTextMapper: MLKitTextMapper,
     private val dispatcher: CoroutineDispatcher
 ) : InstructionsService {
     override suspend fun getInstructions(uri: Uri, context: Context): Result<List<Instruction>> =
@@ -26,7 +26,7 @@ class MlKitInstructionsService @Inject constructor(
                 val inputImage = InputImage.fromFilePath(context, uri)
                 val mlKitText = recognizer.process(inputImage).await()
                     ?: return@withContext Result.Error(Exception("MlKitRecognizerFailure"))
-                return@withContext Result.Success(MLKitTextMapper.getInstructions(mlKitText))
+                return@withContext Result.Success(mlKitTextMapper.getInstructions(mlKitText))
             } catch (e: Exception) {
                 return@withContext Result.Error(IOException())
             }

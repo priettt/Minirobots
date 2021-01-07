@@ -23,5 +23,17 @@
         android:id="@+id/homeFragment"
         android:name="com.example.minirobots.home.presentation.HomeFragment"
         android:label="fragment_home"
-        tools:layout="@layout/fragment_home" />
+        tools:layout="@layout/fragment_home" >
+        <action
+            android:id="@+id/action_homeFragment_to_instructionsScreenFragment"
+            app:destination="@id/instructionsScreenFragment" />
+    </fragment>
+    <fragment
+        android:id="@+id/instructionsScreenFragment"
+        android:name="com.example.minirobots.instructions.presentation.InstructionsScreenFragment"
+        android:label="InstructionsScreenFragment" >
+        <argument
+            android:name="instructions"
+            app:argType="com.example.minirobots.home.domain.Instruction[]" />
+    </fragment>
 </navigation>

@@ -31,8 +31,8 @@ class HomeViewModel @ViewModelInject constructor(
     fun onTakePictureCompleted() {
         viewModelScope.launch {
             when(val result = instructionsService.getInstructions(pictureUri, context)) {
-                is Result.Success -> state.value = HomeUiState.ImageRecognitionSuccess(result.data)
-                is Result.Error -> state.value = HomeUiState.ImageRecognitionError(result.exception)
+                is Result.Success -> state.value = HomeUiState.InstructionsRecognitionSuccess(result.data)
+                is Result.Error -> state.value = HomeUiState.InstructionsRecognitionFailure(result.exception)
             }
         }
     }
@@ -40,6 +40,6 @@ class HomeViewModel @ViewModelInject constructor(
 }
 
 sealed class HomeUiState {
-    data class ImageRecognitionSuccess(val instructions: List<Instruction>) : HomeUiState()
-    data class ImageRecognitionError(val exception: Exception) : HomeUiState()
+    data class InstructionsRecognitionSuccess(val instructions: List<Instruction>) : HomeUiState()
+    data class InstructionsRecognitionFailure(val exception: Exception) : HomeUiState()
 }

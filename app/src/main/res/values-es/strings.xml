@@ -4,4 +4,5 @@
     <string name="camera_fragment_photo_capture_error">Hubo un error intentando tomar la foto. Por favor, intenta de nuevo.</string>
     <string name="home_take_picture_text">Toma una foto de las instrucciones que quieres enviarle al robot</string>
     <string name="home_take_picture_button">Tomar foto</string>
+    <string name="instructions_screen_recognized_instructions_text">Fueron encontradas las siguientes instrucciones:</string>
 </resources>
