@@ -6,8 +6,6 @@ import kotlinx.android.parcel.Parcelize
 @Parcelize
 data class Instruction(val type: InstructionType) : Parcelable
 
-data class InstructionWithCoordinates(val type: InstructionType, val xLocation: Int, val yLocation: Int)
-
 @Parcelize
 enum class InstructionType(val text: String) : Parcelable {
     ANGULO_30("ANGULO 30"),
@@ -62,4 +60,99 @@ enum class InstructionType(val text: String) : Parcelable {
     TOCAR_CORCHEA("TOCAR CORCHEA"),
     TOCAR_MELODIA("TOCAR MELODIA"),
     TOCAR_NEGRA("TOCAR NEGRA")
+}
+
+interface InstructionInterface {
+    fun getJson(): String
+}
+
+data class MovementInstruction(val direction: MovementDirection, val steps: Int) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+enum class MovementDirection {
+    FORWARD,
+    BACKWARD
+}
+
+data class LoopInstruction(val steps: Int) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+data class RotationInstruction(val direction: RotationDirection, val angle: Int) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+enum class RotationDirection {
+    LEFT,
+    RIGHT
+}
+
+data class StartInstruction(val instructionType: StartInstructionType) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+enum class StartInstructionType {
+    PROGRAM,
+    FUNCTION
+}
+
+data class PencilInstruction(val stopWriting: Boolean) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+class FunctionInstruction : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+data class MusicInstruction(val type: MusicInstructionType, val note: MusicInstructionNote) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+enum class MusicInstructionType {
+    QUARTER,
+    EIGHTH,
+    MELODY
+}
+
+enum class MusicInstructionNote {
+    A,
+    B,
+    C,
+    D,
+    E,
+    F,
+    G,
+    SILENCE,
+    RANDOM
+}
+
+data class LedsInstruction(val color: LedsColor) : InstructionInterface {
+    override fun getJson(): String {
+        TODO("Not yet implemented")
+    }
+}
+
+enum class LedsColor {
+    RED,
+    BLUE,
+    GREEN,
+    PINK,
+    RANDOM,
+    YELLOW,
+    LIGHT_BLUE,
 }

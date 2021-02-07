@@ -80,4 +80,5 @@ class HomeFragment : Fragment(R.layout.fragment_home) {
         viewModel.onTakePictureUriCreated(pictureUri)
         getContent.launch(pictureUri)
     }
+
 }

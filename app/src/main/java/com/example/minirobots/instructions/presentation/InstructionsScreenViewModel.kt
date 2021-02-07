@@ -9,7 +9,7 @@ import com.example.minirobots.home.presentation.HomeUiState
 import kotlinx.coroutines.flow.MutableStateFlow
 
 class InstructionsScreenViewModel @ViewModelInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
+    @Assisted private val savedStateHandle: SavedStateHandle
 ) : ViewModel() {
 
     val instructions: MutableStateFlow<String?> = MutableStateFlow(null)

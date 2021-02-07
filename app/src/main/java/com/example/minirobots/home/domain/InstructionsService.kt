@@ -8,6 +8,7 @@ import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.TextRecognizer
+import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
 import kotlinx.coroutines.withContext
@@ -15,20 +16,21 @@ import java.io.IOException
 import javax.inject.Inject
 
 interface InstructionsService {
-    suspend fun getInstructions(uri: Uri, context: Context): Result<List<Instruction>>
+    suspend fun getInstructions(uri: Uri): Result<List<Instruction>>
 }
 
 class MlKitInstructionsService @Inject constructor(
     private val mlKitTextMapper: MLKitTextMapper,
     @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
     @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
+    @ApplicationContext private val context: Context
 ) : InstructionsService {
 
     private val recognizer: TextRecognizer by lazy {
         TextRecognition.getClient()
     }
 
-    override suspend fun getInstructions(uri: Uri, context: Context): Result<List<Instruction>> {
+    override suspend fun getInstructions(uri: Uri): Result<List<Instruction>> {
         val inputImage = getInputImage(uri, context) ?: return Result.failure(IOException())
         val mlKitText = processImage(inputImage)
         val instructions = mapMLKitText(mlKitText)
@@ -37,7 +39,6 @@ class MlKitInstructionsService @Inject constructor(
         } else {
             Result.success(instructions)
         }
-
     }
 
     private suspend fun getInputImage(uri: Uri, context: Context) = withContext(ioDispatcher) {

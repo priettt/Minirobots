@@ -12,7 +12,6 @@ import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
 class HomeViewModel @ViewModelInject constructor(
-    @ApplicationContext private val context: Context,
     private val instructionsService: InstructionsService,
 ) : ViewModel() {
 
@@ -26,7 +25,7 @@ class HomeViewModel @ViewModelInject constructor(
 
     fun onTakePictureCompleted() {
         viewModelScope.launch {
-            instructionsService.getInstructions(pictureUri, context).onSuccess {
+            instructionsService.getInstructions(pictureUri).onSuccess {
                 state.value = HomeUiState.InstructionsRecognitionSuccess(it)
             }.onFailure {
                 state.value = HomeUiState.InstructionsRecognitionFailure(it)
