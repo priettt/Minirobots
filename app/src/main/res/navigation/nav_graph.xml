@@ -18,22 +18,19 @@
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    app:startDestination="@id/homeFragment">
+    app:startDestination="@id/takePictureFragment">
     <fragment
-        android:id="@+id/homeFragment"
-        android:name="com.example.minirobots.home.presentation.HomeFragment"
-        android:label="fragment_home"
-        tools:layout="@layout/fragment_home" >
+        android:id="@+id/takePictureFragment"
+        android:name="com.example.minirobots.home.presentation.TakePictureFragment"
+        android:label="fragment_take_picture"
+        tools:layout="@layout/fragment_take_picture">
         <action
-            android:id="@+id/action_homeFragment_to_instructionsScreenFragment"
+            android:id="@+id/action_takePictureFragment_to_instructionsScreenFragment"
             app:destination="@id/instructionsScreenFragment" />
     </fragment>
     <fragment
         android:id="@+id/instructionsScreenFragment"
         android:name="com.example.minirobots.instructions.presentation.InstructionsScreenFragment"
         android:label="InstructionsScreenFragment" >
-        <argument
-            android:name="instructions"
-            app:argType="com.example.minirobots.home.domain.Instruction[]" />
     </fragment>
 </navigation>

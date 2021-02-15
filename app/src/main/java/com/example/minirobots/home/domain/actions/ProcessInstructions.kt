@@ -1,13 +1,13 @@
-package com.example.minirobots.home.domain
+package com.example.minirobots.home.domain.actions
 
 import android.content.Context
 import android.net.Uri
 import com.example.minirobots.di.DefaultDispatcher
-import com.example.minirobots.di.IoDispatcher
+import com.example.minirobots.home.domain.MLKitTextMapper
+import com.example.minirobots.home.infrastructure.InstructionsRepository
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
-import com.google.mlkit.vision.text.TextRecognizer
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
@@ -15,33 +15,28 @@ import kotlinx.coroutines.withContext
 import java.io.IOException
 import javax.inject.Inject
 
-interface InstructionsService {
-    suspend fun getInstructions(uri: Uri): Result<List<Instruction>>
-}
-
-class MlKitInstructionsService @Inject constructor(
+class ProcessInstructions @Inject constructor(
     private val mlKitTextMapper: MLKitTextMapper,
-    @IoDispatcher private val ioDispatcher: CoroutineDispatcher,
-    @DefaultDispatcher private val defaultDispatcher: CoroutineDispatcher,
-    @ApplicationContext private val context: Context
-) : InstructionsService {
+    @DefaultDispatcher private val dispatcher: CoroutineDispatcher,
+    @ApplicationContext private val context: Context,
+    private val instructionsRepository: InstructionsRepository
+) {
 
-    private val recognizer: TextRecognizer by lazy {
-        TextRecognition.getClient()
-    }
+    private val recognizer = TextRecognition.getClient()
 
-    override suspend fun getInstructions(uri: Uri): Result<List<Instruction>> {
+    suspend operator fun invoke(uri: Uri): Result<Unit> {
         val inputImage = getInputImage(uri, context) ?: return Result.failure(IOException())
         val mlKitText = processImage(inputImage)
         val instructions = mapMLKitText(mlKitText)
         return if (instructions.isEmpty()) {
             Result.failure(Exception("Empty instructions result"))
         } else {
-            Result.success(instructions)
+            instructionsRepository.overwrite(instructions)
+            Result.success(Unit)
         }
     }
 
-    private suspend fun getInputImage(uri: Uri, context: Context) = withContext(ioDispatcher) {
+    private suspend fun getInputImage(uri: Uri, context: Context) = withContext(dispatcher) {
         return@withContext try {
             InputImage.fromFilePath(context, uri)
         } catch (e: IOException) {
@@ -49,11 +44,11 @@ class MlKitInstructionsService @Inject constructor(
         }
     }
 
-    private suspend fun processImage(inputImage: InputImage) = withContext(defaultDispatcher) {
+    private suspend fun processImage(inputImage: InputImage) = withContext(dispatcher) {
         return@withContext recognizer.process(inputImage).await()
     }
 
-    private suspend fun mapMLKitText(mlKitText: Text) = withContext(defaultDispatcher) {
+    private suspend fun mapMLKitText(mlKitText: Text) = withContext(dispatcher) {
         return@withContext mlKitTextMapper.getInstructions(mlKitText)
     }
 }

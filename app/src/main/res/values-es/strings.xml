@@ -2,7 +2,8 @@
 <resources>
     <string name="capture_button_alt">Capturar</string>
     <string name="camera_fragment_photo_capture_error">Hubo un error intentando tomar la foto. Por favor, intenta de nuevo.</string>
-    <string name="home_take_picture_text">Toma una foto de las instrucciones que quieres enviarle al robot</string>
-    <string name="home_take_picture_button">Tomar foto</string>
+    <string name="take_picture_title">Toma una foto de las instrucciones que quieres enviarle al robot</string>
+    <string name="take_picture_button">Tomar foto</string>
+    <string name="take_picture_get_from_gallery_button">Usar foto existente</string>
     <string name="instructions_screen_recognized_instructions_text">Fueron encontradas las siguientes instrucciones:</string>
 </resources>

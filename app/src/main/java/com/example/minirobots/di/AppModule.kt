@@ -1,6 +1,11 @@
 package com.example.minirobots.di
 
-import com.example.minirobots.home.domain.*
+import com.example.minirobots.home.domain.InstructionRecognizer
+import com.example.minirobots.home.domain.LevenshteinDistanceCalculator
+import com.example.minirobots.home.domain.StringDistanceCalculator
+import com.example.minirobots.home.domain.StringDistanceInstructionRecognizer
+import com.example.minirobots.home.infrastructure.InMemoryInstructionsRepository
+import com.example.minirobots.home.infrastructure.InstructionsRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -23,30 +28,11 @@ object DispatcherModule {
     @DefaultDispatcher
     @Provides
     fun providesDefaultDispatcher(): CoroutineDispatcher = Dispatchers.Default
-
-    @IoDispatcher
-    @Provides
-    fun providesIoDispatcher(): CoroutineDispatcher = Dispatchers.IO
 }
-
-@Qualifier
-@Retention(AnnotationRetention.BINARY)
-annotation class IoDispatcher
 
 @Qualifier
 @Retention(AnnotationRetention.BINARY)
 annotation class DefaultDispatcher
-
-@Module
-@InstallIn(ApplicationComponent::class)
-abstract class InstructionsServiceModule {
-
-    @Singleton
-    @Binds
-    abstract fun bindInstructionsService(
-        mlKitInstructionsService: MlKitInstructionsService
-    ): InstructionsService
-}
 
 @Module
 @InstallIn(ApplicationComponent::class)
@@ -68,4 +54,15 @@ abstract class StringDistanceCalculatorModule {
     abstract fun bindStringDistanceCalculator(
         levenshteinDistanceCalculator: LevenshteinDistanceCalculator
     ): StringDistanceCalculator
+}
+
+@Module
+@InstallIn(ApplicationComponent::class)
+abstract class InstructionsRepositoryModule {
+
+    @Singleton
+    @Binds
+    abstract fun bindInstructionsRepository(
+        inMemoryInstructionsRepository: InMemoryInstructionsRepository
+    ): InstructionsRepository
 }

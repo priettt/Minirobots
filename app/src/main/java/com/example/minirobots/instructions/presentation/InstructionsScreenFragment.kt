@@ -30,7 +30,7 @@ class InstructionsScreenFragment : Fragment(R.layout.fragment_instructions_scree
     }
 
     private fun observeViewModel() {
-        viewModel.instructions.asLiveData().observe(viewLifecycleOwner, Observer { instructions ->
+        viewModel.instructionsFlow.asLiveData().observe(viewLifecycleOwner, Observer { instructions ->
             instructionsTextView.text = instructions
         })
     }
