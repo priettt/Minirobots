@@ -1,12 +1,12 @@
 package com.example.minirobots.home.domain
 
-import android.util.Log
 import javax.inject.Inject
 
 const val INSTRUCTION_DISTANCE_THRESHOLD = 3
 
-class StringDistanceInstructionRecognizer @Inject constructor(private val stringDistanceCalculator: StringDistanceCalculator) :
-    InstructionRecognizer {
+class StringDistanceInstructionRecognizer @Inject constructor(
+    private val stringDistanceCalculator: StringDistanceCalculator
+) : InstructionRecognizer {
     override fun getInstructionType(text: String): InstructionType? {
         var closestDistance = Int.MAX_VALUE
         var closestInstruction = InstructionType.ANGULO_30
@@ -16,7 +16,6 @@ class StringDistanceInstructionRecognizer @Inject constructor(private val string
                 closestInstruction = instruction
             }
         }
-        Log.i("MINIROBOTS", "Closest: ${closestInstruction.text}, Distance: $closestDistance")
         if (closestDistance <= INSTRUCTION_DISTANCE_THRESHOLD)
             return closestInstruction
         return null

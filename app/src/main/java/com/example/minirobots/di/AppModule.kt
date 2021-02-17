@@ -10,7 +10,7 @@ import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
-import dagger.hilt.android.components.ApplicationComponent
+import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
 import javax.inject.Qualifier
@@ -23,7 +23,7 @@ import javax.inject.Singleton
  * in Hilt's ApplicationComponent.
  */
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 object DispatcherModule {
     @DefaultDispatcher
     @Provides
@@ -35,7 +35,7 @@ object DispatcherModule {
 annotation class DefaultDispatcher
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class InstructionRecognizerModule {
 
     @Singleton
@@ -47,7 +47,7 @@ abstract class InstructionRecognizerModule {
 
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class StringDistanceCalculatorModule {
     @Singleton
     @Binds
@@ -57,7 +57,7 @@ abstract class StringDistanceCalculatorModule {
 }
 
 @Module
-@InstallIn(ApplicationComponent::class)
+@InstallIn(SingletonComponent::class)
 abstract class InstructionsRepositoryModule {
 
     @Singleton

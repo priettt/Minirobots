@@ -30,7 +30,14 @@
     </fragment>
     <fragment
         android:id="@+id/instructionsScreenFragment"
-        android:name="com.example.minirobots.instructions.presentation.InstructionsScreenFragment"
+        android:name="com.example.minirobots.instructions.presentation.InstructionsListFragment"
         android:label="InstructionsScreenFragment" >
+        <action
+            android:id="@+id/action_instructionsScreenFragment_to_addInstructionFragment"
+            app:destination="@id/addInstructionFragment" />
     </fragment>
+    <dialog
+        android:id="@+id/addInstructionFragment"
+        android:name="com.example.minirobots.instructions.presentation.AddInstructionFragment"
+        android:label="AddInstructionFragment" />
 </navigation>

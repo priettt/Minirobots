@@ -1,27 +1,46 @@
 package com.example.minirobots.instructions.presentation
 
-import androidx.hilt.Assisted
 import androidx.hilt.lifecycle.ViewModelInject
-import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructions.domain.actions.GetInstructions
+import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.receiveAsFlow
+import kotlinx.coroutines.launch
 
 class InstructionsScreenViewModel @ViewModelInject constructor(
-    @Assisted private val savedStateHandle: SavedStateHandle,
     getInstructions: GetInstructions
 ) : ViewModel() {
 
-    val instructionsFlow: MutableStateFlow<String?> = MutableStateFlow(null)
+    val instructionsFlow: MutableStateFlow<List<InstructionItem>?> = MutableStateFlow(null)
+
+    private val eventChannel = Channel<Event>(Channel.BUFFERED)
+    val eventsFlow = eventChannel.receiveAsFlow()
+
+    fun onAddButtonClicked() {
+        sendEvent(Event.ShowAddInstructionPopUp)
+    }
+
+    private fun sendEvent(event: Event) {
+        viewModelScope.launch {
+            eventChannel.send(event)
+        }
+    }
 
     init {
         getInstructions().onSuccess { instructions ->
-            instructionsFlow.value = instructions.joinToString { it.type.text }
+            instructionsFlow.value = instructions.map { InstructionItem(it.type.text) }
         }.onFailure {
-            instructionsFlow.value = "Couldn't retrieve instructions"
+            sendEvent(Event.ShowError)
         }
     }
+
 }
 
+sealed class Event {
+    object ShowAddInstructionPopUp : Event()
+    object ShowError : Event()
+}
 
 
