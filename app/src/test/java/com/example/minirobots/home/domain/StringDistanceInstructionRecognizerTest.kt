@@ -16,21 +16,21 @@ internal class StringDistanceInstructionRecognizerTest {
     @Test
     fun givenSameInstructionString_shouldReturnInstruction() {
         val text = "COLOR AZUL"
-        val instructionType = InstructionType.COLOR_AZUL
+        val instructionType = InstructionCardName.COLOR_AZUL
         assertEquals(instructionType, recognizer.getInstructionType(text))
     }
 
     @Test
     fun givenStringWithDistanceOne_shouldReturnInstruction() {
         val text = "COLOR 4ZUL"
-        val instructionType = InstructionType.COLOR_AZUL
+        val instructionType = InstructionCardName.COLOR_AZUL
         assertEquals(instructionType, recognizer.getInstructionType(text))
     }
 
     @Test
     fun givenStringWithDistanceThree_shouldReturnInstruction() {
         val text = "OR AZUL"
-        val instructionType = InstructionType.COLOR_AZUL.also {
+        val instructionType = InstructionCardName.COLOR_AZUL.also {
             assertEquals(recognizer.getInstructionType(text), it)
         }
     }

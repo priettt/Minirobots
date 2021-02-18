@@ -7,10 +7,10 @@ const val INSTRUCTION_DISTANCE_THRESHOLD = 3
 class StringDistanceInstructionRecognizer @Inject constructor(
     private val stringDistanceCalculator: StringDistanceCalculator
 ) : InstructionRecognizer {
-    override fun getInstructionType(text: String): InstructionType? {
+    override fun getInstructionType(text: String): InstructionCardName? {
         var closestDistance = Int.MAX_VALUE
-        var closestInstruction = InstructionType.ANGULO_30
-        for (instruction in InstructionType.values()) {
+        var closestInstruction = InstructionCardName.ANGULO_30
+        for (instruction in InstructionCardName.values()) {
             if (stringDistanceCalculator.getDistance(text, instruction.text) < closestDistance) {
                 closestDistance = stringDistanceCalculator.getDistance(text, instruction.text)
                 closestInstruction = instruction
@@ -23,5 +23,5 @@ class StringDistanceInstructionRecognizer @Inject constructor(
 }
 
 interface InstructionRecognizer {
-    fun getInstructionType(text: String): InstructionType?
+    fun getInstructionType(text: String): InstructionCardName?
 }

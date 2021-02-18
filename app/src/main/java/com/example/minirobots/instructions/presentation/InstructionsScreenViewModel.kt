@@ -30,7 +30,7 @@ class InstructionsScreenViewModel @ViewModelInject constructor(
 
     init {
         getInstructions().onSuccess { instructions ->
-            instructionsFlow.value = instructions.map { InstructionItem(it.type.text) }
+            instructionsFlow.value = instructions.map { InstructionItem(it.name) }
         }.onFailure {
             sendEvent(Event.ShowError)
         }
