@@ -4,14 +4,90 @@ import com.google.mlkit.vision.text.Text
 import javax.inject.Inject
 
 class MLKitTextMapper @Inject constructor(
+    private val getInstructionCardNames: GetInstructionCardNames,
+    private val generateInstructions: GenerateInstructions
+) {
+    fun getInstructions(mlKitText: Text): List<Instruction> {
+        val instructionCardNames = getInstructionCardNames(mlKitText)
+        return generateInstructions(instructionCardNames)
+    }
+
+}
+
+class GetInstructionCardNames @Inject constructor(
     private val instructionTypeRecognizer: InstructionRecognizer
 ) {
-    fun getInstructions(mlKitText: Text): List<InstructionContract> {
+    operator fun invoke(mlKitText: Text): List<InstructionCardName> {
+        val list = mutableListOf<InstructionWithLocation>()
+        for (block in mlKitText.textBlocks) {
+            for (line in block.lines) {
+                instructionTypeRecognizer.getInstructionType(line.text)?.let {
+                    list.add(
+                        InstructionWithLocation(
+                            it,
+                            line.cornerPoints?.get(0)?.x ?: 0,
+                            line.cornerPoints?.get(0)?.y ?: 0
+                        )
+                    )
+                }
+            }
+        }
+        return list
+            .sortedBy { it.x }
+            .map { it.type }
+    }
+}
 
-        val listOfInstructionsWithLocation = mutableListOf<InstructionWithLocation>()
+class GenerateInstructions @Inject constructor() {
+    operator fun invoke(instructionCardNames: List<InstructionCardName>): List<Instruction> {
+        val instructions = mutableListOf<Instruction>()
+        instructionCardNames.forEachIndexed { index, instruction ->
+            when (instruction) {
+                InstructionCardName.AVANZAR -> instructions.add(MoveForward(getSteps(instructionCardNames, index)))
+                InstructionCardName.BAJAR_LAPIZ -> instructions.add(PencilDown())
+                InstructionCardName.FUNCION -> instructions.add(FunctionExecute())
+                InstructionCardName.FUNCION_COMIENZO -> instructions.add(FunctionStart())
+                InstructionCardName.FUNCION_FIN -> instructions.add(FunctionEnd())
+                InstructionCardName.GIRAR_DERECHA -> instructions.add(RotateRight(getRotationAngle(instructionCardNames, index)))
+                InstructionCardName.GIRAR_IZQUIERDA -> instructions.add(RotateLeft(getRotationAngle(instructionCardNames, index)))
+                InstructionCardName.LEDS -> instructions.add(Led(getLedColor(instructionCardNames, index)))
+                InstructionCardName.LEVANTAR_LAPIZ -> instructions.add(PencilUp())
+                InstructionCardName.PROGRAMA_COMIENZO -> instructions.add(ProgramStart())
+                InstructionCardName.PROGRAMA_FIN -> instructions.add(ProgramEnd())
+                InstructionCardName.REPETIR_COMIENZO -> instructions.add(RepeatStart(getSteps(instructionCardNames, index)))
+                InstructionCardName.REPETIR_FIN -> instructions.add(RepeatEnd())
+                InstructionCardName.RETROCEDER -> instructions.add(MoveBackward(getSteps(instructionCardNames, index)))
+                InstructionCardName.TOCAR_CORCHEA -> instructions.add(Eighth(getMusicNote(instructionCardNames, index)))
+                InstructionCardName.TOCAR_MELODIA -> instructions.add(Melody(getMusicNote(instructionCardNames, index)))
+                InstructionCardName.TOCAR_NEGRA -> instructions.add(Quarter(getMusicNote(instructionCardNames, index)))
+                else -> { // Do Nothing
+                }
+            }
+        }
+        return instructions
+    }
+
+    private fun getSteps(instructionCardNames: List<InstructionCardName>, index: Int): Steps {
+
+        fun findSteps(index: Int): Steps? {
+            return when (instructionCardNames.getOrNull(index)) {
+                InstructionCardName.NUMERO_2 -> return Steps.STEPS_2
+                InstructionCardName.NUMERO_3 -> return Steps.STEPS_3
+                InstructionCardName.NUMERO_4 -> return Steps.STEPS_4
+                InstructionCardName.NUMERO_5 -> return Steps.STEPS_5
+                InstructionCardName.NUMERO_6 -> return Steps.STEPS_6
+                InstructionCardName.NUMERO_AL_AZAR -> return Steps.RANDOM
+                else -> null
+            }
+        }
+
+        return findSteps(index - 1) ?: findSteps(index + 1) ?: Steps.RANDOM
+    }
+
+    private fun getLedColor(instructionCardNames: List<InstructionCardName>, index: Int): LedColor {
 
         fun findLedColor(index: Int): LedColor? {
-            return when (listOfInstructionsWithLocation.getOrNull(index)?.type) {
+            return when (instructionCardNames.getOrNull(index)) {
                 InstructionCardName.COLOR_AMARILLO -> LedColor.YELLOW
                 InstructionCardName.COLOR_AZUL -> LedColor.BLUE
                 InstructionCardName.COLOR_BLANCO -> LedColor.WHITE
@@ -25,8 +101,13 @@ class MLKitTextMapper @Inject constructor(
             }
         }
 
+        return findLedColor(index - 1) ?: findLedColor(index + 1) ?: LedColor.RANDOM
+    }
+
+    private fun getMusicNote(instructionCardNames: List<InstructionCardName>, index: Int): MusicNote {
+
         fun findNote(index: Int): MusicNote? {
-            return when (listOfInstructionsWithLocation.getOrNull(index)?.type) {
+            return when (instructionCardNames.getOrNull(index)) {
                 InstructionCardName.NOTA_A -> MusicNote.A
                 InstructionCardName.NOTA_B -> MusicNote.B
                 InstructionCardName.NOTA_C -> MusicNote.C
@@ -40,20 +121,13 @@ class MLKitTextMapper @Inject constructor(
             }
         }
 
-        fun findSteps(index: Int): Steps? {
-            return when (listOfInstructionsWithLocation.getOrNull(index)?.type) {
-                InstructionCardName.NUMERO_2 -> return Steps.STEPS_2
-                InstructionCardName.NUMERO_3 -> return Steps.STEPS_3
-                InstructionCardName.NUMERO_4 -> return Steps.STEPS_4
-                InstructionCardName.NUMERO_5 -> return Steps.STEPS_5
-                InstructionCardName.NUMERO_6 -> return Steps.STEPS_6
-                InstructionCardName.NUMERO_AL_AZAR -> return Steps.RANDOM
-                else -> null
-            }
-        }
+        return findNote(index - 1) ?: findNote(index + 1) ?: MusicNote.RANDOM
+    }
+
+    private fun getRotationAngle(instructionCardNames: List<InstructionCardName>, index: Int): RotationAngle {
 
         fun findRotationAngle(index: Int): RotationAngle? {
-            return when (listOfInstructionsWithLocation.getOrNull(index)?.type) {
+            return when (instructionCardNames.getOrNull(index)) {
                 InstructionCardName.ANGULO_30 -> RotationAngle.ANGLE_30
                 InstructionCardName.ANGULO_36 -> RotationAngle.ANGLE_36
                 InstructionCardName.ANGULO_45 -> RotationAngle.ANGLE_45
@@ -68,86 +142,7 @@ class MLKitTextMapper @Inject constructor(
                 else -> null
             }
         }
-
-        val listOfInstructions = mutableListOf<InstructionContract>()
-        for (block in mlKitText.textBlocks) {
-            for (line in block.lines) {
-                val instructionType = instructionTypeRecognizer.getInstructionType(line.text)
-                instructionType?.let {
-                    listOfInstructionsWithLocation.add(
-                        InstructionWithLocation(
-                            it,
-                            line.cornerPoints?.get(0)?.x ?: 0,
-                            line.cornerPoints?.get(0)?.y ?: 0
-                        )
-                    )
-                }
-            }
-        }
-
-        listOfInstructionsWithLocation
-            .sortedBy { it.x }
-            .forEachIndexed { index, instruction ->
-                when (instruction.type) {
-                    InstructionCardName.AVANZAR -> listOfInstructions.add(
-                        MoveForward(
-                            findSteps(index - 1) ?: findSteps(index + 1) ?: Steps.RANDOM
-                        )
-                    )
-                    InstructionCardName.BAJAR_LAPIZ -> listOfInstructions.add(PencilDown())
-                    InstructionCardName.FUNCION -> listOfInstructions.add(FunctionExecute())
-                    InstructionCardName.FUNCION_COMIENZO -> listOfInstructions.add(FunctionStart())
-                    InstructionCardName.FUNCION_FIN -> listOfInstructions.add(FunctionEnd())
-                    InstructionCardName.GIRAR_DERECHA -> listOfInstructions.add(
-                        RotateRight(
-                            findRotationAngle(index - 1) ?: findRotationAngle(index + 1) ?: RotationAngle.RANDOM
-                        )
-                    )
-                    InstructionCardName.GIRAR_IZQUIERDA -> listOfInstructions.add(
-                        RotateLeft(
-                            findRotationAngle(index - 1) ?: findRotationAngle(index + 1) ?: RotationAngle.RANDOM
-                        )
-                    )
-                    InstructionCardName.LEDS -> listOfInstructions.add(
-                        Led(
-                            findLedColor(index - 1) ?: findLedColor(index + 1) ?: LedColor.RANDOM
-                        )
-                    )
-                    InstructionCardName.LEVANTAR_LAPIZ -> listOfInstructions.add(PencilUp())
-
-                    InstructionCardName.PROGRAMA_COMIENZO -> listOfInstructions.add(ProgramStart())
-                    InstructionCardName.PROGRAMA_FIN -> listOfInstructions.add(ProgramEnd())
-                    InstructionCardName.REPETIR_COMIENZO -> listOfInstructions.add(
-                        RepeatStart(
-                            findSteps(index - 1) ?: findSteps(index + 1) ?: Steps.RANDOM
-                        )
-                    )
-                    InstructionCardName.REPETIR_FIN -> listOfInstructions.add(RepeatEnd())
-                    InstructionCardName.RETROCEDER -> listOfInstructions.add(
-                        MoveBackward(
-                            findSteps(index - 1) ?: findSteps(index + 1) ?: Steps.RANDOM
-                        )
-                    )
-                    InstructionCardName.TOCAR_CORCHEA -> listOfInstructions.add(
-                        Eighth(
-                            findNote(index - 1) ?: findNote(index + 1) ?: MusicNote.RANDOM
-                        )
-                    )
-                    InstructionCardName.TOCAR_MELODIA -> listOfInstructions.add(
-                        Melody(
-                            findNote(index - 1) ?: findNote(index + 1) ?: MusicNote.RANDOM
-                        )
-                    )
-                    InstructionCardName.TOCAR_NEGRA -> listOfInstructions.add(
-                        Quarter(
-                            findNote(index - 1) ?: findNote(index + 1) ?: MusicNote.RANDOM
-                        )
-                    )
-                    else -> { // Do Nothing
-                    }
-                }
-            }
-        return listOfInstructions
+        return findRotationAngle(index - 1) ?: findRotationAngle(index + 1) ?: RotationAngle.RANDOM
     }
 
 }

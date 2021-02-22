@@ -59,7 +59,7 @@ enum class InstructionCardName(val text: String) : Parcelable {
     TOCAR_NEGRA("TOCAR NEGRA")
 }
 
-interface InstructionContract {
+interface Instruction {
     val name: String
     val imageLocation: String
 }
@@ -68,96 +68,96 @@ data class RotateRight(
     var angle: RotationAngle,
     override val name: String = "Derecha",
     override val imageLocation: String = "tarjeta_derecha",
-) : InstructionContract
+) : Instruction
 
 data class RotateLeft(
     var angle: RotationAngle,
     override val name: String = "Izquierda",
     override val imageLocation: String = "tarjeta_izquierda",
-) : InstructionContract
+) : Instruction
 
 data class Led(
     var color: LedColor,
     override val name: String = "Leds",
     override val imageLocation: String = "tarjeta_leds",
-) : InstructionContract
+) : Instruction
 
 data class MoveForward(
     var steps: Steps,
     override val name: String = "Adelante",
     override val imageLocation: String = "tarjeta_adelante",
-) : InstructionContract
+) : Instruction
 
 data class MoveBackward(
     var steps: Steps,
     override val name: String = "Atras",
     override val imageLocation: String = "tarjeta_atras",
-) : InstructionContract
+) : Instruction
 
 data class RepeatStart(
     var steps: Steps,
     override val name: String = "Repetir",
     override val imageLocation: String = "tarjeta_repetir",
-) : InstructionContract
+) : Instruction
 
 data class Quarter(
     var note: MusicNote,
     override val name: String = "Negra",
     override val imageLocation: String = "tarjeta_negra",
-) : InstructionContract
+) : Instruction
 
 data class Eighth(
     var note: MusicNote,
     override val name: String = "Corchea",
     override val imageLocation: String = "tarjeta_corchea",
-) : InstructionContract
+) : Instruction
 
 data class Melody(
     var note: MusicNote,
     override val name: String = "Melodia",
     override val imageLocation: String = "tarjeta_melodia",
-) : InstructionContract
+) : Instruction
 
 data class ProgramStart(
     override val name: String = "Inicio Programa",
     override val imageLocation: String = "tarjeta_inicio_programa",
-) : InstructionContract
+) : Instruction
 
 data class ProgramEnd(
     override val name: String = "Fin Programa",
     override val imageLocation: String = "tarjeta_fin_programa",
-) : InstructionContract
+) : Instruction
 
 
 data class RepeatEnd(
     override val name: String = "Fin Repeticion",
     override val imageLocation: String = "tarjeta_fin_repeticion",
-) : InstructionContract
+) : Instruction
 
 data class FunctionStart(
     override val name: String = "Inicio Función",
     override val imageLocation: String = "tarjeta_inicio_funcion",
-) : InstructionContract
+) : Instruction
 
 data class FunctionEnd(
     override val name: String = "Fin Función",
     override val imageLocation: String = "tarjeta_fin_funcion",
-) : InstructionContract
+) : Instruction
 
 data class FunctionExecute(
     override val name: String = "Ejecutar Función",
     override val imageLocation: String = "tarjeta_funcion",
-) : InstructionContract
+) : Instruction
 
 data class PencilDown(
     override val name: String = "Lápiz Abajo",
     override val imageLocation: String = "tarjeta_lapiz_abajo",
-) : InstructionContract
+) : Instruction
 
 data class PencilUp(
     override val name: String = "Lápiz Arriba",
     override val imageLocation: String = "tarjeta_lapiz_arriba",
-) : InstructionContract
+) : Instruction
 
 enum class MusicInstructionType {
     QUARTER,
