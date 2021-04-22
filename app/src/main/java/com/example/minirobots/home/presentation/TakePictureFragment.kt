@@ -64,7 +64,7 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
 
     private fun goToInstructionsScreen() {
         findNavController().navigate(
-            TakePictureFragmentDirections.actionTakePictureFragmentToInstructionsScreenFragment()
+            TakePictureFragmentDirections.actionTakePictureFragmentToInstructionListFragment()
         )
     }
 

@@ -3,7 +3,6 @@ package com.example.minirobots.instructions.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.ImageView
 import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
@@ -40,9 +39,7 @@ class AddInstructionAdapter :
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): AddInstructionViewHolder {
-        val view =
-            LayoutInflater.from(parent.context)
-                .inflate(R.layout.item_add_instruction, parent, false)
+        val view = LayoutInflater.from(parent.context).inflate(R.layout.item_add_instruction, parent, false)
         return AddInstructionViewHolder(view)
     }
 

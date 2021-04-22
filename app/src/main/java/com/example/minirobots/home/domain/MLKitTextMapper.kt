@@ -11,7 +11,6 @@ class MLKitTextMapper @Inject constructor(
         val instructionCardNames = getInstructionCardNames(mlKitText)
         return generateInstructions(instructionCardNames)
     }
-
 }
 
 class GetInstructionCardNames @Inject constructor(

@@ -128,7 +128,6 @@ data class ProgramEnd(
     override val imageLocation: String = "tarjeta_fin_programa",
 ) : Instruction
 
-
 data class RepeatEnd(
     override val name: String = "Fin Repeticion",
     override val imageLocation: String = "tarjeta_fin_repeticion",
@@ -158,12 +157,6 @@ data class PencilUp(
     override val name: String = "Lápiz Arriba",
     override val imageLocation: String = "tarjeta_lapiz_arriba",
 ) : Instruction
-
-enum class MusicInstructionType {
-    QUARTER,
-    EIGHTH,
-    MELODY
-}
 
 enum class MusicNote {
     A,

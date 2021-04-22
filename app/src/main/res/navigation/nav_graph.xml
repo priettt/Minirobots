@@ -25,13 +25,13 @@
         android:label="fragment_take_picture"
         tools:layout="@layout/fragment_take_picture">
         <action
-            android:id="@+id/action_takePictureFragment_to_instructionsScreenFragment"
-            app:destination="@id/instructionsScreenFragment" />
+            android:id="@+id/action_takePictureFragment_to_instructionListFragment"
+            app:destination="@id/instructionListFragment" />
     </fragment>
     <fragment
-        android:id="@+id/instructionsScreenFragment"
-        android:name="com.example.minirobots.instructions.presentation.InstructionsListFragment"
-        android:label="InstructionsScreenFragment" >
+        android:id="@+id/instructionListFragment"
+        android:name="com.example.minirobots.instructions.presentation.InstructionListFragment"
+        android:label="InstructionListFragment">
         <action
             android:id="@+id/action_instructionsScreenFragment_to_addInstructionFragment"
             app:destination="@id/addInstructionFragment" />

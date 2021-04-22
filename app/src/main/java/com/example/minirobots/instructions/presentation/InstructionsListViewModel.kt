@@ -1,15 +1,17 @@
 package com.example.minirobots.instructions.presentation
 
-import androidx.hilt.lifecycle.ViewModelInject
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructions.domain.actions.GetInstructions
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class InstructionsScreenViewModel @ViewModelInject constructor(
+@HiltViewModel
+class InstructionsListViewModel @Inject constructor(
     getInstructions: GetInstructions
 ) : ViewModel() {
 
