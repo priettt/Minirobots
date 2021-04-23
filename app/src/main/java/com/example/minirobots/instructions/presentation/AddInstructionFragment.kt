@@ -8,14 +8,18 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentAddInstructionBinding
+import com.example.minirobots.utilities.observeIn
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class AddInstructionFragment : BottomSheetDialogFragment() {
 
-    private val viewModel: SelectInstructionViewModel by viewModels()
-    private val adapter = AddInstructionAdapter()
+    private val viewModel: AddInstructionViewModel by viewModels()
+    private val adapter = AddInstructionAdapter {
+        viewModel.onInstructionAdded(it)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return inflater.inflate(R.layout.fragment_add_instruction, container, false)
@@ -37,6 +41,18 @@ class AddInstructionFragment : BottomSheetDialogFragment() {
             .observe(viewLifecycleOwner, { instructions ->
                 adapter.submitList(instructions)
             })
+
+        viewModel.eventsFlow
+            .onEach {
+                when (it) {
+                    AddInstructionViewModel.Event.CloseAddSheet -> closeAddSheet()
+                }
+            }
+            .observeIn(this)
+    }
+
+    private fun closeAddSheet() {
+        dismiss()
     }
 
 }

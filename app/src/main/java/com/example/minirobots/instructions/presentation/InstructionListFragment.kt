@@ -1,5 +1,6 @@
 package com.example.minirobots.instructions.presentation
 
+import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -14,7 +15,7 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
+class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), DialogInterface.OnDismissListener {
 
     private val viewModel: InstructionsListViewModel by viewModels()
     private val adapter = InstructionsAdapter()
@@ -57,6 +58,10 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
         findNavController().navigate(
             InstructionListFragmentDirections.actionInstructionsScreenFragmentToAddInstructionFragment()
         )
+    }
+
+    override fun onDismiss(dialog: DialogInterface?) {
+        viewModel.onAddSheetDismissed()
     }
 
 }

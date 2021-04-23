@@ -13,13 +13,29 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InstructionsListViewModel @Inject constructor(
-    getInstructions: GetInstructions
+    private val getInstructions: GetInstructions
 ) : ViewModel() {
 
     val instructionsFlow: MutableStateFlow<List<Instruction>?> = MutableStateFlow(null)
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
+
+    init {
+        fetchInstructions()
+    }
+
+    fun onAddSheetDismissed() {
+        fetchInstructions()
+    }
+
+    private fun fetchInstructions() {
+        getInstructions().onSuccess { instructions ->
+            instructionsFlow.value = instructions
+        }.onFailure {
+            sendEvent(Event.ShowError)
+        }
+    }
 
     fun onAddButtonClicked() {
         sendEvent(Event.ShowAddInstructionPopUp)
@@ -28,14 +44,6 @@ class InstructionsListViewModel @Inject constructor(
     private fun sendEvent(event: Event) {
         viewModelScope.launch {
             eventChannel.send(event)
-        }
-    }
-
-    init {
-        getInstructions().onSuccess { instructions ->
-            instructionsFlow.value = instructions
-        }.onFailure {
-            sendEvent(Event.ShowError)
         }
     }
 

@@ -3,7 +3,6 @@ package com.example.minirobots.instructions.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -11,7 +10,9 @@ import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemAddInstructionBinding
 import com.example.minirobots.instructions.domain.entities.Instruction
 
-class AddInstructionAdapter :
+class AddInstructionAdapter(
+    private val onItemClickListener: (Instruction) -> Unit
+) :
     ListAdapter<Instruction, AddInstructionAdapter.AddInstructionViewHolder>(
         AddInstructionDiffCallback
     ) {
@@ -19,17 +20,6 @@ class AddInstructionAdapter :
     class AddInstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemAddInstructionBinding.bind(view)
         private var currentInstruction: Instruction? = null
-
-        init {
-            view.setOnClickListener {
-                Toast.makeText(
-                    view.context,
-                    currentInstruction?.name.toString(),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
-            }
-        }
 
         fun bind(instruction: Instruction) {
             currentInstruction = instruction
@@ -44,7 +34,10 @@ class AddInstructionAdapter :
     }
 
     override fun onBindViewHolder(holder: AddInstructionViewHolder, position: Int) {
-        holder.bind(getItem(position))
+        val instruction = getItem(position)
+        //TODO: research what's the best way to tell the viewModel that an instruction has been clicked
+        holder.itemView.setOnClickListener { onItemClickListener(instruction) }
+        holder.bind(instruction)
     }
 }
 
