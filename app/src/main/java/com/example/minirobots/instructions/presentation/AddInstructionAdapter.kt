@@ -9,16 +9,16 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemAddInstructionBinding
-import com.example.minirobots.instructions.domain.actions.AddInstructionItem
+import com.example.minirobots.instructions.domain.entities.Instruction
 
 class AddInstructionAdapter :
-    ListAdapter<AddInstructionItem, AddInstructionAdapter.AddInstructionViewHolder>(
+    ListAdapter<Instruction, AddInstructionAdapter.AddInstructionViewHolder>(
         AddInstructionDiffCallback
     ) {
 
     class AddInstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemAddInstructionBinding.bind(view)
-        private var currentInstruction: AddInstructionItem? = null
+        private var currentInstruction: Instruction? = null
 
         init {
             view.setOnClickListener {
@@ -31,10 +31,10 @@ class AddInstructionAdapter :
             }
         }
 
-        fun bind(addInstructionItem: AddInstructionItem) {
-            currentInstruction = addInstructionItem
-            binding.instructionName.text = addInstructionItem.name
-            binding.instructionImage.setImageResource(R.drawable.common_full_open_on_phone)
+        fun bind(instruction: Instruction) {
+            currentInstruction = instruction
+            binding.instructionName.text = instruction.name
+            binding.instructionImage.setImageResource(instruction.imageDrawable)
         }
     }
 
@@ -48,17 +48,17 @@ class AddInstructionAdapter :
     }
 }
 
-object AddInstructionDiffCallback : DiffUtil.ItemCallback<AddInstructionItem>() {
+object AddInstructionDiffCallback : DiffUtil.ItemCallback<Instruction>() {
     override fun areItemsTheSame(
-        oldItem: AddInstructionItem,
-        newItem: AddInstructionItem
+        oldItem: Instruction,
+        newItem: Instruction
     ): Boolean {
         return oldItem == newItem
     }
 
     override fun areContentsTheSame(
-        oldItem: AddInstructionItem,
-        newItem: AddInstructionItem
+        oldItem: Instruction,
+        newItem: Instruction
     ): Boolean {
         return oldItem.name == newItem.name
     }

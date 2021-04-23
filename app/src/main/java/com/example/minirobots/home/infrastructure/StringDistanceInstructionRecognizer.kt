@@ -1,5 +1,6 @@
-package com.example.minirobots.home.domain
+package com.example.minirobots.home.infrastructure
 
+import com.example.minirobots.home.domain.entities.InstructionCardName
 import javax.inject.Inject
 
 const val INSTRUCTION_DISTANCE_THRESHOLD = 3

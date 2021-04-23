@@ -9,13 +9,14 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemInstructionBinding
+import com.example.minirobots.instructions.domain.entities.Instruction
 
 class InstructionsAdapter :
-    ListAdapter<InstructionItem, InstructionsAdapter.InstructionViewHolder>(InstructionDiffCallback) {
+    ListAdapter<Instruction, InstructionsAdapter.InstructionViewHolder>(InstructionDiffCallback) {
 
     class InstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemInstructionBinding.bind(view)
-        private var currentInstruction: InstructionItem? = null
+        private var currentInstruction: Instruction? = null
 
         init {
             view.setOnClickListener {
@@ -28,9 +29,10 @@ class InstructionsAdapter :
             }
         }
 
-        fun bind(instructionItem: InstructionItem) {
-            currentInstruction = instructionItem
-            binding.instructionText.text = instructionItem.name
+        fun bind(instruction: Instruction) {
+            currentInstruction = instruction
+            binding.instructionText.text = instruction.name
+            binding.instructionImage.setImageResource(instruction.imageDrawable)
         }
     }
 
@@ -45,14 +47,12 @@ class InstructionsAdapter :
     }
 }
 
-data class InstructionItem(val name: String)
-
-object InstructionDiffCallback : DiffUtil.ItemCallback<InstructionItem>() {
-    override fun areItemsTheSame(oldItem: InstructionItem, newItem: InstructionItem): Boolean {
+object InstructionDiffCallback : DiffUtil.ItemCallback<Instruction>() {
+    override fun areItemsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: InstructionItem, newItem: InstructionItem): Boolean {
+    override fun areContentsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
         return oldItem.name == newItem.name
     }
 }

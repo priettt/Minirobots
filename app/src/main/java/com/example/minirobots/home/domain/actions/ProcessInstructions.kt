@@ -3,8 +3,8 @@ package com.example.minirobots.home.domain.actions
 import android.content.Context
 import android.net.Uri
 import com.example.minirobots.di.DefaultDispatcher
-import com.example.minirobots.home.domain.MLKitTextMapper
 import com.example.minirobots.home.infrastructure.InstructionsRepository
+import com.example.minirobots.home.infrastructure.MLKitTextMapper
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
@@ -36,6 +36,7 @@ class ProcessInstructions @Inject constructor(
         }
     }
 
+    @Suppress("BlockingMethodInNonBlockingContext")
     private suspend fun getInputImage(uri: Uri, context: Context) = withContext(dispatcher) {
         return@withContext try {
             InputImage.fromFilePath(context, uri)

@@ -51,4 +51,4 @@ class FragmentObserver<T>(
 
 inline fun <reified T> Flow<T>.observeIn(
     fragment: Fragment
-) = FragmentObserver(fragment, this, {})
+) = FragmentObserver(fragment, this) {}

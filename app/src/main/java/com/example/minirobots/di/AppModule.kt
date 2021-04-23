@@ -1,11 +1,6 @@
 package com.example.minirobots.di
 
-import com.example.minirobots.home.domain.InstructionRecognizer
-import com.example.minirobots.home.domain.LevenshteinDistanceCalculator
-import com.example.minirobots.home.domain.StringDistanceCalculator
-import com.example.minirobots.home.domain.StringDistanceInstructionRecognizer
-import com.example.minirobots.home.infrastructure.InMemoryInstructionsRepository
-import com.example.minirobots.home.infrastructure.InstructionsRepository
+import com.example.minirobots.home.infrastructure.*
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -44,7 +39,6 @@ abstract class InstructionRecognizerModule {
         distanceInstructionRecognizer: StringDistanceInstructionRecognizer
     ): InstructionRecognizer
 }
-
 
 @Module
 @InstallIn(SingletonComponent::class)

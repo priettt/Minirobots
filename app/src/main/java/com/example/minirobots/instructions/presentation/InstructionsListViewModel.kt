@@ -3,6 +3,7 @@ package com.example.minirobots.instructions.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructions.domain.actions.GetInstructions
+import com.example.minirobots.instructions.domain.entities.Instruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -15,7 +16,7 @@ class InstructionsListViewModel @Inject constructor(
     getInstructions: GetInstructions
 ) : ViewModel() {
 
-    val instructionsFlow: MutableStateFlow<List<InstructionItem>?> = MutableStateFlow(null)
+    val instructionsFlow: MutableStateFlow<List<Instruction>?> = MutableStateFlow(null)
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
@@ -32,7 +33,7 @@ class InstructionsListViewModel @Inject constructor(
 
     init {
         getInstructions().onSuccess { instructions ->
-            instructionsFlow.value = instructions.map { InstructionItem(it.name) }
+            instructionsFlow.value = instructions
         }.onFailure {
             sendEvent(Event.ShowError)
         }

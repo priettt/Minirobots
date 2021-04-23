@@ -1,7 +1,6 @@
-package com.example.minirobots.home.domain
+package com.example.minirobots.home.infrastructure
 
 import javax.inject.Inject
-import kotlin.math.min
 import kotlin.math.max
 
 /*
@@ -12,7 +11,7 @@ An “edit” is defined by either an insertion of a character, a deletion of a 
 
 class LevenshteinDistanceCalculator @Inject constructor() : StringDistanceCalculator {
     override fun getDistance(first: String, second: String): Int {
-        if(first.isEmpty() || second.isEmpty()) return max(first.length, second.length)
+        if (first.isEmpty() || second.isEmpty()) return max(first.length, second.length)
 
         // create two integer arrays of distances and initialize the first one
         val cost = IntArray(second.length + 1) { it }  // previous

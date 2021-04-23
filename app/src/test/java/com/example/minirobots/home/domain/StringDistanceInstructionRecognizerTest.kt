@@ -1,6 +1,9 @@
 package com.example.minirobots.home.domain
 
-import junit.framework.Assert.assertEquals
+import com.example.minirobots.home.domain.entities.InstructionCardName
+import com.example.minirobots.home.infrastructure.LevenshteinDistanceCalculator
+import com.example.minirobots.home.infrastructure.StringDistanceInstructionRecognizer
+import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
@@ -30,7 +33,7 @@ internal class StringDistanceInstructionRecognizerTest {
     @Test
     fun givenStringWithDistanceThree_shouldReturnInstruction() {
         val text = "OR AZUL"
-        val instructionType = InstructionCardName.COLOR_AZUL.also {
+        InstructionCardName.COLOR_AZUL.also {
             assertEquals(recognizer.getInstructionType(text), it)
         }
     }

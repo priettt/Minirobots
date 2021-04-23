@@ -1,6 +1,6 @@
 package com.example.minirobots.home.infrastructure
 
-import com.example.minirobots.home.domain.Instruction
+import com.example.minirobots.instructions.domain.entities.Instruction
 import javax.inject.Inject
 
 interface InstructionsRepository {
