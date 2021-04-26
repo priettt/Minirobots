@@ -3,7 +3,6 @@ package com.example.minirobots.instructions.presentation
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
 import androidx.recyclerview.widget.DiffUtil
 import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
@@ -20,12 +19,6 @@ class InstructionsAdapter :
 
         init {
             view.setOnClickListener {
-                Toast.makeText(
-                    view.context,
-                    currentInstruction?.name.toString(),
-                    Toast.LENGTH_SHORT
-                )
-                    .show()
             }
         }
 

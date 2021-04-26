@@ -7,6 +7,9 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
+import androidx.recyclerview.widget.ItemTouchHelper
+import androidx.recyclerview.widget.ItemTouchHelper.*
+import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentInstructionListBinding
 import com.example.minirobots.utilities.observeIn
@@ -25,7 +28,7 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
         super.onViewCreated(view, savedInstanceState)
         setupBinding(view)
         observeViewModel()
-    }
+     }
 
     private fun setupBinding(view: View) {
         val binding = FragmentInstructionListBinding.bind(view)
@@ -33,6 +36,8 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
         binding.addButton.setOnClickListener {
             viewModel.onAddButtonClicked()
         }
+        val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
+        itemTouchHelper.attachToRecyclerView(binding.instructionsList)
     }
 
     private fun observeViewModel() {
@@ -63,4 +68,24 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
     override fun onDismiss(dialog: DialogInterface?) {
         viewModel.onAddSheetDismissed()
     }
+
+    private val itemTouchHelperCallback = object : ItemTouchHelper.Callback() {
+        override fun getMovementFlags(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder): Int {
+            // Specify the directions of movement
+            return makeMovementFlags(UP or DOWN, START)
+        }
+
+        override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
+            // Notify your adapter that an item is moved from x position to y position
+            viewModel.onItemMoved(viewHolder.adapterPosition, target.adapterPosition)
+            return true
+        }
+
+        override fun isLongPressDragEnabled() = true
+
+        override fun onSwiped(viewHolder: RecyclerView.ViewHolder, direction: Int) {
+            viewModel.onItemDeleted(viewHolder.adapterPosition)
+        }
+    }
+
 }

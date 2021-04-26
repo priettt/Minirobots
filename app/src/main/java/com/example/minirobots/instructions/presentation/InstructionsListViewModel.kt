@@ -4,7 +4,9 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import com.example.minirobots.instructions.domain.actions.DeleteInstruction
 import com.example.minirobots.instructions.domain.actions.GetInstructions
+import com.example.minirobots.instructions.domain.actions.MoveInstruction
 import com.example.minirobots.instructions.domain.entities.Instruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
@@ -14,7 +16,9 @@ import javax.inject.Inject
 
 @HiltViewModel
 class InstructionsListViewModel @Inject constructor(
-    private val getInstructions: GetInstructions
+    private val getInstructions: GetInstructions,
+    private val deleteInstruction: DeleteInstruction,
+    private val moveInstruction: MoveInstruction,
 ) : ViewModel() {
 
     private val mutableInstructions = MutableLiveData<List<Instruction>>()
@@ -48,6 +52,16 @@ class InstructionsListViewModel @Inject constructor(
         viewModelScope.launch {
             eventChannel.send(event)
         }
+    }
+
+    fun onItemDeleted(index: Int) {
+        deleteInstruction(index)
+        fetchInstructions()
+    }
+
+    fun onItemMoved(fromIndex: Int, toIndex: Int) {
+        moveInstruction(fromIndex, toIndex)
+        fetchInstructions()
     }
 
 }
