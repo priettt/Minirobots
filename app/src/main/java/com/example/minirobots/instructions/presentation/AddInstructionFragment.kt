@@ -4,8 +4,10 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
 import androidx.lifecycle.asLiveData
+import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentAddInstructionBinding
 import com.example.minirobots.utilities.observeIn
@@ -17,6 +19,7 @@ import kotlinx.coroutines.flow.onEach
 class AddInstructionFragment : BottomSheetDialogFragment() {
 
     private val viewModel: AddInstructionViewModel by viewModels()
+    private val instructionListViewModel: InstructionsListViewModel by activityViewModels()
     private val adapter = AddInstructionAdapter {
         viewModel.onInstructionAdded(it)
     }
@@ -52,7 +55,8 @@ class AddInstructionFragment : BottomSheetDialogFragment() {
     }
 
     private fun closeAddSheet() {
-        dismiss()
+        instructionListViewModel.onAddSheetDismissed()
+        findNavController().navigateUp()
     }
 
 }

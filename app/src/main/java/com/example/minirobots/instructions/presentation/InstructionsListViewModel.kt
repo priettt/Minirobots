@@ -1,12 +1,13 @@
 package com.example.minirobots.instructions.presentation
 
+import androidx.lifecycle.LiveData
+import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructions.domain.actions.GetInstructions
 import com.example.minirobots.instructions.domain.entities.Instruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
-import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
@@ -16,7 +17,9 @@ class InstructionsListViewModel @Inject constructor(
     private val getInstructions: GetInstructions
 ) : ViewModel() {
 
-    val instructionsFlow: MutableStateFlow<List<Instruction>?> = MutableStateFlow(null)
+    private val mutableInstructions = MutableLiveData<List<Instruction>>()
+    val instructions: LiveData<List<Instruction>>
+        get() = mutableInstructions
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
@@ -31,7 +34,7 @@ class InstructionsListViewModel @Inject constructor(
 
     private fun fetchInstructions() {
         getInstructions().onSuccess { instructions ->
-            instructionsFlow.value = instructions
+            mutableInstructions.value = instructions
         }.onFailure {
             sendEvent(Event.ShowError)
         }

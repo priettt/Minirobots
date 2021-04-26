@@ -5,8 +5,7 @@ import android.os.Bundle
 import android.view.View
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
+import androidx.fragment.app.activityViewModels
 import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentInstructionListBinding
@@ -17,7 +16,9 @@ import kotlinx.coroutines.flow.onEach
 @AndroidEntryPoint
 class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), DialogInterface.OnDismissListener {
 
-    private val viewModel: InstructionsListViewModel by viewModels()
+    // TODO: Try nesting InstructionList and AddInstruction fragments, scoping a ViewModel to that nested graph,
+    //  and using hiltNavGraphViewModels to inject the VMs. That avoids having a Singleton VM with the scope of the whole app.
+    private val viewModel: InstructionsListViewModel by activityViewModels()
     private val adapter = InstructionsAdapter()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -35,10 +36,9 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
     }
 
     private fun observeViewModel() {
-        viewModel.instructionsFlow.asLiveData()
-            .observe(viewLifecycleOwner, { instructions ->
-                adapter.submitList(instructions)
-            })
+        viewModel.instructions.observe(viewLifecycleOwner, { instructions ->
+            adapter.submitList(instructions.toMutableList())
+        })
 
         viewModel.eventsFlow
             .onEach {
@@ -63,5 +63,4 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
     override fun onDismiss(dialog: DialogInterface?) {
         viewModel.onAddSheetDismissed()
     }
-
 }
