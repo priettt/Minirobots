@@ -1,10 +1,10 @@
-package com.example.minirobots.instructions.presentation
+package com.example.minirobots.instructions.presentation.editinstructionmenu
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructions.domain.actions.AddInstruction
-import com.example.minirobots.instructions.domain.actions.GetAvailableInstructions
-import com.example.minirobots.instructions.domain.entities.Instruction
+import com.example.minirobots.instructions.domain.actions.GetModifiersList
+import com.example.minirobots.instructions.domain.entities.Modifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -13,28 +13,27 @@ import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
-class AddInstructionViewModel @Inject constructor(
-    getAvailableInstructions: GetAvailableInstructions,
+class EditInstructionViewModel @Inject constructor(
+    getModifiersList: GetModifiersList,
     private val addInstruction: AddInstruction
 ) : ViewModel() {
 
-    val instructionsFlow: MutableStateFlow<List<Instruction>?> = MutableStateFlow(null)
+    val modifiersFlow: MutableStateFlow<List<Modifier>?> = MutableStateFlow(null)
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
 
     init {
-        instructionsFlow.value = getAvailableInstructions()
+        modifiersFlow.value = getModifiersList()
     }
 
-    fun onInstructionAdded(instruction: Instruction) {
-        addInstruction(instruction)
+    fun onInstructionEdited(modifier: Modifier) {
         viewModelScope.launch {
-            eventChannel.send(Event.CloseAddSheet)
+            eventChannel.send(Event.InstructionEdited)
         }
     }
 
     sealed class Event {
-        object CloseAddSheet : Event()
+        object InstructionEdited : Event()
     }
 }

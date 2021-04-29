@@ -1,13 +1,12 @@
-package com.example.minirobots.instructions.presentation
+package com.example.minirobots.instructions.presentation.instructionlist
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.minirobots.instructions.domain.actions.DeleteInstruction
-import com.example.minirobots.instructions.domain.actions.GetInstructions
-import com.example.minirobots.instructions.domain.actions.MoveInstruction
+import com.example.minirobots.instructions.domain.actions.*
 import com.example.minirobots.instructions.domain.entities.Instruction
+import com.example.minirobots.instructions.domain.entities.Modifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,6 +18,8 @@ class InstructionsListViewModel @Inject constructor(
     private val getInstructions: GetInstructions,
     private val deleteInstruction: DeleteInstruction,
     private val moveInstruction: MoveInstruction,
+    private val getInstructionModifiers: GetInstructionModifiers,
+    private val storeModifiers: StoreModifiers,
 ) : ViewModel() {
 
     private val mutableInstructions = MutableLiveData<List<Instruction>>()
@@ -32,7 +33,11 @@ class InstructionsListViewModel @Inject constructor(
         fetchInstructions()
     }
 
-    fun onAddSheetDismissed() {
+    fun onInstructionAdded() {
+        fetchInstructions()
+    }
+
+    fun onInstructionEdited() {
         fetchInstructions()
     }
 
@@ -45,7 +50,7 @@ class InstructionsListViewModel @Inject constructor(
     }
 
     fun onAddButtonClicked() {
-        sendEvent(Event.ShowAddInstructionPopUp)
+        sendEvent(Event.ShowAddInstructionMenu)
     }
 
     private fun sendEvent(event: Event) {
@@ -64,10 +69,22 @@ class InstructionsListViewModel @Inject constructor(
         fetchInstructions()
     }
 
+    fun onInstructionClicked(index: Int) {
+        getInstructionModifiers(index)?.let {
+            storeModifiers(it)
+            sendEvent(Event.ShowEditInstructionMenu)
+        }
+    }
+
+    fun onInstructionEdited(modifier: Modifier) {
+
+    }
+
 }
 
 sealed class Event {
-    object ShowAddInstructionPopUp : Event()
+    object ShowAddInstructionMenu : Event()
+    object ShowEditInstructionMenu : Event()
     object ShowError : Event()
 }
 

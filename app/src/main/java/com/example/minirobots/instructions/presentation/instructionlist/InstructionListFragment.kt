@@ -1,6 +1,5 @@
-package com.example.minirobots.instructions.presentation
+package com.example.minirobots.instructions.presentation.instructionlist
 
-import android.content.DialogInterface
 import android.os.Bundle
 import android.view.View
 import android.widget.Toast
@@ -17,18 +16,20 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
-class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), DialogInterface.OnDismissListener {
+class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
 
     // TODO: Try nesting InstructionList and AddInstruction fragments, scoping a ViewModel to that nested graph,
     //  and using hiltNavGraphViewModels to inject the VMs. That avoids having a Singleton VM with the scope of the whole app.
     private val viewModel: InstructionsListViewModel by activityViewModels()
-    private val adapter = InstructionsAdapter()
+    private val adapter = InstructionsAdapter { index ->
+        viewModel.onInstructionClicked(index)
+    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding(view)
         observeViewModel()
-     }
+    }
 
     private fun setupBinding(view: View) {
         val binding = FragmentInstructionListBinding.bind(view)
@@ -48,7 +49,8 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
         viewModel.eventsFlow
             .onEach {
                 when (it) {
-                    Event.ShowAddInstructionPopUp -> showAddInstructionPopUp()
+                    Event.ShowAddInstructionMenu -> showAddInstructionMenu()
+                    Event.ShowEditInstructionMenu -> showEditInstructionMenu()
                     Event.ShowError -> showError()
                 }
             }
@@ -59,14 +61,16 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list), Di
         Toast.makeText(requireContext(), "Couldn't retrieve instructions.", Toast.LENGTH_SHORT).show()
     }
 
-    private fun showAddInstructionPopUp() {
+    private fun showAddInstructionMenu() {
         findNavController().navigate(
-            InstructionListFragmentDirections.actionInstructionsScreenFragmentToAddInstructionFragment()
+            InstructionListFragmentDirections.actionInstructionListFragmentToAddInstructionFragment()
         )
     }
 
-    override fun onDismiss(dialog: DialogInterface?) {
-        viewModel.onAddSheetDismissed()
+    private fun showEditInstructionMenu() {
+        findNavController().navigate(
+            InstructionListFragmentDirections.actionInstructionListFragmentToEditInstructionFragment()
+        )
     }
 
     private val itemTouchHelperCallback = object : ItemTouchHelper.Callback() {

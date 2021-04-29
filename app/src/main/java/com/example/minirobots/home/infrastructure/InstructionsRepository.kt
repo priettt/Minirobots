@@ -7,8 +7,9 @@ interface InstructionsRepository {
     fun add(instructions: List<Instruction>)
     fun overwrite(instructions: List<Instruction>)
     fun delete(index: Int)
-    fun move(fromIndex: Int, toIndex: Int)
+    fun move(originIndex: Int, targetIndex: Int)
     fun getAll(): List<Instruction>
+    fun get(index: Int): Instruction?
 }
 
 class InMemoryInstructionsRepository @Inject constructor() : InstructionsRepository {
@@ -35,5 +36,12 @@ class InMemoryInstructionsRepository @Inject constructor() : InstructionsReposit
     }
 
     override fun getAll(): List<Instruction> = instructions
+
+    override fun get(index: Int): Instruction? {
+        return if (index >= 0 && index < instructions.size)
+            instructions[index]
+        else
+            null
+    }
 
 }

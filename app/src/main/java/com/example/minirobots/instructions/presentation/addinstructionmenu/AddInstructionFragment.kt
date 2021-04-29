@@ -1,4 +1,4 @@
-package com.example.minirobots.instructions.presentation
+package com.example.minirobots.instructions.presentation.addinstructionmenu
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -10,6 +10,7 @@ import androidx.lifecycle.asLiveData
 import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentAddInstructionBinding
+import com.example.minirobots.instructions.presentation.instructionlist.InstructionsListViewModel
 import com.example.minirobots.utilities.observeIn
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
@@ -48,14 +49,14 @@ class AddInstructionFragment : BottomSheetDialogFragment() {
         viewModel.eventsFlow
             .onEach {
                 when (it) {
-                    AddInstructionViewModel.Event.CloseAddSheet -> closeAddSheet()
+                    AddInstructionViewModel.Event.InstructionAdded -> onInstructionAdded()
                 }
             }
             .observeIn(this)
     }
 
-    private fun closeAddSheet() {
-        instructionListViewModel.onAddSheetDismissed()
+    private fun onInstructionAdded() {
+        instructionListViewModel.onInstructionAdded()
         findNavController().navigateUp()
     }
 

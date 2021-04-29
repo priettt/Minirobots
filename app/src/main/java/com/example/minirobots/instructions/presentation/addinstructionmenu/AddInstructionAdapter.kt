@@ -1,4 +1,4 @@
-package com.example.minirobots.instructions.presentation
+package com.example.minirobots.instructions.presentation.addinstructionmenu
 
 import android.view.LayoutInflater
 import android.view.View
@@ -19,10 +19,8 @@ class AddInstructionAdapter(
 
     class AddInstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemAddInstructionBinding.bind(view)
-        private var currentInstruction: Instruction? = null
 
         fun bind(instruction: Instruction) {
-            currentInstruction = instruction
             binding.instructionName.text = instruction.name
             binding.instructionImage.setImageResource(instruction.imageDrawable)
         }

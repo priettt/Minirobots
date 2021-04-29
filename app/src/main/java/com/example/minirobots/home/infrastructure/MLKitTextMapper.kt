@@ -44,23 +44,23 @@ class GenerateInstructions @Inject constructor() {
         val instructions = mutableListOf<Instruction>()
         instructionCardNames.forEachIndexed { index, instruction ->
             when (instruction) {
-                InstructionCardName.AVANZAR -> instructions.add(MoveForward(getSteps(instructionCardNames, index)))
+                InstructionCardName.AVANZAR -> instructions.add(MoveForward(modifier = getSteps(instructionCardNames, index)))
                 InstructionCardName.BAJAR_LAPIZ -> instructions.add(PencilDown())
                 InstructionCardName.FUNCION -> instructions.add(FunctionExecute())
                 InstructionCardName.FUNCION_COMIENZO -> instructions.add(FunctionStart())
                 InstructionCardName.FUNCION_FIN -> instructions.add(FunctionEnd())
-                InstructionCardName.GIRAR_DERECHA -> instructions.add(RotateRight(getRotationAngle(instructionCardNames, index)))
-                InstructionCardName.GIRAR_IZQUIERDA -> instructions.add(RotateLeft(getRotationAngle(instructionCardNames, index)))
-                InstructionCardName.LEDS -> instructions.add(Led(getLedColor(instructionCardNames, index)))
+                InstructionCardName.GIRAR_DERECHA -> instructions.add(RotateRight(modifier = getAngle(instructionCardNames, index)))
+                InstructionCardName.GIRAR_IZQUIERDA -> instructions.add(RotateLeft(modifier = getAngle(instructionCardNames, index)))
+                InstructionCardName.LEDS -> instructions.add(Led(modifier = getLedColor(instructionCardNames, index)))
                 InstructionCardName.LEVANTAR_LAPIZ -> instructions.add(PencilUp())
                 InstructionCardName.PROGRAMA_COMIENZO -> instructions.add(ProgramStart())
                 InstructionCardName.PROGRAMA_FIN -> instructions.add(ProgramEnd())
-                InstructionCardName.REPETIR_COMIENZO -> instructions.add(RepeatStart(getSteps(instructionCardNames, index)))
+                InstructionCardName.REPETIR_COMIENZO -> instructions.add(RepeatStart(modifier = getSteps(instructionCardNames, index)))
                 InstructionCardName.REPETIR_FIN -> instructions.add(RepeatEnd())
-                InstructionCardName.RETROCEDER -> instructions.add(MoveBackward(getSteps(instructionCardNames, index)))
-                InstructionCardName.TOCAR_CORCHEA -> instructions.add(Eighth(getMusicNote(instructionCardNames, index)))
-                InstructionCardName.TOCAR_MELODIA -> instructions.add(Melody(getMusicNote(instructionCardNames, index)))
-                InstructionCardName.TOCAR_NEGRA -> instructions.add(Quarter(getMusicNote(instructionCardNames, index)))
+                InstructionCardName.RETROCEDER -> instructions.add(MoveBackward(modifier = getSteps(instructionCardNames, index)))
+                InstructionCardName.TOCAR_CORCHEA -> instructions.add(Eighth(modifier = getMusicNote(instructionCardNames, index)))
+                InstructionCardName.TOCAR_MELODIA -> instructions.add(Melody(modifier = getMusicNote(instructionCardNames, index)))
+                InstructionCardName.TOCAR_NEGRA -> instructions.add(Quarter(modifier = getMusicNote(instructionCardNames, index)))
                 else -> { // Do Nothing
                 }
             }
@@ -125,7 +125,7 @@ class GenerateInstructions @Inject constructor() {
         return findNote(index - 1) ?: findNote(index + 1) ?: MusicNote.RANDOM
     }
 
-    private fun getRotationAngle(instructionCardNames: List<InstructionCardName>, index: Int): RotationAngle {
+    private fun getAngle(instructionCardNames: List<InstructionCardName>, index: Int): RotationAngle {
 
         fun findRotationAngle(index: Int): RotationAngle? {
             return when (instructionCardNames.getOrNull(index)) {

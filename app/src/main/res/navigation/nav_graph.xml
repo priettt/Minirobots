@@ -28,14 +28,21 @@
     </fragment>
     <fragment
         android:id="@+id/instructionListFragment"
-        android:name="com.example.minirobots.instructions.presentation.InstructionListFragment"
+        android:name="com.example.minirobots.instructions.presentation.instructionlist.InstructionListFragment"
         android:label="InstructionListFragment">
         <action
-            android:id="@+id/action_instructionsScreenFragment_to_addInstructionFragment"
+            android:id="@+id/action_instructionListFragment_to_addInstructionFragment"
             app:destination="@id/addInstructionFragment" />
+        <action
+            android:id="@+id/action_instructionListFragment_to_editInstructionFragment"
+            app:destination="@id/editInstructionFragment" />
     </fragment>
     <dialog
         android:id="@+id/addInstructionFragment"
-        android:name="com.example.minirobots.instructions.presentation.AddInstructionFragment"
+        android:name="com.example.minirobots.instructions.presentation.addinstructionmenu.AddInstructionFragment"
         android:label="AddInstructionFragment" />
+    <dialog
+        android:id="@+id/editInstructionFragment"
+        android:name="com.example.minirobots.instructions.presentation.editinstructionmenu.EditInstructionFragment"
+        android:label="EditInstructionFragment" />
 </navigation>
