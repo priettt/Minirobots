@@ -51,7 +51,7 @@ class InstructionsAdapter(
 
 object InstructionDiffCallback : DiffUtil.ItemCallback<Instruction>() {
     override fun areItemsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
-        return oldItem == newItem
+        return oldItem.name == newItem.name && oldItem.modifier?.text == newItem.modifier?.text
     }
 
     override fun areContentsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {

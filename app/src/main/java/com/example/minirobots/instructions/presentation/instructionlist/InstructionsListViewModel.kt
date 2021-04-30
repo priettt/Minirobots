@@ -6,7 +6,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructions.domain.actions.*
 import com.example.minirobots.instructions.domain.entities.Instruction
-import com.example.minirobots.instructions.domain.entities.Modifier
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,7 +18,7 @@ class InstructionsListViewModel @Inject constructor(
     private val deleteInstruction: DeleteInstruction,
     private val moveInstruction: MoveInstruction,
     private val getInstructionModifiers: GetInstructionModifiers,
-    private val storeModifiers: StoreModifiers,
+    private val storeEditInstructionMenuData: StoreEditInstructionMenuData,
 ) : ViewModel() {
 
     private val mutableInstructions = MutableLiveData<List<Instruction>>()
@@ -37,8 +36,8 @@ class InstructionsListViewModel @Inject constructor(
         fetchInstructions()
     }
 
-    fun onInstructionEdited() {
-        fetchInstructions()
+    fun onInstructionEdited(index: Int) {
+        sendEvent(Event.ForceUpdate(index))
     }
 
     private fun fetchInstructions() {
@@ -71,13 +70,9 @@ class InstructionsListViewModel @Inject constructor(
 
     fun onInstructionClicked(index: Int) {
         getInstructionModifiers(index)?.let {
-            storeModifiers(it)
+            storeEditInstructionMenuData(index, it)
             sendEvent(Event.ShowEditInstructionMenu)
         }
-    }
-
-    fun onInstructionEdited(modifier: Modifier) {
-
     }
 
 }
@@ -86,6 +81,7 @@ sealed class Event {
     object ShowAddInstructionMenu : Event()
     object ShowEditInstructionMenu : Event()
     object ShowError : Event()
+    data class ForceUpdate(val index: Int) : Event()
 }
 
 

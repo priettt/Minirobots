@@ -1,8 +1,8 @@
 package com.example.minirobots.di
 
 import com.example.minirobots.home.infrastructure.*
-import com.example.minirobots.instructions.infrastructure.InMemoryModifiersRepository
-import com.example.minirobots.instructions.infrastructure.ModifiersRepository
+import com.example.minirobots.instructions.infrastructure.EditInstructionMenuDataRepository
+import com.example.minirobots.instructions.infrastructure.InMemoryEditInstructionMenuDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
@@ -70,6 +70,6 @@ abstract class ModifiersRepositoryModule {
     @Singleton
     @Binds
     abstract fun bindModifiersRepository(
-        inMemoryModifiersRepository: InMemoryModifiersRepository
-    ): ModifiersRepository
+        inMemoryModifiersRepository: InMemoryEditInstructionMenuDataRepository
+    ): EditInstructionMenuDataRepository
 }

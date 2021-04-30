@@ -21,8 +21,8 @@ class EditInstructionFragment : BottomSheetDialogFragment() {
 
     private val viewModel: EditInstructionViewModel by viewModels()
     private val instructionListViewModel: InstructionsListViewModel by activityViewModels()
-    private val adapter = EditInstructionAdapter {
-        instructionListViewModel.onInstructionEdited(it)
+    private val adapter = EditInstructionAdapter { modifier ->
+        viewModel.onModifierClicked(modifier)
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -49,14 +49,14 @@ class EditInstructionFragment : BottomSheetDialogFragment() {
         viewModel.eventsFlow
             .onEach {
                 when (it) {
-                    EditInstructionViewModel.Event.InstructionEdited -> onInstructionEdited()
+                    is EditInstructionViewModel.Event.InstructionEdited -> onInstructionEdited(it.index)
                 }
             }
             .observeIn(this)
     }
 
-    private fun onInstructionEdited() {
-        instructionListViewModel.onInstructionEdited()
+    private fun onInstructionEdited(index: Int) {
+        instructionListViewModel.onInstructionEdited(index)
         findNavController().navigateUp()
     }
 

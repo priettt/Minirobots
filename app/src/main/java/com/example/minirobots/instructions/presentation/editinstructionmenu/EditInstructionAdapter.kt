@@ -17,9 +17,12 @@ class EditInstructionAdapter(
     class EditInstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemEditInstructionBinding.bind(view)
 
-        fun bind(modifier: Modifier) {
+        fun bind(modifier: Modifier, onItemClickListener: (Modifier) -> Unit) {
             binding.instructionName.text = modifier.text
             binding.instructionImage.setImageResource(modifier.imageDrawable)
+            itemView.setOnClickListener {
+                onItemClickListener(modifier)
+            }
         }
     }
 
@@ -29,10 +32,7 @@ class EditInstructionAdapter(
     }
 
     override fun onBindViewHolder(holder: EditInstructionViewHolder, position: Int) {
-        val modifier = getItem(position)
-        //TODO: research what's the best way to tell the viewModel that an instruction has been clicked
-        holder.itemView.setOnClickListener { onItemClickListener(modifier) }
-        holder.bind(modifier)
+        holder.bind(getItem(position), onItemClickListener)
     }
 }
 

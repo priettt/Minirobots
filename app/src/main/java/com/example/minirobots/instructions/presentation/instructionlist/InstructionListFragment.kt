@@ -39,6 +39,7 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
         }
         val itemTouchHelper = ItemTouchHelper(itemTouchHelperCallback)
         itemTouchHelper.attachToRecyclerView(binding.instructionsList)
+        binding.instructionsList.itemAnimator?.changeDuration = 0
     }
 
     private fun observeViewModel() {
@@ -52,9 +53,18 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
                     Event.ShowAddInstructionMenu -> showAddInstructionMenu()
                     Event.ShowEditInstructionMenu -> showEditInstructionMenu()
                     Event.ShowError -> showError()
+                    is Event.ForceUpdate -> updateList(it.index)
                 }
             }
             .observeIn(this)
+    }
+
+    private fun updateList(index: Int) {
+        // This approach is ugly, but in order to update the list with submitList instead, we should find a way to update items from
+        // the repository by inserting a new copy, rather than modifying the existent one. This could be done with a more functional
+        // approach, in which every item is immutable, but I couldn't find a way to match that with the interfaces I already had.
+        // This could need a major refactor.
+        adapter.notifyItemChanged(index)
     }
 
     private fun showError() {

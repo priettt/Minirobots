@@ -12,7 +12,7 @@ interface Modifier {
 
 interface Instruction {
     val name: String
-    val modifier: Modifier?
+    var modifier: Modifier?
 
     @get:DrawableRes
     val imageDrawable: Int
@@ -21,103 +21,103 @@ interface Instruction {
 data class RotateRight(
     override val name: String = "Rotar a la derecha",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = RotationAngle.RANDOM,
+    override var modifier: Modifier? = RotationAngle.RANDOM,
 ) : Instruction
 
 data class RotateLeft(
     override val name: String = "Rotar a la izquierda",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = RotationAngle.RANDOM,
+    override var modifier: Modifier? = RotationAngle.RANDOM,
 ) : Instruction
 
 data class Led(
     override val name: String = "Leds",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = RotationAngle.RANDOM,
+    override var modifier: Modifier? = LedColor.RANDOM,
 ) : Instruction
 
 data class MoveForward(
     override val name: String = "Avanzar",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = Steps.RANDOM,
+    override var modifier: Modifier? = Steps.RANDOM,
 ) : Instruction
 
 data class MoveBackward(
     override val name: String = "Retroceder",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = Steps.RANDOM,
+    override var modifier: Modifier? = Steps.RANDOM,
 ) : Instruction
 
 data class RepeatStart(
     override val name: String = "Inicio de repetición",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = Steps.RANDOM,
+    override var modifier: Modifier? = Steps.RANDOM,
 ) : Instruction
 
 data class Quarter(
     override val name: String = "Reproducir negra",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = MusicNote.RANDOM,
+    override var modifier: Modifier? = MusicNote.RANDOM,
 ) : Instruction
 
 data class Eighth(
     override val name: String = "Reproducir corchea",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = MusicNote.RANDOM,
+    override var modifier: Modifier? = MusicNote.RANDOM,
 ) : Instruction
 
 data class Melody(
     override val name: String = "Reproducir melodia",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier = MusicNote.RANDOM,
+    override var modifier: Modifier? = MusicNote.RANDOM,
 ) : Instruction
 
 data class ProgramStart(
     override val name: String = "Inicio Programa",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class ProgramEnd(
     override val name: String = "Fin Programa",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class RepeatEnd(
     override val name: String = "Fin Repeticion",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class FunctionStart(
     override val name: String = "Inicio Función",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class FunctionEnd(
     override val name: String = "Fin Función",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class FunctionExecute(
     override val name: String = "Ejecutar Función",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class PencilDown(
     override val name: String = "Lápiz Abajo",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 data class PencilUp(
     override val name: String = "Lápiz Arriba",
     override val imageDrawable: Int = R.drawable.inicio_programa,
-    override val modifier: Modifier? = null
+    override var modifier: Modifier? = null
 ) : Instruction
 
 enum class MusicNote : Modifier {

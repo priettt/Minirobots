@@ -1,6 +1,7 @@
 package com.example.minirobots.home.infrastructure
 
 import com.example.minirobots.instructions.domain.entities.Instruction
+import com.example.minirobots.instructions.domain.entities.Modifier
 import javax.inject.Inject
 
 interface InstructionsRepository {
@@ -10,6 +11,7 @@ interface InstructionsRepository {
     fun move(originIndex: Int, targetIndex: Int)
     fun getAll(): List<Instruction>
     fun get(index: Int): Instruction?
+    fun updateModifier(index: Int, modifier: Modifier)
 }
 
 class InMemoryInstructionsRepository @Inject constructor() : InstructionsRepository {
@@ -42,6 +44,12 @@ class InMemoryInstructionsRepository @Inject constructor() : InstructionsReposit
             instructions[index]
         else
             null
+    }
+
+    override fun updateModifier(index: Int, modifier: Modifier) {
+        if (index >= 0 && index < instructions.size)
+            if (instructions[index].modifier != null)
+                instructions[index].modifier = modifier
     }
 
 }
