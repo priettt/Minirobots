@@ -37,7 +37,7 @@ class InMemoryInstructionsRepository @Inject constructor() : InstructionsReposit
         instructions.add(targetIndex, originInstruction)
     }
 
-    override fun getAll(): List<Instruction> = instructions
+    override fun getAll(): List<Instruction> = instructions.toMutableList()
 
     override fun get(index: Int): Instruction? {
         return if (index >= 0 && index < instructions.size)

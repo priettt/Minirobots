@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemInstructionBinding
 import com.example.minirobots.instructions.domain.entities.Instruction
+import com.example.minirobots.instructions.domain.entities.Modifier
 
 class InstructionsAdapter(
     private val onItemClickListener: (Int) -> Unit
@@ -18,7 +19,7 @@ class InstructionsAdapter(
         private val binding = ItemInstructionBinding.bind(view)
 
         fun bind(instruction: Instruction, onItemClickListener: (Int) -> Unit) {
-            bindModifier(instruction)
+            bindModifier(instruction.modifier)
             bindInstruction(instruction)
             itemView.setOnClickListener {
                 onItemClickListener(adapterPosition)
@@ -30,11 +31,13 @@ class InstructionsAdapter(
             binding.instructionImage.setImageResource(instruction.imageDrawable)
         }
 
-        private fun bindModifier(instruction: Instruction) {
-            instruction.modifier?.let {
+        private fun bindModifier(modifier: Modifier?) {
+            if (modifier != null) {
                 binding.modifierInfo.visibility = View.VISIBLE
-                binding.modifierText.text = it.text
-                binding.modifierImage.setImageResource(it.imageDrawable)
+                binding.modifierText.text = modifier.text
+                binding.modifierImage.setImageResource(modifier.imageDrawable)
+            } else {
+                binding.modifierInfo.visibility = View.GONE
             }
         }
     }
@@ -51,7 +54,7 @@ class InstructionsAdapter(
 
 object InstructionDiffCallback : DiffUtil.ItemCallback<Instruction>() {
     override fun areItemsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
-        return oldItem.name == newItem.name && oldItem.modifier?.text == newItem.modifier?.text
+        return oldItem == newItem
     }
 
     override fun areContentsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
