@@ -4,6 +4,8 @@ import android.net.Uri
 import android.os.Bundle
 import android.os.Environment
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import android.widget.Toast
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
@@ -23,6 +25,7 @@ private const val FILE_PROVIDER_AUTHORITY = "com.minirobots.fileprovider"
 class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
 
     private val viewModel: TakePictureViewModel by viewModels()
+    private lateinit var binding: FragmentTakePictureBinding
 
     private val takePicture = registerForActivityResult(ActivityResultContracts.TakePicture()) { takePictureSuccessful ->
         viewModel.onTakePictureCompleted(takePictureSuccessful)
@@ -39,7 +42,7 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
     }
 
     private fun setupBinding(view: View) {
-        val binding = FragmentTakePictureBinding.bind(view)
+        binding = FragmentTakePictureBinding.bind(view)
         binding.takePictureButton.setOnClickListener {
             onTakePictureClicked()
         }
@@ -52,23 +55,38 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
         viewModel.navigation.asLiveData().observe(viewLifecycleOwner, { state ->
             when (state) {
                 TakePictureNavigation.GoToInstructions -> goToInstructionsScreen()
-                TakePictureNavigation.ShowRecognitionError ->
+                TakePictureNavigation.ShowSpinner -> showSpinner()
+                TakePictureNavigation.ShowRecognitionError -> {
                     Toast.makeText(requireContext(), "There was an error analyzing the image. Please try again", Toast.LENGTH_SHORT).show()
-                TakePictureNavigation.ShowTakePictureError ->
+                    hideSpinner()
+                }
+                TakePictureNavigation.ShowTakePictureError -> {
                     Toast.makeText(requireContext(), "Couldn't retrieve picture, please, try again.", Toast.LENGTH_SHORT).show()
+                    hideSpinner()
+                }
                 else -> { //Do nothing
                 }
             }
         })
     }
 
+    private fun showSpinner() {
+        binding.loadingSpinner.visibility = VISIBLE
+    }
+
+    private fun hideSpinner() {
+        binding.loadingSpinner.visibility = GONE
+    }
+
     private fun goToInstructionsScreen() {
+        hideSpinner()
         findNavController().navigate(
             TakePictureFragmentDirections.actionTakePictureFragmentToInstructionListFragment()
         )
     }
 
     private fun onGetPictureFromGalleryClicked() {
+        showSpinner()
         getPictureFromGallery.launch("image/*")
     }
 

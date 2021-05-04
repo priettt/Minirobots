@@ -21,6 +21,7 @@ class TakePictureViewModel @Inject constructor(
 
     fun onPictureUriCreated(pictureUri: Uri) {
         this.pictureUri = pictureUri
+        navigation.value = TakePictureNavigation.ShowSpinner
     }
 
     fun onTakePictureCompleted(takePictureSuccessful: Boolean) {
@@ -53,5 +54,6 @@ class TakePictureViewModel @Inject constructor(
 enum class TakePictureNavigation {
     GoToInstructions,
     ShowRecognitionError,
-    ShowTakePictureError
+    ShowTakePictureError,
+    ShowSpinner
 }
