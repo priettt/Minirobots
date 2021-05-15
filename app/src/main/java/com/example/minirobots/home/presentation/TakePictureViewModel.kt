@@ -32,9 +32,11 @@ class TakePictureViewModel @Inject constructor(
         }
     }
 
-    fun onGetPictureFromGallery(pictureUri: Uri) {
-        onPictureUriCreated(pictureUri)
-        recognizeInstructions()
+    fun onGetPictureFromGallery(pictureUri: Uri?) {
+        pictureUri?.let {
+            onPictureUriCreated(it)
+            recognizeInstructions()
+        }
     }
 
     private fun recognizeInstructions() {

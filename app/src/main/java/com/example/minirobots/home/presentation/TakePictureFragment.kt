@@ -86,7 +86,6 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
     }
 
     private fun onGetPictureFromGalleryClicked() {
-        showSpinner()
         getPictureFromGallery.launch("image/*")
     }
 
