@@ -4,5 +4,6 @@
     <string name="take_picture_title">Take a picture of the instructions you want to send to the robot</string>
     <string name="take_picture_button">Take picture</string>
     <string name="take_picture_get_from_gallery_button">Get picture from gallery</string>
-    <string name="instructions_screen_recognized_instructions_text">The following instructions were found:</string>
+    <string name="instructions_list_title">The following instructions will be sent to the robot: </string>
+    <string name="instructions_screen_send_instructions_button_text">Send instructions</string>
 </resources>

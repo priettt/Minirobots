@@ -71,11 +71,11 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
     }
 
     private fun showSpinner() {
-        binding.loadingSpinner.visibility = VISIBLE
+        binding.loadingView.progressOverlay.visibility = VISIBLE
     }
 
     private fun hideSpinner() {
-        binding.loadingSpinner.visibility = GONE
+        binding.loadingView.progressOverlay.visibility = GONE
     }
 
     private fun goToInstructionsScreen() {
