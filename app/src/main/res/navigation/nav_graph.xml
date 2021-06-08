@@ -19,7 +19,7 @@
     app:startDestination="@id/takePictureFragment">
     <fragment
         android:id="@+id/takePictureFragment"
-        android:name="com.example.minirobots.home.presentation.TakePictureFragment"
+        android:name="com.example.minirobots.takePicture.presentation.TakePictureFragment"
         android:label="fragment_take_picture"
         tools:layout="@layout/fragment_take_picture">
         <action
@@ -28,7 +28,7 @@
     </fragment>
     <fragment
         android:id="@+id/instructionListFragment"
-        android:name="com.example.minirobots.instructions.presentation.instructionlist.InstructionListFragment"
+        android:name="com.example.minirobots.instructionsList.presentation.instructionlist.InstructionListFragment"
         android:label="InstructionListFragment">
         <action
             android:id="@+id/action_instructionListFragment_to_addInstructionFragment"
@@ -36,13 +36,20 @@
         <action
             android:id="@+id/action_instructionListFragment_to_editInstructionFragment"
             app:destination="@id/editInstructionFragment" />
+        <action
+            android:id="@+id/action_instructionListFragment_to_sendInstructionsFragment"
+            app:destination="@id/sendInstructionsFragment" />
     </fragment>
     <dialog
         android:id="@+id/addInstructionFragment"
-        android:name="com.example.minirobots.instructions.presentation.addinstructionmenu.AddInstructionFragment"
+        android:name="com.example.minirobots.instructionsList.presentation.addinstructionmenu.AddInstructionFragment"
         android:label="AddInstructionFragment" />
     <dialog
         android:id="@+id/editInstructionFragment"
-        android:name="com.example.minirobots.instructions.presentation.editinstructionmenu.EditInstructionFragment"
+        android:name="com.example.minirobots.instructionsList.presentation.editinstructionmenu.EditInstructionFragment"
         android:label="EditInstructionFragment" />
+    <fragment
+        android:id="@+id/sendInstructionsFragment"
+        android:name="com.example.minirobots.sendInstructions.presentation.SendInstructionsFragment"
+        android:label="SendInstructionsFragment" />
 </navigation>

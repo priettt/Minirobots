@@ -1,8 +1,8 @@
 package com.example.minirobots.di
 
-import com.example.minirobots.home.infrastructure.*
-import com.example.minirobots.instructions.infrastructure.EditInstructionMenuDataRepository
-import com.example.minirobots.instructions.infrastructure.InMemoryEditInstructionMenuDataRepository
+import com.example.minirobots.takePicture.infrastructure.*
+import com.example.minirobots.instructionsList.infrastructure.EditInstructionMenuDataRepository
+import com.example.minirobots.instructionsList.infrastructure.InMemoryEditInstructionMenuDataRepository
 import dagger.Binds
 import dagger.Module
 import dagger.Provides
