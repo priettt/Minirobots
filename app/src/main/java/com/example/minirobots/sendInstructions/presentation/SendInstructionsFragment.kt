@@ -18,6 +18,7 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding(view)
         observeViewModel()
+        viewModel.onViewCreated()
     }
 
     private fun setupBinding(view: View) {
