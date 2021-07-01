@@ -19,6 +19,7 @@ import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
+import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Qualifier
 import javax.inject.Singleton
 
@@ -116,6 +117,7 @@ object NetworkModule {
         val contentType = "application/json".toMediaType()
         return Retrofit.Builder()
             .baseUrl(MINIROBOTS_API_BASE_URL)
+            .addConverterFactory(ScalarsConverterFactory.create())
             .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory(contentType))
             .client(okHttpClient)
             .build()
