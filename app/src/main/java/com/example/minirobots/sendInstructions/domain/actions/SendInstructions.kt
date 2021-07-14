@@ -8,21 +8,22 @@ import javax.inject.Inject
 class SendInstructions @Inject constructor(
     private val instructionsRepository: InstructionsRepository,
     private val instructionsParser: InstructionsParser,
-    private val instructionsService: InstructionsService,
+    private val instructionsService: InstructionsService
 ) {
-    suspend operator fun invoke(): Result<String> {
+    suspend operator fun invoke(): Result<Unit> {
         val instructions = instructionsRepository.getAll()
         val parsedInstructions = instructionsParser.parse(instructions)
         return try {
             val sendInstructionsResult = instructionsService.sendInstructions(parsedInstructions)
             if (sendInstructionsResult.isSuccessful) {
-                Result.success("")
+                Result.success(Unit)
             } else {
                 Result.failure(Error("Network error"))
             }
         } catch (exception: Exception) {
-            Result.failure(Error("Network error"))
+            Result.failure(exception)
         }
     }
-
 }
+
+class InvalidNetworkError : Error()

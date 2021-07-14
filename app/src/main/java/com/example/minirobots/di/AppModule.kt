@@ -14,10 +14,12 @@ import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.Dispatchers
+import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
+import retrofit2.Converter
 import retrofit2.Retrofit
 import retrofit2.converter.scalars.ScalarsConverterFactory
 import javax.inject.Qualifier
@@ -100,6 +102,15 @@ abstract class InstructionsParserModule {
 @Module
 @InstallIn(SingletonComponent::class)
 object NetworkModule {
+    private val json = Json { ignoreUnknownKeys = true }
+
+    @ExperimentalSerializationApi
+    @Provides
+    @Singleton
+    fun provideJsonConverterFactory(): Converter.Factory {
+        val contentType = "application/json".toMediaType()
+        return json.asConverterFactory(contentType)
+    }
 
     @Provides
     @Singleton
@@ -113,12 +124,11 @@ object NetworkModule {
 
     @Provides
     @Singleton
-    fun provideInstructionsService(okHttpClient: OkHttpClient): InstructionsService {
-        val contentType = "application/json".toMediaType()
+    fun provideInstructionsService(okHttpClient: OkHttpClient, converterFactory: Converter.Factory): InstructionsService {
         return Retrofit.Builder()
             .baseUrl(MINIROBOTS_API_BASE_URL)
             .addConverterFactory(ScalarsConverterFactory.create())
-            .addConverterFactory(Json { ignoreUnknownKeys = true }.asConverterFactory(contentType))
+            .addConverterFactory(converterFactory)
             .client(okHttpClient)
             .build()
             .create(InstructionsService::class.java)

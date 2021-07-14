@@ -8,6 +8,7 @@ import com.example.minirobots.takePicture.infrastructure.MLKitTextMapper
 import com.google.mlkit.vision.common.InputImage
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.TextRecognizerOptions
 import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.CoroutineDispatcher
 import kotlinx.coroutines.tasks.await
@@ -22,7 +23,7 @@ class ProcessInstructions @Inject constructor(
     private val instructionsRepository: InstructionsRepository
 ) {
 
-    private val recognizer = TextRecognition.getClient()
+    private val recognizer = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 
     suspend operator fun invoke(uri: Uri): Result<Unit> {
         val inputImage = getInputImage(uri, context) ?: return Result.failure(IOException())

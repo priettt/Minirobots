@@ -2,11 +2,15 @@ package com.example.minirobots.sendInstructions.presentation
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.GONE
+import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentSendInstructionsBinding
+import com.example.minirobots.utilities.observeIn
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
 class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
@@ -23,11 +27,35 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
 
     private fun setupBinding(view: View) {
         binding = FragmentSendInstructionsBinding.bind(view)
-
+        binding.sendInstructionsRetryButton.setOnClickListener {
+            viewModel.onRetryPressed()
+        }
     }
 
     private fun observeViewModel() {
+        viewModel.eventsFlow
+            .onEach {
+                when (it) {
+                    SendInstructionsViewModel.Event.ShowFailure -> showFailure()
+                    SendInstructionsViewModel.Event.ShowSuccess -> showSuccess()
+                    SendInstructionsViewModel.Event.ShowLoading -> showLoading()
+                }
+            }
+            .observeIn(this)
+    }
 
+    private fun showSuccess() {
+        TODO("Not yet implemented")
+    }
+
+    private fun showLoading() {
+        binding.loadingGroup.visibility = VISIBLE
+        binding.errorGroup.visibility = GONE
+    }
+
+    private fun showFailure() {
+        binding.loadingGroup.visibility = GONE
+        binding.errorGroup.visibility = VISIBLE
     }
 
 }
