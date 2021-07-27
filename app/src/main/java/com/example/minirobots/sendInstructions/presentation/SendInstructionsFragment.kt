@@ -45,7 +45,7 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
     }
 
     private fun showSuccess() {
-        TODO("Not yet implemented")
+        showFailure()
     }
 
     private fun showLoading() {
