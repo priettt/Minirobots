@@ -6,6 +6,7 @@ import com.example.minirobots.sendInstructions.infrastructure.InstructionsParser
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsParserImpl
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsService
 import com.example.minirobots.takePicture.infrastructure.*
+import com.example.minirobots.utilities.network.SocketTimeoutRetryInterceptor
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
@@ -26,6 +27,7 @@ import javax.inject.Qualifier
 import javax.inject.Singleton
 
 private const val MINIROBOTS_API_BASE_URL = "http://192.168.4.1"
+private const val MAX_RETRIES = 3
 
 /**
  * Module to tell Hilt how to provide instances of types that cannot be constructor-injected.
@@ -119,6 +121,7 @@ object NetworkModule {
         logger.level = HttpLoggingInterceptor.Level.BODY
         return OkHttpClient.Builder()
             .addInterceptor(logger)
+            .addInterceptor(SocketTimeoutRetryInterceptor(MAX_RETRIES))
             .build()
     }
 
