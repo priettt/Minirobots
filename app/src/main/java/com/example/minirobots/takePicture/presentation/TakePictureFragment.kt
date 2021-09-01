@@ -52,22 +52,24 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
     }
 
     private fun observeViewModel() {
-        viewModel.navigation.asLiveData().observe(viewLifecycleOwner, { state ->
-            when (state) {
-                TakePictureNavigation.GoToInstructions -> goToInstructionsScreen()
-                TakePictureNavigation.ShowSpinner -> showSpinner()
-                TakePictureNavigation.ShowRecognitionError -> {
-                    Toast.makeText(requireContext(), "There was an error analyzing the image. Please try again", Toast.LENGTH_SHORT).show()
-                    hideSpinner()
-                }
-                TakePictureNavigation.ShowTakePictureError -> {
-                    Toast.makeText(requireContext(), "Couldn't retrieve picture, please, try again.", Toast.LENGTH_SHORT).show()
-                    hideSpinner()
-                }
-                else -> { //Do nothing
-                }
+        viewModel.navigation.asLiveData().observe(viewLifecycleOwner, ::handleNavigation)
+    }
+
+    private fun handleNavigation(state: TakePictureNavigation?) {
+        when (state) {
+            TakePictureNavigation.GoToInstructions -> goToInstructionsScreen()
+            TakePictureNavigation.ShowSpinner -> showSpinner()
+            TakePictureNavigation.ShowRecognitionError -> {
+                Toast.makeText(requireContext(), "There was an error analyzing the image. Please try again", Toast.LENGTH_SHORT).show()
+                hideSpinner()
             }
-        })
+            TakePictureNavigation.ShowTakePictureError -> {
+                Toast.makeText(requireContext(), "Couldn't retrieve picture, please, try again.", Toast.LENGTH_SHORT).show()
+                hideSpinner()
+            }
+            else -> { //Do nothing
+            }
+        }
     }
 
     private fun showSpinner() {

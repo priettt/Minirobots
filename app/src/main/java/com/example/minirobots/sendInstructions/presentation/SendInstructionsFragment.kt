@@ -45,16 +45,20 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
     }
 
     private fun showSuccess() {
-        showFailure()
+        binding.successGroup.visibility = VISIBLE
+        binding.errorGroup.visibility = GONE
+        binding.loadingGroup.visibility = GONE
     }
 
     private fun showLoading() {
         binding.loadingGroup.visibility = VISIBLE
+        binding.successGroup.visibility = GONE
         binding.errorGroup.visibility = GONE
     }
 
     private fun showFailure() {
         binding.loadingGroup.visibility = GONE
+        binding.successGroup.visibility = GONE
         binding.errorGroup.visibility = VISIBLE
     }
 

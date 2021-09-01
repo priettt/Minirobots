@@ -1,5 +1,6 @@
 package com.example.minirobots.takePicture.infrastructure
 
+import android.util.Log
 import com.example.minirobots.takePicture.domain.entities.InstructionCardName
 import javax.inject.Inject
 
@@ -17,6 +18,11 @@ class StringDistanceInstructionRecognizer @Inject constructor(
                 closestInstruction = instruction
             }
         }
+
+        Log.d(
+            "Instruction Recognizer",
+            "Recognizing text: $text. Closest instruction ${closestInstruction.text} with a distance $closestDistance"
+        )
         if (closestDistance <= INSTRUCTION_DISTANCE_THRESHOLD)
             return closestInstruction
         return null

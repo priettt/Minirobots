@@ -15,7 +15,8 @@
         app:layout_constraintEnd_toStartOf="@id/instructionText"
         app:layout_constraintHorizontal_chainStyle="spread"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:srcCompat="@drawable/adelante" />
 
     <ImageView
         android:id="@+id/modifierImage"
@@ -26,7 +27,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toStartOf="@id/modifierText"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/instructionImage" />
+        app:layout_constraintTop_toBottomOf="@id/instructionImage"
+        tools:srcCompat="@drawable/numero_2" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/instructionText"
@@ -39,7 +41,8 @@
         app:layout_constraintBottom_toBottomOf="@id/instructionImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/instructionImage"
-        app:layout_constraintTop_toTopOf="@id/instructionImage" />
+        app:layout_constraintTop_toTopOf="@id/instructionImage"
+        tools:text="Adelante" />
 
     <androidx.appcompat.widget.AppCompatTextView
         android:id="@+id/modifierText"
@@ -52,7 +55,8 @@
         app:layout_constraintBottom_toBottomOf="@id/modifierImage"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/modifierImage"
-        app:layout_constraintTop_toTopOf="@id/modifierImage" />
+        app:layout_constraintTop_toTopOf="@id/modifierImage"
+        tools:text="Numero 2" />
 
     <androidx.constraintlayout.widget.Group
         android:id="@+id/modifierInfo"
