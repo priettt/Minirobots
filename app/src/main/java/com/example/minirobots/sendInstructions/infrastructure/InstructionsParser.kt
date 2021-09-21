@@ -26,7 +26,7 @@ class InstructionsParserImpl @Inject constructor() : InstructionsParser {
             is FunctionExecute -> ""
             is FunctionStart -> ""
             is Led -> """["LD", ${getLedColor(instruction.modifier as LedColor)}]"""
-            is Melody -> getMelody(getMusicNote(instruction.modifier as MusicNote))
+            is Melody -> getMelody(instruction.modifier as MusicNote)
             is MoveBackward -> """["BD", ${getSteps(instruction.modifier as Steps)}]"""
             is MoveForward -> """["FD", ${getSteps(instruction.modifier as Steps)}]"""
             is PencilDown -> """["PN", 1]"""
@@ -41,8 +41,16 @@ class InstructionsParserImpl @Inject constructor() : InstructionsParser {
         }
     }
 
-    private fun getMelody(musicNote: String): String {
-        TODO("Not yet implemented")
+    private fun getMelody(musicNote: MusicNote): String = when (musicNote) {
+        MusicNote.A -> Melodies.Mario
+        MusicNote.B -> Melodies.Mario
+        MusicNote.C -> Melodies.Mario
+        MusicNote.D -> Melodies.Mario
+        MusicNote.E -> Melodies.Mario
+        MusicNote.F -> Melodies.Mario
+        MusicNote.G -> Melodies.Mario
+        MusicNote.SILENCE -> Melodies.Mario
+        MusicNote.RANDOM -> Melodies.Mario
     }
 
     private fun getMusicNote(musicNote: MusicNote) = when (musicNote) {

@@ -17,7 +17,9 @@ class SocketTimeoutRetryInterceptor(private val maxRetries: Int) : Interceptor {
         var retries = 0
 
         while (!response.isSuccessful && retries < maxRetries) {
-            Log.v("RetryInterceptor", "Retry number $retries")
+            Log.d("RetryInterceptor", "Retry number $retries")
+            Log.d("RetryInterceptor", "Error: ${response.message}")
+            response.close()
             response = getResponse(chain)
             retries++
         }
