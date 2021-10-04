@@ -1,39 +1,39 @@
 package com.example.minirobots.takePicture.domain
 
-import com.example.minirobots.takePicture.domain.entities.InstructionCardName
+import com.example.minirobots.takePicture.domain.entities.InstructionName
 import com.example.minirobots.takePicture.infrastructure.LevenshteinDistanceCalculator
-import com.example.minirobots.takePicture.infrastructure.StringDistanceInstructionRecognizer
+import com.example.minirobots.takePicture.infrastructure.StringDistanceGetLocalizedInstruction
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-internal class StringDistanceInstructionRecognizerTest {
+internal class StringDistanceGetLocalizedInstructionTest {
 
-    private lateinit var recognizer: StringDistanceInstructionRecognizer
+    private lateinit var recognizer: StringDistanceGetLocalizedInstruction
 
     @Before
     fun setUp() {
-        recognizer = StringDistanceInstructionRecognizer(LevenshteinDistanceCalculator())
+        recognizer = StringDistanceGetLocalizedInstruction(LevenshteinDistanceCalculator())
     }
 
     @Test
     fun givenSameInstructionString_shouldReturnInstruction() {
         val text = "COLOR AZUL"
-        val instructionType = InstructionCardName.COLOR_AZUL
+        val instructionType = InstructionName.COLOR_AZUL
         assertEquals(instructionType, recognizer.getInstructionType(text))
     }
 
     @Test
     fun givenStringWithDistanceOne_shouldReturnInstruction() {
         val text = "COLOR 4ZUL"
-        val instructionType = InstructionCardName.COLOR_AZUL
+        val instructionType = InstructionName.COLOR_AZUL
         assertEquals(instructionType, recognizer.getInstructionType(text))
     }
 
     @Test
     fun givenStringWithDistanceThree_shouldReturnInstruction() {
         val text = "OR AZUL"
-        InstructionCardName.COLOR_AZUL.also {
+        InstructionName.COLOR_AZUL.also {
             assertEquals(recognizer.getInstructionType(text), it)
         }
     }

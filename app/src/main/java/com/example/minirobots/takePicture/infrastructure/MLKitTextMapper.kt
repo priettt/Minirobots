@@ -1,66 +1,43 @@
 package com.example.minirobots.takePicture.infrastructure
 
-import com.example.minirobots.takePicture.domain.entities.InstructionCardName
+import com.example.minirobots.takePicture.domain.entities.InstructionName
 import com.example.minirobots.instructionsList.domain.entities.*
 import com.google.mlkit.vision.text.Text
 import javax.inject.Inject
 
 class MLKitTextMapper @Inject constructor(
-    private val getInstructionCardNames: GetInstructionCardNames,
+    private val getRecognizedInstructionNames: GetRecognizedInstructionNames,
     private val generateInstructions: GenerateInstructions
 ) {
-    fun getInstructions(mlKitText: Text): List<Instruction> {
-        val instructionCardNames = getInstructionCardNames(mlKitText)
+    fun map(mlKitText: Text): List<Instruction> {
+        val instructionCardNames = getRecognizedInstructionNames(mlKitText)
         return generateInstructions(instructionCardNames)
     }
 }
 
-class GetInstructionCardNames @Inject constructor(
-    private val instructionTypeRecognizer: InstructionRecognizer
-) {
-    operator fun invoke(mlKitText: Text): List<InstructionCardName> {
-        val list = mutableListOf<InstructionWithLocation>()
-        for (block in mlKitText.textBlocks) {
-            for (line in block.lines) {
-                instructionTypeRecognizer.getInstructionType(line.text)?.let {
-                    list.add(
-                        InstructionWithLocation(
-                            it,
-                            line.cornerPoints?.get(0)?.x ?: 0,
-                            line.cornerPoints?.get(0)?.y ?: 0
-                        )
-                    )
-                }
-            }
-        }
-        return list
-            .sortedBy { it.x }
-            .map { it.type }
-    }
-}
 
 class GenerateInstructions @Inject constructor() {
-    operator fun invoke(instructionCardNames: List<InstructionCardName>): List<Instruction> {
+    operator fun invoke(instructionNames: List<InstructionName>): List<Instruction> {
         val instructions = mutableListOf<Instruction>()
-        instructionCardNames.forEachIndexed { index, instruction ->
+        instructionNames.forEachIndexed { index, instruction ->
             when (instruction) {
-                InstructionCardName.AVANZAR -> instructions.add(MoveForward(modifier = getSteps(instructionCardNames, index)))
-                InstructionCardName.BAJAR_LAPIZ -> instructions.add(PencilDown())
-                InstructionCardName.FUNCION -> instructions.add(FunctionExecute())
-                InstructionCardName.FUNCION_COMIENZO -> instructions.add(FunctionStart())
-                InstructionCardName.FUNCION_FIN -> instructions.add(FunctionEnd())
-                InstructionCardName.GIRAR_DERECHA -> instructions.add(RotateRight(modifier = getAngle(instructionCardNames, index)))
-                InstructionCardName.GIRAR_IZQUIERDA -> instructions.add(RotateLeft(modifier = getAngle(instructionCardNames, index)))
-                InstructionCardName.LEDS -> instructions.add(Led(modifier = getLedColor(instructionCardNames, index)))
-                InstructionCardName.LEVANTAR_LAPIZ -> instructions.add(PencilUp())
-                InstructionCardName.PROGRAMA_COMIENZO -> instructions.add(ProgramStart())
-                InstructionCardName.PROGRAMA_FIN -> instructions.add(ProgramEnd())
-                InstructionCardName.REPETIR_COMIENZO -> instructions.add(RepeatStart(modifier = getSteps(instructionCardNames, index)))
-                InstructionCardName.REPETIR_FIN -> instructions.add(RepeatEnd())
-                InstructionCardName.RETROCEDER -> instructions.add(MoveBackward(modifier = getSteps(instructionCardNames, index)))
-                InstructionCardName.TOCAR_CORCHEA -> instructions.add(Eighth(modifier = getMusicNote(instructionCardNames, index)))
-                InstructionCardName.TOCAR_MELODIA -> instructions.add(Melody(modifier = getMusicNote(instructionCardNames, index)))
-                InstructionCardName.TOCAR_NEGRA -> instructions.add(Quarter(modifier = getMusicNote(instructionCardNames, index)))
+                InstructionName.AVANZAR -> instructions.add(MoveForward(modifier = getSteps(instructionNames, index)))
+                InstructionName.BAJAR_LAPIZ -> instructions.add(PencilDown())
+                InstructionName.FUNCION -> instructions.add(FunctionExecute())
+                InstructionName.FUNCION_COMIENZO -> instructions.add(FunctionStart())
+                InstructionName.FUNCION_FIN -> instructions.add(FunctionEnd())
+                InstructionName.GIRAR_DERECHA -> instructions.add(RotateRight(modifier = getAngle(instructionNames, index)))
+                InstructionName.GIRAR_IZQUIERDA -> instructions.add(RotateLeft(modifier = getAngle(instructionNames, index)))
+                InstructionName.LEDS -> instructions.add(Led(modifier = getLedColor(instructionNames, index)))
+                InstructionName.LEVANTAR_LAPIZ -> instructions.add(PencilUp())
+                InstructionName.PROGRAMA_COMIENZO -> instructions.add(ProgramStart())
+                InstructionName.PROGRAMA_FIN -> instructions.add(ProgramEnd())
+                InstructionName.REPETIR_COMIENZO -> instructions.add(RepeatStart(modifier = getSteps(instructionNames, index)))
+                InstructionName.REPETIR_FIN -> instructions.add(RepeatEnd())
+                InstructionName.RETROCEDER -> instructions.add(MoveBackward(modifier = getSteps(instructionNames, index)))
+                InstructionName.TOCAR_CORCHEA -> instructions.add(Eighth(modifier = getMusicNote(instructionNames, index)))
+                InstructionName.TOCAR_MELODIA -> instructions.add(Melody(modifier = getMusicNote(instructionNames, index)))
+                InstructionName.TOCAR_NEGRA -> instructions.add(Quarter(modifier = getMusicNote(instructionNames, index)))
                 else -> { // Do Nothing
                 }
             }
@@ -68,16 +45,16 @@ class GenerateInstructions @Inject constructor() {
         return instructions
     }
 
-    private fun getSteps(instructionCardNames: List<InstructionCardName>, index: Int): Steps {
+    private fun getSteps(instructionNames: List<InstructionName>, index: Int): Steps {
 
         fun findSteps(index: Int): Steps? {
-            return when (instructionCardNames.getOrNull(index)) {
-                InstructionCardName.NUMERO_2 -> return Steps.STEPS_2
-                InstructionCardName.NUMERO_3 -> return Steps.STEPS_3
-                InstructionCardName.NUMERO_4 -> return Steps.STEPS_4
-                InstructionCardName.NUMERO_5 -> return Steps.STEPS_5
-                InstructionCardName.NUMERO_6 -> return Steps.STEPS_6
-                InstructionCardName.NUMERO_AL_AZAR -> return Steps.RANDOM
+            return when (instructionNames.getOrNull(index)) {
+                InstructionName.NUMERO_2 -> return Steps.STEPS_2
+                InstructionName.NUMERO_3 -> return Steps.STEPS_3
+                InstructionName.NUMERO_4 -> return Steps.STEPS_4
+                InstructionName.NUMERO_5 -> return Steps.STEPS_5
+                InstructionName.NUMERO_6 -> return Steps.STEPS_6
+                InstructionName.NUMERO_AL_AZAR -> return Steps.RANDOM
                 else -> null
             }
         }
@@ -85,19 +62,19 @@ class GenerateInstructions @Inject constructor() {
         return findSteps(index - 1) ?: findSteps(index + 1) ?: Steps.RANDOM
     }
 
-    private fun getLedColor(instructionCardNames: List<InstructionCardName>, index: Int): LedColor {
+    private fun getLedColor(instructionNames: List<InstructionName>, index: Int): LedColor {
 
         fun findLedColor(index: Int): LedColor? {
-            return when (instructionCardNames.getOrNull(index)) {
-                InstructionCardName.COLOR_AMARILLO -> LedColor.YELLOW
-                InstructionCardName.COLOR_AZUL -> LedColor.BLUE
-                InstructionCardName.COLOR_BLANCO -> LedColor.WHITE
-                InstructionCardName.COLOR_CIAN -> LedColor.LIGHT_BLUE
-                InstructionCardName.COLOR_MAGENTA -> LedColor.PINK
-                InstructionCardName.COLOR_ROJO -> LedColor.RED
-                InstructionCardName.COLOR_VERDE -> LedColor.GREEN
-                InstructionCardName.COLOR_AL_AZAR -> LedColor.RANDOM
-                InstructionCardName.NO_COLOR -> LedColor.NONE
+            return when (instructionNames.getOrNull(index)) {
+                InstructionName.COLOR_AMARILLO -> LedColor.YELLOW
+                InstructionName.COLOR_AZUL -> LedColor.BLUE
+                InstructionName.COLOR_BLANCO -> LedColor.WHITE
+                InstructionName.COLOR_CIAN -> LedColor.LIGHT_BLUE
+                InstructionName.COLOR_MAGENTA -> LedColor.PINK
+                InstructionName.COLOR_ROJO -> LedColor.RED
+                InstructionName.COLOR_VERDE -> LedColor.GREEN
+                InstructionName.COLOR_AL_AZAR -> LedColor.RANDOM
+                InstructionName.NO_COLOR -> LedColor.NONE
                 else -> null
             }
         }
@@ -105,19 +82,19 @@ class GenerateInstructions @Inject constructor() {
         return findLedColor(index - 1) ?: findLedColor(index + 1) ?: LedColor.RANDOM
     }
 
-    private fun getMusicNote(instructionCardNames: List<InstructionCardName>, index: Int): MusicNote {
+    private fun getMusicNote(instructionNames: List<InstructionName>, index: Int): MusicNote {
 
         fun findNote(index: Int): MusicNote? {
-            return when (instructionCardNames.getOrNull(index)) {
-                InstructionCardName.NOTA_A -> MusicNote.A
-                InstructionCardName.NOTA_B -> MusicNote.B
-                InstructionCardName.NOTA_C -> MusicNote.C
-                InstructionCardName.NOTA_D -> MusicNote.D
-                InstructionCardName.NOTA_E -> MusicNote.E
-                InstructionCardName.NOTA_F -> MusicNote.F
-                InstructionCardName.NOTA_G -> MusicNote.G
-                InstructionCardName.NOTA_AL_AZAR -> MusicNote.RANDOM
-                InstructionCardName.NO_SONIDO -> MusicNote.SILENCE
+            return when (instructionNames.getOrNull(index)) {
+                InstructionName.NOTA_A -> MusicNote.A
+                InstructionName.NOTA_B -> MusicNote.B
+                InstructionName.NOTA_C -> MusicNote.C
+                InstructionName.NOTA_D -> MusicNote.D
+                InstructionName.NOTA_E -> MusicNote.E
+                InstructionName.NOTA_F -> MusicNote.F
+                InstructionName.NOTA_G -> MusicNote.G
+                InstructionName.NOTA_AL_AZAR -> MusicNote.RANDOM
+                InstructionName.NO_SONIDO -> MusicNote.SILENCE
                 else -> null
             }
         }
@@ -125,21 +102,21 @@ class GenerateInstructions @Inject constructor() {
         return findNote(index - 1) ?: findNote(index + 1) ?: MusicNote.RANDOM
     }
 
-    private fun getAngle(instructionCardNames: List<InstructionCardName>, index: Int): RotationAngle {
+    private fun getAngle(instructionNames: List<InstructionName>, index: Int): RotationAngle {
 
         fun findRotationAngle(index: Int): RotationAngle? {
-            return when (instructionCardNames.getOrNull(index)) {
-                InstructionCardName.ANGULO_30 -> RotationAngle.ANGLE_30
-                InstructionCardName.ANGULO_36 -> RotationAngle.ANGLE_36
-                InstructionCardName.ANGULO_45 -> RotationAngle.ANGLE_45
-                InstructionCardName.ANGULO_60 -> RotationAngle.ANGLE_60
-                InstructionCardName.ANGULO_72 -> RotationAngle.ANGLE_72
-                InstructionCardName.ANGULO_108 -> RotationAngle.ANGLE_108
-                InstructionCardName.ANGULO_120 -> RotationAngle.ANGLE_120
-                InstructionCardName.ANGULO_135 -> RotationAngle.ANGLE_135
-                InstructionCardName.ANGULO_144 -> RotationAngle.ANGLE_144
-                InstructionCardName.ANGULO_150 -> RotationAngle.ANGLE_150
-                InstructionCardName.ANGULO_AL_AZAR -> RotationAngle.RANDOM
+            return when (instructionNames.getOrNull(index)) {
+                InstructionName.ANGULO_30 -> RotationAngle.ANGLE_30
+                InstructionName.ANGULO_36 -> RotationAngle.ANGLE_36
+                InstructionName.ANGULO_45 -> RotationAngle.ANGLE_45
+                InstructionName.ANGULO_60 -> RotationAngle.ANGLE_60
+                InstructionName.ANGULO_72 -> RotationAngle.ANGLE_72
+                InstructionName.ANGULO_108 -> RotationAngle.ANGLE_108
+                InstructionName.ANGULO_120 -> RotationAngle.ANGLE_120
+                InstructionName.ANGULO_135 -> RotationAngle.ANGLE_135
+                InstructionName.ANGULO_144 -> RotationAngle.ANGLE_144
+                InstructionName.ANGULO_150 -> RotationAngle.ANGLE_150
+                InstructionName.ANGULO_AL_AZAR -> RotationAngle.RANDOM
                 else -> null
             }
         }
@@ -148,7 +125,7 @@ class GenerateInstructions @Inject constructor() {
 
 }
 
-data class InstructionWithLocation(
-    val type: InstructionCardName,
+data class LocalizedInstruction(
+    val type: InstructionName,
     val x: Int, val y: Int
 )

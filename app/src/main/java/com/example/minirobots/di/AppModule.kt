@@ -7,6 +7,8 @@ import com.example.minirobots.sendInstructions.infrastructure.InstructionsParser
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsService
 import com.example.minirobots.takePicture.infrastructure.*
 import com.example.minirobots.utilities.network.SocketTimeoutRetryInterceptor
+import com.google.mlkit.vision.text.TextRecognition
+import com.google.mlkit.vision.text.latin.TextRecognizerOptions
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Binds
 import dagger.Module
@@ -49,17 +51,6 @@ annotation class DefaultDispatcher
 
 @Module
 @InstallIn(SingletonComponent::class)
-abstract class InstructionRecognizerModule {
-
-    @Singleton
-    @Binds
-    abstract fun bindInstructionRecognizer(
-        distanceInstructionRecognizer: StringDistanceInstructionRecognizer
-    ): InstructionRecognizer
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
 abstract class StringDistanceCalculatorModule {
     @Singleton
     @Binds
@@ -99,6 +90,15 @@ abstract class InstructionsParserModule {
     abstract fun bindInstructionsParser(
         instructionsParserImpl: InstructionsParserImpl
     ): InstructionsParser
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+object TextRecognizerModule {
+
+    @Provides
+    @Singleton
+    fun provideTextRecognizer() = TextRecognition.getClient(TextRecognizerOptions.DEFAULT_OPTIONS)
 }
 
 @Module

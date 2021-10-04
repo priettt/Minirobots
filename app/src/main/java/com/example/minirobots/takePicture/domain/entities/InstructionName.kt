@@ -4,7 +4,7 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 @Parcelize
-enum class InstructionCardName(val text: String) : Parcelable {
+enum class InstructionName(val text: String) : Parcelable {
     ANGULO_30("30°"),
     ANGULO_36("36°"),
     ANGULO_45("45°"),

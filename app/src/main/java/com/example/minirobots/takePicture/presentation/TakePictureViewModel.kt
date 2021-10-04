@@ -4,7 +4,7 @@ import android.net.Uri
 import android.util.Log
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.minirobots.takePicture.domain.actions.ProcessInstructions
+import com.example.minirobots.takePicture.domain.actions.RecognizeInstructions
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 @HiltViewModel
 class TakePictureViewModel @Inject constructor(
-    private val processInstructions: ProcessInstructions,
+    private val recognizeInstructions: RecognizeInstructions,
 ) : ViewModel() {
 
     private lateinit var pictureUri: Uri
@@ -42,7 +42,7 @@ class TakePictureViewModel @Inject constructor(
     private fun recognizeInstructions() {
         viewModelScope.launch {
             val startTime = System.currentTimeMillis()
-            processInstructions(pictureUri).onSuccess {
+            recognizeInstructions(pictureUri).onSuccess {
                 Log.d("MINIROBOTS", "Instructions processed in ${System.currentTimeMillis() - startTime}")
                 navigation.value = TakePictureNavigation.GoToInstructions
             }.onFailure {
