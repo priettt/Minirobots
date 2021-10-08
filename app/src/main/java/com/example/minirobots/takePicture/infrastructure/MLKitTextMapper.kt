@@ -15,7 +15,6 @@ class MLKitTextMapper @Inject constructor(
     }
 }
 
-
 class GenerateInstructions @Inject constructor() {
     operator fun invoke(instructionNames: List<InstructionName>): List<Instruction> {
         val instructions = mutableListOf<Instruction>()

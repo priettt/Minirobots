@@ -3,6 +3,11 @@ package com.example.minirobots.takePicture.domain.entities
 import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
+/*
+    All of the possible instruction component names, both actions and modifiers.
+    Each name is associated with the text we are using to recognize said instruction.
+*/
+
 @Parcelize
 enum class InstructionName(val text: String) : Parcelable {
     ANGULO_30("30°"),
