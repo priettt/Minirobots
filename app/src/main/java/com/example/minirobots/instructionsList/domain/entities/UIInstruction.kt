@@ -12,7 +12,7 @@ interface Modifier {
     val imageDrawable: Int
 }
 
-sealed interface Instruction {
+sealed interface UIInstruction {
     val name: String
     var modifier: Modifier?
 
@@ -25,103 +25,103 @@ data class RotateRight(
     override val name: String = "Rotar a la derecha",
     override val imageDrawable: Int = R.drawable.girar_derecha,
     override var modifier: Modifier? = RotationAngle.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class RotateLeft(
     override val name: String = "Rotar a la izquierda",
     override val imageDrawable: Int = R.drawable.girar_izquierda,
     override var modifier: Modifier? = RotationAngle.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class Led(
     override val name: String = "Leds",
     override val imageDrawable: Int = R.drawable.leds,
     override var modifier: Modifier? = LedColor.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class MoveForward(
     override val name: String = "Avanzar",
     override val imageDrawable: Int = R.drawable.adelante,
     override var modifier: Modifier? = Steps.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class MoveBackward(
     override val name: String = "Retroceder",
     override val imageDrawable: Int = R.drawable.atras,
     override var modifier: Modifier? = Steps.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class RepeatStart(
     override val name: String = "Inicio de repetición",
     override val imageDrawable: Int = R.drawable.repetir_comienzo,
     override var modifier: Modifier? = Steps.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class Quarter(
     override val name: String = "Reproducir negra",
     override val imageDrawable: Int = R.drawable.negra,
     override var modifier: Modifier? = MusicNote.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class Eighth(
     override val name: String = "Reproducir corchea",
     override val imageDrawable: Int = R.drawable.corchea,
     override var modifier: Modifier? = MusicNote.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class Melody(
     override val name: String = "Reproducir melodia",
     override val imageDrawable: Int = R.drawable.melodia,
     override var modifier: Modifier? = MusicNote.RANDOM
-) : Instruction
+) : UIInstruction
 
 data class ProgramStart(
     override val name: String = "Inicio Programa",
     override val imageDrawable: Int = R.drawable.programa_comienzo,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class ProgramEnd(
     override val name: String = "Fin Programa",
     override val imageDrawable: Int = R.drawable.programa_fin,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class RepeatEnd(
     override val name: String = "Fin Repeticion",
     override val imageDrawable: Int = R.drawable.repetir_fin,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class FunctionStart(
     override val name: String = "Inicio Función",
     override val imageDrawable: Int = R.drawable.inicio_funcion,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class FunctionEnd(
     override val name: String = "Fin Función",
     override val imageDrawable: Int = R.drawable.fin_funcion,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class FunctionExecute(
     override val name: String = "Ejecutar Función",
     override val imageDrawable: Int = R.drawable.funcion,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class PencilDown(
     override val name: String = "Lápiz Abajo",
     override val imageDrawable: Int = R.drawable.lapiz_abajo,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 data class PencilUp(
     override val name: String = "Lápiz Arriba",
     override val imageDrawable: Int = R.drawable.lapiz_arriba,
     override var modifier: Modifier? = null
-) : Instruction
+) : UIInstruction
 
 enum class MusicNote : Modifier {
     A {

@@ -9,15 +9,15 @@ class MLKitTextMapper @Inject constructor(
     private val getRecognizedInstructionNames: GetRecognizedInstructionNames,
     private val generateInstructions: GenerateInstructions
 ) {
-    fun map(mlKitText: Text): List<Instruction> {
+    fun map(mlKitText: Text): List<UIInstruction> {
         val instructionCardNames = getRecognizedInstructionNames(mlKitText)
         return generateInstructions(instructionCardNames)
     }
 }
 
 class GenerateInstructions @Inject constructor() {
-    operator fun invoke(instructionNames: List<InstructionName>): List<Instruction> {
-        val instructions = mutableListOf<Instruction>()
+    operator fun invoke(instructionNames: List<InstructionName>): List<UIInstruction> {
+        val instructions = mutableListOf<UIInstruction>()
         instructionNames.forEachIndexed { index, instruction ->
             when (instruction) {
                 InstructionName.AVANZAR -> instructions.add(MoveForward(modifier = getSteps(instructionNames, index)))

@@ -5,7 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructionsList.domain.actions.*
-import com.example.minirobots.instructionsList.domain.entities.Instruction
+import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -21,8 +21,8 @@ class InstructionsListViewModel @Inject constructor(
     private val storeEditInstructionMenuData: StoreEditInstructionMenuData,
 ) : ViewModel() {
 
-    private val mutableInstructions = MutableLiveData<List<Instruction>>()
-    val instructions: LiveData<List<Instruction>>
+    private val mutableInstructions = MutableLiveData<List<UIInstruction>>()
+    val instructions: LiveData<List<UIInstruction>>
         get() = mutableInstructions
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)

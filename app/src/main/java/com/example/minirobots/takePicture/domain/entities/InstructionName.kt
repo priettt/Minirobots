@@ -63,3 +63,5 @@ enum class InstructionName(val text: String) : Parcelable {
     TOCAR_MELODIA("MELODIA"),
     TOCAR_NEGRA("NEGRA")
 }
+
+const val MODIFIERS = listOf(InstructionName.ANGULO_30)

@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.instructionsList.domain.actions.AddInstruction
 import com.example.minirobots.instructionsList.domain.actions.GetAvailableInstructions
-import com.example.minirobots.instructionsList.domain.entities.Instruction
+import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -18,7 +18,7 @@ class AddInstructionViewModel @Inject constructor(
     private val addInstruction: AddInstruction
 ) : ViewModel() {
 
-    val instructionsFlow: MutableStateFlow<List<Instruction>?> = MutableStateFlow(null)
+    val instructionsFlow: MutableStateFlow<List<UIInstruction>?> = MutableStateFlow(null)
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val eventsFlow = eventChannel.receiveAsFlow()
@@ -27,7 +27,7 @@ class AddInstructionViewModel @Inject constructor(
         instructionsFlow.value = getAvailableInstructions()
     }
 
-    fun onInstructionAdded(instruction: Instruction) {
+    fun onInstructionAdded(instruction: UIInstruction) {
         addInstruction(instruction)
         viewModelScope.launch {
             eventChannel.send(Event.InstructionAdded)

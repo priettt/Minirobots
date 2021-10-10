@@ -10,7 +10,6 @@ import javax.inject.Inject
 class GetInputImage @Inject constructor(
     @ApplicationContext private val context: Context,
 ) {
-
     operator fun invoke(uri: Uri): InputImage? = try {
         InputImage.fromFilePath(context, uri)
     } catch (e: IOException) {

@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemAddInstructionBinding
-import com.example.minirobots.instructionsList.domain.entities.Instruction
+import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 
 class AddInstructionAdapter(
-    private val onItemClickListener: (Instruction) -> Unit
+    private val onItemClickListener: (UIInstruction) -> Unit
 ) :
-    ListAdapter<Instruction, AddInstructionAdapter.AddInstructionViewHolder>(
+    ListAdapter<UIInstruction, AddInstructionAdapter.AddInstructionViewHolder>(
         AddInstructionDiffCallback
     ) {
 
     class AddInstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemAddInstructionBinding.bind(view)
 
-        fun bind(instruction: Instruction) {
+        fun bind(instruction: UIInstruction) {
             binding.instructionName.text = instruction.name
             binding.instructionImage.setImageResource(instruction.imageDrawable)
         }
@@ -39,17 +39,17 @@ class AddInstructionAdapter(
     }
 }
 
-object AddInstructionDiffCallback : DiffUtil.ItemCallback<Instruction>() {
+object AddInstructionDiffCallback : DiffUtil.ItemCallback<UIInstruction>() {
     override fun areItemsTheSame(
-        oldItem: Instruction,
-        newItem: Instruction
+        oldItem: UIInstruction,
+        newItem: UIInstruction
     ): Boolean {
         return oldItem == newItem
     }
 
     override fun areContentsTheSame(
-        oldItem: Instruction,
-        newItem: Instruction
+        oldItem: UIInstruction,
+        newItem: UIInstruction
     ): Boolean {
         return oldItem.name == newItem.name
     }

@@ -1,6 +1,8 @@
 package com.example.minirobots.takePicture.infrastructure
 
-import com.example.minirobots.instructionsList.domain.entities.Instruction
+import com.example.minirobots.Action
+import com.example.minirobots.Instruction
+import com.example.minirobots.Modifier
 import com.example.minirobots.takePicture.domain.entities.InstructionName
 import junit.framework.Assert.assertEquals
 import org.junit.Test
@@ -20,7 +22,7 @@ class InstructionNamesMapperTest {
     fun `map single action without modifier`() {
         val namesList = givenSingleActionName()
         val result = whenMappingNamesList(namesList)
-//        shouldReturnInstructionWithRandomModifier(result)
+        shouldReturnInstructionWithRandomModifier(result)
     }
 
     private fun givenEmptyNamesList() = emptyList<InstructionName>()
@@ -30,6 +32,11 @@ class InstructionNamesMapperTest {
     private fun whenMappingNamesList(namesList: List<InstructionName>) = instructionNamesMapper.map(namesList)
 
     private fun shouldReturnEmptyInstructionList(result: List<Instruction>) = assertEquals(emptyList<Instruction>(), result)
+
+    private fun shouldReturnInstructionWithRandomModifier(result: List<Instruction>) {
+        val instructionListWithRandomModifier = listOf(Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_AL_AZAR))
+        assertEquals(instructionListWithRandomModifier, result)
+    }
 
 
 }

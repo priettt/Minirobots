@@ -4,7 +4,7 @@ import com.example.minirobots.instructionsList.domain.entities.*
 import javax.inject.Inject
 
 class AddInstructionItemsRepository @Inject constructor() {
-    fun getAvailableInstructions(): List<Instruction> {
+    fun getAvailableInstructions(): List<UIInstruction> {
         return listOf(
             RotateRight(),
             RotateLeft(),

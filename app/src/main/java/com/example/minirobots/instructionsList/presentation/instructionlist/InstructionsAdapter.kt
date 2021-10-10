@@ -8,17 +8,17 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemInstructionBinding
-import com.example.minirobots.instructionsList.domain.entities.Instruction
+import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 import com.example.minirobots.instructionsList.domain.entities.Modifier
 
 class InstructionsAdapter(
     private val onItemClickListener: (Int) -> Unit
-) : ListAdapter<Instruction, InstructionsAdapter.InstructionViewHolder>(InstructionDiffCallback) {
+) : ListAdapter<UIInstruction, InstructionsAdapter.InstructionViewHolder>(InstructionDiffCallback) {
 
     class InstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemInstructionBinding.bind(view)
 
-        fun bind(instruction: Instruction, onItemClickListener: (Int) -> Unit) {
+        fun bind(instruction: UIInstruction, onItemClickListener: (Int) -> Unit) {
             bindModifier(instruction.modifier)
             bindInstruction(instruction)
             itemView.setOnClickListener {
@@ -26,7 +26,7 @@ class InstructionsAdapter(
             }
         }
 
-        private fun bindInstruction(instruction: Instruction) {
+        private fun bindInstruction(instruction: UIInstruction) {
             binding.instructionText.text = instruction.name
             binding.instructionImage.setImageResource(instruction.imageDrawable)
         }
@@ -52,12 +52,12 @@ class InstructionsAdapter(
     }
 }
 
-object InstructionDiffCallback : DiffUtil.ItemCallback<Instruction>() {
-    override fun areItemsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
+object InstructionDiffCallback : DiffUtil.ItemCallback<UIInstruction>() {
+    override fun areItemsTheSame(oldItem: UIInstruction, newItem: UIInstruction): Boolean {
         return oldItem == newItem
     }
 
-    override fun areContentsTheSame(oldItem: Instruction, newItem: Instruction): Boolean {
+    override fun areContentsTheSame(oldItem: UIInstruction, newItem: UIInstruction): Boolean {
         return oldItem.name == newItem.name && oldItem.modifier?.text == newItem.modifier?.text
     }
 }

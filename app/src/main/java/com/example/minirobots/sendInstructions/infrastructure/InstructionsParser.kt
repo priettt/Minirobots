@@ -6,20 +6,20 @@ import javax.inject.Inject
 private const val STEP_DISTANCE = 30
 
 interface InstructionsParser {
-    fun parse(instructions: List<Instruction>): String
+    fun parse(instructions: List<UIInstruction>): String
 }
 
 class InstructionsParserImpl @Inject constructor() : InstructionsParser {
-    override fun parse(instructions: List<Instruction>) =
+    override fun parse(instructions: List<UIInstruction>) =
         getPrefix() + getParsedInstructions(instructions) + getSuffix()
 
-    private fun getParsedInstructions(instructions: List<Instruction>): String {
+    private fun getParsedInstructions(instructions: List<UIInstruction>): String {
         return instructions.joinToString {
             parseInstruction(it)
         }
     }
 
-    private fun parseInstruction(instruction: Instruction): String {
+    private fun parseInstruction(instruction: UIInstruction): String {
         return when (instruction) {
             is Eighth -> """["TE", ${getMusicNote(instruction.modifier as MusicNote)} 60]]"""
             is FunctionEnd -> ""

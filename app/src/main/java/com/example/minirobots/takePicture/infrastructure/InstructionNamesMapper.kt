@@ -1,6 +1,6 @@
 package com.example.minirobots.takePicture.infrastructure
 
-import com.example.minirobots.instructionsList.domain.entities.Instruction
+import com.example.minirobots.Instruction
 import com.example.minirobots.takePicture.domain.entities.InstructionName
 import javax.inject.Inject
 
@@ -40,6 +40,14 @@ import javax.inject.Inject
 
 class InstructionNamesMapper @Inject constructor() {
     fun map(instructionNames: List<InstructionName>): List<Instruction> {
+        val result: List<Instruction> = emptyList()
+        instructionNames.forEach {
+            if (it.isModifier())
+        }
         return emptyList()
     }
+}
+
+private fun InstructionName.isModifier(): Boolean {
+    return this in MODIFIERS
 }
