@@ -1,7 +1,7 @@
 package com.example.minirobots.takePicture.infrastructure
 
 import com.example.minirobots.Instruction
-import com.example.minirobots.takePicture.domain.entities.InstructionName
+import com.example.minirobots.takePicture.domain.entities.PieceName
 import javax.inject.Inject
 
 /*
@@ -35,19 +35,30 @@ import javax.inject.Inject
         - What happens when there's an action without an associated modifier.
         - What happens when there's a modifier without an associated action.
 
+    [Avanzar, Retroceder, 2 Pasos, 3 Pasos]
+    [2 Pasos, Avanzar, Retroceder, 3 Pasos]
+    [Avanzar, 2 Pasos, Retroceder, 3 Pasos]
+    [2 Pasos, Avanzar, 3 Pasos, Retroceder]
+    [Avanzar, 2 Pasos, 3 Pasos, Retroceder]
+    [2 Pasos, 2 Pasos, Avanzar, Retroceder]
+
  */
 
 
-class InstructionNamesMapper @Inject constructor() {
-    fun map(instructionNames: List<InstructionName>): List<Instruction> {
-        val result: List<Instruction> = emptyList()
-        instructionNames.forEach {
-            if (it.isModifier())
+class PieceNamesMapper @Inject constructor(
+    private val pieceMapper: PieceNameMapper,
+    private val pieceNamesMapperStateMachine: PieceNameMapperStateMachine
+) {
+    fun map(pieceNames: List<PieceName>): List<Instruction> {
+        val result = mutableListOf<Instruction>()
+        for (pieceName in pieceNames) {
+            val action = pieceMapper.mapToAction(pieceName)
+            val modifier = pieceMapper.mapToModifier(pieceName)
+            val instruction = pieceNamesMapperStateMachine.consumePiece(action, modifier)
+            instruction?.let { result.add(it) }
         }
-        return emptyList()
+        val lastInstruction = pieceNamesMapperStateMachine.finish()
+        lastInstruction?.let { result.add(it) }
+        return result
     }
-}
-
-private fun InstructionName.isModifier(): Boolean {
-    return this in MODIFIERS
 }

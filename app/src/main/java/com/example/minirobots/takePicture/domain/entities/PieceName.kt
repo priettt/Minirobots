@@ -4,12 +4,12 @@ import android.os.Parcelable
 import kotlinx.android.parcel.Parcelize
 
 /*
-    All of the possible instruction component names, both actions and modifiers.
+    All of the possible piece names, both actions and modifiers.
     Each name is associated with the text we are using to recognize said instruction.
 */
 
 @Parcelize
-enum class InstructionName(val text: String) : Parcelable {
+enum class PieceName(val text: String) : Parcelable {
     ANGULO_30("30°"),
     ANGULO_36("36°"),
     ANGULO_45("45°"),
@@ -63,5 +63,3 @@ enum class InstructionName(val text: String) : Parcelable {
     TOCAR_MELODIA("MELODIA"),
     TOCAR_NEGRA("NEGRA")
 }
-
-const val MODIFIERS = listOf(InstructionName.ANGULO_30)
