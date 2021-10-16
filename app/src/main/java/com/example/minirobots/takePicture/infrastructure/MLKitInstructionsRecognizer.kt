@@ -99,15 +99,15 @@ import javax.inject.Inject
 class MLKitInstructionsRecognizer @Inject constructor(
     private val getInputImage: GetInputImage,
     private val recognizeImage: RecognizeImage,
-    private val getRecognizedPieceNames: GetRecognizedPieceNames,
+    private val mlKitTextMapper: MLKitTextMapper,
     private val pieceNamesMapper: PieceNamesMapper,
 ) {
 
     suspend fun recognize(uri: Uri): List<Instruction> {
         val inputImage = getInputImage(uri) ?: return emptyList()
         val mlKitText = recognizeImage(inputImage) ?: return emptyList()
-        val recognizedPieceNames = getRecognizedPieceNames(mlKitText)
-        return pieceNamesMapper.map(recognizedPieceNames)
+        val pieceNames = mlKitTextMapper.map(mlKitText)
+        return pieceNamesMapper.map(pieceNames)
     }
 
 }

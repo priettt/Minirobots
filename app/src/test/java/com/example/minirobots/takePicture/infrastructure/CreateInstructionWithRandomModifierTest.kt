@@ -9,7 +9,7 @@ import org.junit.Test
 
 class CreateInstructionWithRandomModifierTest {
 
-    val createInstructionWithRandomModifier = CreateInstructionWithRandomModifier()
+    private val createInstructionWithRandomModifier = CreateInstructionWithRandomModifier()
 
     private val movementAction = Action.RETROCEDER
     private val turnAction = Action.GIRAR_DERECHA
