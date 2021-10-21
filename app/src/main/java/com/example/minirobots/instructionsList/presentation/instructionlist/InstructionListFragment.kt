@@ -19,7 +19,7 @@ import kotlinx.coroutines.flow.onEach
 class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
 
     // TODO: Try nesting InstructionList and AddInstruction fragments, scoping a ViewModel to that nested graph,
-    //  and using hiltNavGraphViewModels to inject the VMs. That avoids having a Singleton VM with the scope of the whole app.
+    //  and using hiltNavGraphViewModels to inject the VMs. That would avoid having a Singleton VM with the scope of the whole app.
     private val viewModel: InstructionsListViewModel by activityViewModels()
     private val adapter = InstructionsAdapter { index ->
         viewModel.onInstructionClicked(index)

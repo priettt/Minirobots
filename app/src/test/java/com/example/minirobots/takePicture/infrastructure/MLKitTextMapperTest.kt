@@ -1,6 +1,7 @@
 package com.example.minirobots.takePicture.infrastructure
 
 import android.graphics.Rect
+import com.example.minirobots.takePicture.domain.entities.LocalizedPieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName.*
 import com.google.mlkit.vision.text.Text

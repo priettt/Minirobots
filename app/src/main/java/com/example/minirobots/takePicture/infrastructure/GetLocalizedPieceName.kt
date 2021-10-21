@@ -1,5 +1,6 @@
 package com.example.minirobots.takePicture.infrastructure
 
+import com.example.minirobots.takePicture.domain.entities.LocalizedPieceName
 import com.google.mlkit.vision.text.Text
 import javax.inject.Inject
 

@@ -3,8 +3,6 @@ package com.example.minirobots.instructionsList.domain.entities
 import androidx.annotation.DrawableRes
 import com.example.minirobots.R
 
-private const val STEP_DISTANCE = 30
-
 interface Modifier {
     val text: String
 

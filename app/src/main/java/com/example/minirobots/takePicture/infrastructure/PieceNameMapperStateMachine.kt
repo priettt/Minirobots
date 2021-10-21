@@ -10,21 +10,15 @@ class PieceNameMapperStateMachine @Inject constructor(
 ) {
     private var state: State = State.Base
 
-    //After a new input, the machine may return a new instruction
-    fun consumePiece(action: Action?, modifier: Modifier?): Instruction? {
-        return when {
-            action != null -> consumeAction(action)
-            modifier != null -> consumeModifier(modifier)
-            else -> null
-        }
+    fun consumePiece(action: Action?, modifier: Modifier?): Instruction? = when {
+        action != null -> consumeAction(action)
+        modifier != null -> consumeModifier(modifier)
+        else -> null
     }
 
-    fun finish(): Instruction? {
-        val state = state
-        return if (state is State.StoredAction) {
-            createInstructionWithRandomModifier(state.action)
-        } else
-            null
+    fun finish(): Instruction? = when (val state = state) {
+        is State.StoredAction -> createInstructionWithRandomModifier(state.action)
+        else -> null
     }
 
     private fun consumeAction(action: Action): Instruction? {
@@ -45,7 +39,7 @@ class PieceNameMapperStateMachine @Inject constructor(
         }
     }
 
-    private fun goToBaseState(action: Action, modifier: Modifier): Instruction? {
+    private fun goToBaseState(action: Action, modifier: Modifier): Instruction {
         state = State.Base
         return Instruction(action, modifier)
     }
@@ -60,24 +54,22 @@ class PieceNameMapperStateMachine @Inject constructor(
         return null
     }
 
-    private fun stayInStoredActionState(storedAction: Action, consumedAction: Action): Instruction? {
+    private fun stayInStoredActionState(storedAction: Action, consumedAction: Action): Instruction {
         state = State.StoredAction(consumedAction)
         return createInstructionWithRandomModifier(storedAction)
     }
 
-    private fun Action.isSinglePieceInstruction(): Boolean {
-        return this in listOf(
-            Action.BAJAR_LAPIZ,
-            Action.FUNCION,
-            Action.FUNCION_COMIENZO,
-            Action.FUNCION_FIN,
-            Action.LEVANTAR_LAPIZ,
-            Action.PROGRAMA_COMIENZO,
-            Action.PROGRAMA_FIN,
-            Action.REPETIR_COMIENZO,
-            Action.REPETIR_FIN,
-        )
-    }
+    private fun Action.isSinglePieceInstruction() = this in listOf(
+        Action.BAJAR_LAPIZ,
+        Action.FUNCION,
+        Action.FUNCION_COMIENZO,
+        Action.FUNCION_FIN,
+        Action.LEVANTAR_LAPIZ,
+        Action.PROGRAMA_COMIENZO,
+        Action.PROGRAMA_FIN,
+        Action.REPETIR_COMIENZO,
+        Action.REPETIR_FIN,
+    )
 }
 
 sealed class State {
