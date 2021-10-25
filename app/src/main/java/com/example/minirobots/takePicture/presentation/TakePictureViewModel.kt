@@ -6,7 +6,8 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.takePicture.domain.actions.RecognizeInstructions
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
@@ -17,18 +18,19 @@ class TakePictureViewModel @Inject constructor(
 
     private lateinit var pictureUri: Uri
 
-    val navigation: MutableStateFlow<TakePictureNavigation?> = MutableStateFlow(null)
+    private val eventChannel = Channel<Event>(Channel.BUFFERED)
+    val events = eventChannel.receiveAsFlow()
 
     fun onPictureUriCreated(pictureUri: Uri) {
         this.pictureUri = pictureUri
-        navigation.value = TakePictureNavigation.ShowSpinner
+        sendEvent(Event.ShowSpinner)
     }
 
     fun onTakePictureCompleted(takePictureSuccessful: Boolean) {
         if (takePictureSuccessful) {
             recognizeInstructions()
         } else {
-            navigation.value = TakePictureNavigation.ShowTakePictureError
+            sendEvent(Event.ShowTakePictureError)
         }
     }
 
@@ -44,18 +46,23 @@ class TakePictureViewModel @Inject constructor(
             val startTime = System.currentTimeMillis()
             recognizeInstructions(pictureUri).onSuccess {
                 Log.d("MINIROBOTS", "Instructions processed in ${System.currentTimeMillis() - startTime}")
-                navigation.value = TakePictureNavigation.GoToInstructions
+                sendEvent(Event.GoToInstructions)
             }.onFailure {
-                navigation.value = TakePictureNavigation.ShowRecognitionError
+                sendEvent(Event.ShowRecognitionError)
             }
         }
     }
 
+    private fun sendEvent(event: Event) {
+        viewModelScope.launch {
+            eventChannel.send(event)
+        }
+    }
 }
 
-enum class TakePictureNavigation {
-    GoToInstructions,
-    ShowRecognitionError,
-    ShowTakePictureError,
-    ShowSpinner
+sealed class Event {
+    object GoToInstructions : Event()
+    object ShowRecognitionError : Event()
+    object ShowTakePictureError : Event()
+    object ShowSpinner : Event()
 }

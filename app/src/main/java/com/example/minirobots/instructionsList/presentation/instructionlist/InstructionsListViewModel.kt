@@ -1,32 +1,34 @@
 package com.example.minirobots.instructionsList.presentation.instructionlist
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.minirobots.instructionsList.domain.actions.*
+import com.example.minirobots.instructionsList.domain.actions.DeleteInstruction
+import com.example.minirobots.instructionsList.domain.actions.GetUIInstructions
+import com.example.minirobots.instructionsList.domain.actions.MoveInstruction
 import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.receiveAsFlow
 import kotlinx.coroutines.launch
 import javax.inject.Inject
 
 @HiltViewModel
 class InstructionsListViewModel @Inject constructor(
-    private val getInstructions: GetInstructions,
+    private val getUIInstructions: GetUIInstructions,
     private val deleteInstruction: DeleteInstruction,
     private val moveInstruction: MoveInstruction,
-    private val getInstructionModifiers: GetInstructionModifiers,
-    private val storeEditInstructionMenuData: StoreEditInstructionMenuData,
 ) : ViewModel() {
 
-    private val mutableInstructions = MutableLiveData<List<UIInstruction>>()
-    val instructions: LiveData<List<UIInstruction>>
+    private val mutableInstructions = MutableStateFlow<List<UIInstruction>>(emptyList())
+    val instructions: StateFlow<List<UIInstruction>>
         get() = mutableInstructions
 
+    var clickedInstruction = 0
+
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
-    val eventsFlow = eventChannel.receiveAsFlow()
+    val events = eventChannel.receiveAsFlow()
 
     init {
         fetchInstructions()
@@ -36,16 +38,12 @@ class InstructionsListViewModel @Inject constructor(
         fetchInstructions()
     }
 
-    fun onInstructionEdited(index: Int) {
-        sendEvent(Event.ForceUpdate(index))
+    fun onInstructionEdited() {
+        fetchInstructions()
     }
 
     private fun fetchInstructions() {
-        getInstructions().onSuccess { instructions ->
-            mutableInstructions.value = instructions
-        }.onFailure {
-            sendEvent(Event.ShowError)
-        }
+        mutableInstructions.value = getUIInstructions()
     }
 
     private fun sendEvent(event: Event) {
@@ -65,10 +63,8 @@ class InstructionsListViewModel @Inject constructor(
     }
 
     fun onInstructionClicked(index: Int) {
-        getInstructionModifiers(index)?.let {
-            storeEditInstructionMenuData(index, it)
-            sendEvent(Event.ShowEditInstructionMenu)
-        }
+        clickedInstruction = index
+        sendEvent(Event.ShowEditInstructionMenu)
     }
 
     fun onAddButtonClicked() {
@@ -84,9 +80,7 @@ class InstructionsListViewModel @Inject constructor(
 sealed class Event {
     object ShowAddInstructionMenu : Event()
     object ShowEditInstructionMenu : Event()
-    object ShowSendInstructionsScreen: Event()
-    object ShowError : Event()
-    data class ForceUpdate(val index: Int) : Event()
+    object ShowSendInstructionsScreen : Event()
 }
 
 

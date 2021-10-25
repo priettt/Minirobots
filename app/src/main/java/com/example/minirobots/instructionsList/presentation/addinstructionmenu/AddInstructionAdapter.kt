@@ -8,19 +8,19 @@ import androidx.recyclerview.widget.ListAdapter
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.ItemAddInstructionBinding
-import com.example.minirobots.instructionsList.domain.entities.UIInstruction
+import com.example.minirobots.instructionsList.domain.entities.UIAction
 
 class AddInstructionAdapter(
-    private val onItemClickListener: (UIInstruction) -> Unit
+    private val onItemClickListener: (UIAction) -> Unit
 ) :
-    ListAdapter<UIInstruction, AddInstructionAdapter.AddInstructionViewHolder>(
+    ListAdapter<UIAction, AddInstructionAdapter.AddInstructionViewHolder>(
         AddInstructionDiffCallback
     ) {
 
     class AddInstructionViewHolder(view: View) : RecyclerView.ViewHolder(view) {
         private val binding = ItemAddInstructionBinding.bind(view)
 
-        fun bind(instruction: UIInstruction) {
+        fun bind(instruction: UIAction) {
             binding.instructionName.text = instruction.name
             binding.instructionImage.setImageResource(instruction.imageDrawable)
         }
@@ -39,18 +39,8 @@ class AddInstructionAdapter(
     }
 }
 
-object AddInstructionDiffCallback : DiffUtil.ItemCallback<UIInstruction>() {
-    override fun areItemsTheSame(
-        oldItem: UIInstruction,
-        newItem: UIInstruction
-    ): Boolean {
-        return oldItem == newItem
-    }
+object AddInstructionDiffCallback : DiffUtil.ItemCallback<UIAction>() {
+    override fun areItemsTheSame(oldItem: UIAction, newItem: UIAction) = oldItem == newItem
 
-    override fun areContentsTheSame(
-        oldItem: UIInstruction,
-        newItem: UIInstruction
-    ): Boolean {
-        return oldItem.name == newItem.name
-    }
+    override fun areContentsTheSame(oldItem: UIAction, newItem: UIAction) = oldItem.name == newItem.name
 }

@@ -42,9 +42,8 @@ class PieceNameMapper @Inject constructor() {
         PieceName.COLOR_AL_AZAR -> Modifier.COLOR_AL_AZAR
         PieceName.COLOR_AMARILLO -> Modifier.COLOR_AMARILLO
         PieceName.COLOR_AZUL -> Modifier.COLOR_AZUL
-        PieceName.COLOR_BLANCO -> Modifier.COLOR_BLANCO
-        PieceName.COLOR_CIAN -> Modifier.COLOR_CIAN
-        PieceName.COLOR_MAGENTA -> Modifier.COLOR_MAGENTA
+        PieceName.COLOR_CELESTE -> Modifier.COLOR_CELESTE
+        PieceName.COLOR_ROSA -> Modifier.COLOR_ROSA
         PieceName.COLOR_ROJO -> Modifier.COLOR_ROJO
         PieceName.COLOR_VERDE -> Modifier.COLOR_VERDE
         PieceName.NO_COLOR -> Modifier.NO_COLOR

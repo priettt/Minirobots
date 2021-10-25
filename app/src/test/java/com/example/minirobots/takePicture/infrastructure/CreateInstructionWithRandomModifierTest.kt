@@ -4,7 +4,6 @@ import com.example.minirobots.Action
 import com.example.minirobots.Instruction
 import com.example.minirobots.Modifier
 import org.junit.Assert.assertEquals
-
 import org.junit.Test
 
 class CreateInstructionWithRandomModifierTest {
@@ -68,23 +67,28 @@ class CreateInstructionWithRandomModifierTest {
     }
 
     private fun shouldReturnActionWithRandomNumber(result: Instruction) {
-        assertEquals(Instruction(movementAction, Modifier.NUMERO_AL_AZAR), result)
+        assertEquals(movementAction, result.action)
+        assertEquals(Modifier.NUMERO_AL_AZAR, result.modifier)
     }
 
     private fun shouldReturnActionWithRandomAngle(result: Instruction) {
-        assertEquals(Instruction(turnAction, Modifier.ANGULO_AL_AZAR), result)
+        assertEquals(turnAction, result.action)
+        assertEquals(Modifier.ANGULO_AL_AZAR, result.modifier)
     }
 
     private fun shouldReturnActionWithRandomColor(result: Instruction) {
-        assertEquals(Instruction(ledsAction, Modifier.COLOR_AL_AZAR), result)
+        assertEquals(ledsAction, result.action)
+        assertEquals(Modifier.COLOR_AL_AZAR, result.modifier)
     }
 
     private fun shouldReturnActionWithRandomNote(result: Instruction) {
-        assertEquals(Instruction(musicAction, Modifier.NOTA_AL_AZAR), result)
+        assertEquals(musicAction, result.action)
+        assertEquals(Modifier.NOTA_AL_AZAR, result.modifier)
     }
 
     private fun shouldReturnActionWithNullModifier(result: Instruction) {
-        assertEquals(Instruction(nullModifierAction, null), result)
+        assertEquals(nullModifierAction, result.action)
+        assertEquals(null, result.modifier)
     }
 
 }

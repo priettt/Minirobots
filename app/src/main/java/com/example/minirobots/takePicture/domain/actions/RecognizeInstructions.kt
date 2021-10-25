@@ -19,7 +19,7 @@ class RecognizeInstructions @Inject constructor(
         if (recognizedInstructions.isEmpty())
             Result.failure(Error("Recognition Error"))
         else {
-            instructionsRepository.overwrite2(recognizedInstructions)
+            instructionsRepository.overwrite(recognizedInstructions)
             Result.success(Unit)
         }
     }

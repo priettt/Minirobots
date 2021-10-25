@@ -1,36 +1,30 @@
 package com.example.minirobots.takePicture.infrastructure
 
 import com.example.minirobots.Instruction
-import com.example.minirobots.instructionsList.domain.entities.Modifier
-import com.example.minirobots.instructionsList.domain.entities.UIInstruction
+import com.example.minirobots.Modifier
+
 import javax.inject.Inject
 
 interface InstructionsRepository {
-    fun add(instructions: List<UIInstruction>)
-    fun overwrite(instructions: List<UIInstruction>)
-    fun overwrite2(instructions: List<Instruction>)
+    fun add(instruction: Instruction)
+    fun overwrite(instructions: List<Instruction>)
     fun delete(index: Int)
     fun move(originIndex: Int, targetIndex: Int)
-    fun getAll(): List<UIInstruction>
-    fun get(index: Int): UIInstruction?
+    fun getAll(): List<Instruction>
+    fun get(index: Int): Instruction?
     fun updateModifier(index: Int, modifier: Modifier)
 }
 
 class InMemoryInstructionsRepository @Inject constructor() : InstructionsRepository {
 
-    private var instructions = mutableListOf<UIInstruction>()
-    private var instructions2 = mutableListOf<Instruction>()
+    private var instructions = mutableListOf<Instruction>()
 
-    override fun add(instructions: List<UIInstruction>) {
-        this.instructions.addAll(instructions)
+    override fun add(instruction: Instruction) {
+        instructions.add(instruction)
     }
 
-    override fun overwrite(instructions: List<UIInstruction>) {
+    override fun overwrite(instructions: List<Instruction>) {
         this.instructions = instructions.toMutableList()
-    }
-
-    override fun overwrite2(instructions: List<Instruction>) {
-        this.instructions2 = instructions.toMutableList()
     }
 
     override fun delete(index: Int) {
@@ -44,19 +38,13 @@ class InMemoryInstructionsRepository @Inject constructor() : InstructionsReposit
         instructions.add(targetIndex, originInstruction)
     }
 
-    override fun getAll(): List<UIInstruction> = instructions.toMutableList()
+    override fun getAll(): List<Instruction> = instructions
 
-    override fun get(index: Int): UIInstruction? {
-        return if (index >= 0 && index < instructions.size)
-            instructions[index]
-        else
-            null
-    }
+    override fun get(index: Int) = instructions.getOrNull(index)
 
     override fun updateModifier(index: Int, modifier: Modifier) {
-        if (index >= 0 && index < instructions.size)
-            if (instructions[index].modifier != null)
-                instructions[index].modifier = modifier
+        val instruction = instructions.getOrNull(index) ?: return
+        instructions[index] = Instruction(instruction.action, modifier, instruction.id)
     }
 
 }

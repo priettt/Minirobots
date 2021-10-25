@@ -6,15 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentAddInstructionBinding
 import com.example.minirobots.instructionsList.presentation.instructionlist.InstructionsListViewModel
-import com.example.minirobots.utilities.observeIn
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class AddInstructionFragment : BottomSheetDialogFragment() {
@@ -46,18 +51,24 @@ class AddInstructionFragment : BottomSheetDialogFragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.instructionsFlow.asLiveData()
-            .observe(viewLifecycleOwner, { instructions ->
-                adapter.submitList(instructions)
-            })
-
-        viewModel.eventsFlow
-            .onEach {
-                when (it) {
-                    AddInstructionViewModel.Event.InstructionAdded -> onInstructionAdded()
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.availableInstructions.collect {
+                    adapter.submitList(it)
                 }
             }
-            .observeIn(this)
+        }
+
+        viewModel.events
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach(::handleEvent)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun handleEvent(event: AddInstructionViewModel.Event) {
+        when (event) {
+            AddInstructionViewModel.Event.InstructionAdded -> onInstructionAdded()
+        }
     }
 
     private fun onInstructionAdded() {

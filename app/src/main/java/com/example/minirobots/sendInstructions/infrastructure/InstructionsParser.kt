@@ -1,68 +1,70 @@
 package com.example.minirobots.sendInstructions.infrastructure
 
-import com.example.minirobots.instructionsList.domain.entities.*
+import com.example.minirobots.Action
+import com.example.minirobots.Instruction
+import com.example.minirobots.Modifier
 import javax.inject.Inject
 
 private const val STEP_DISTANCE = 30
 
 interface InstructionsParser {
-    fun parse(instructions: List<UIInstruction>): String
+    fun parse(instructions: List<Instruction>): String
 }
 
 class InstructionsParserImpl @Inject constructor() : InstructionsParser {
-    override fun parse(instructions: List<UIInstruction>) =
+    override fun parse(instructions: List<Instruction>) =
         getPrefix() + getParsedInstructions(instructions) + getSuffix()
 
-    private fun getParsedInstructions(instructions: List<UIInstruction>): String {
+    private fun getParsedInstructions(instructions: List<Instruction>): String {
         return instructions.joinToString {
             parseInstruction(it)
         }
     }
 
-    private fun parseInstruction(instruction: UIInstruction): String {
-        return when (instruction) {
-            is Eighth -> """["TE", ${getMusicNote(instruction.modifier as MusicNote)} 60]]"""
-            is FunctionEnd -> ""
-            is FunctionExecute -> ""
-            is FunctionStart -> ""
-            is Led -> """["LD", ${getLedColor(instruction.modifier as LedColor)}]"""
-            is Melody -> getMelody(instruction.modifier as MusicNote)
-            is MoveBackward -> """["BD", ${getSteps(instruction.modifier as Steps)}]"""
-            is MoveForward -> """["FD", ${getSteps(instruction.modifier as Steps)}]"""
-            is PencilDown -> """["PN", 1]"""
-            is PencilUp -> """["PN", 0]"""
-            is ProgramEnd -> ""
-            is ProgramStart -> ""
-            is Quarter -> """["TE", ${getMusicNote(instruction.modifier as MusicNote)} 120]]"""
-            is RepeatEnd -> ""
-            is RepeatStart -> ""
-            is RotateLeft -> """["LT", ${getRotationAngle(instruction.modifier as RotationAngle)}]"""
-            is RotateRight -> """["RT", ${getRotationAngle(instruction.modifier as RotationAngle)}]"""
+    private fun parseInstruction(instruction: Instruction): String {
+        return when (instruction.action) {
+            Action.AVANZAR -> """["FD", ${getSteps(instruction.modifier)}]"""
+            Action.BAJAR_LAPIZ -> """["PN", 1]"""
+            Action.FUNCION -> ""
+            Action.FUNCION_COMIENZO -> ""
+            Action.FUNCION_FIN -> ""
+            Action.GIRAR_DERECHA -> """["RT", ${getRotationAngle(instruction.modifier)}]"""
+            Action.GIRAR_IZQUIERDA -> """["LT", ${getRotationAngle(instruction.modifier)}]"""
+            Action.LEDS -> """["LD", ${getLedColor(instruction.modifier)}]"""
+            Action.LEVANTAR_LAPIZ -> """["PN", 0]"""
+            Action.PROGRAMA_COMIENZO -> ""
+            Action.PROGRAMA_FIN -> ""
+            Action.REPETIR_COMIENZO -> ""
+            Action.REPETIR_FIN -> ""
+            Action.RETROCEDER -> """["BD", ${getSteps(instruction.modifier)}]"""
+            Action.TOCAR_CORCHEA -> """["TE", ${getMusicNote(instruction.modifier)} 60]]"""
+            Action.TOCAR_MELODIA -> getMelody(instruction.modifier)
+            Action.TOCAR_NEGRA -> """["TE", ${getMusicNote(instruction.modifier)} 120]]"""
         }
     }
 
-    private fun getMelody(musicNote: MusicNote): String = when (musicNote) {
-        MusicNote.A -> Melodies.Mario
-        MusicNote.B -> Melodies.Mario
-        MusicNote.C -> Melodies.Mario
-        MusicNote.D -> Melodies.Mario
-        MusicNote.E -> Melodies.Mario
-        MusicNote.F -> Melodies.Mario
-        MusicNote.G -> Melodies.Mario
-        MusicNote.SILENCE -> Melodies.Mario
-        MusicNote.RANDOM -> Melodies.Mario
+    private fun getMelody(musicNote: Modifier?): String = when (musicNote) {
+        Modifier.NOTA_A -> Melodies.Mario
+        Modifier.NOTA_B -> Melodies.Mario
+        Modifier.NOTA_C -> Melodies.Mario
+        Modifier.NOTA_D -> Melodies.Mario
+        Modifier.NOTA_E -> Melodies.Mario
+        Modifier.NOTA_F -> Melodies.Mario
+        Modifier.NOTA_G -> Melodies.Mario
+        Modifier.NO_SONIDO -> Melodies.Mario
+        else -> Melodies.Mario
     }
 
-    private fun getMusicNote(musicNote: MusicNote) = when (musicNote) {
-        MusicNote.A -> "[440, "
-        MusicNote.B -> "[494, "
-        MusicNote.C -> "[523, "
-        MusicNote.D -> "[587, "
-        MusicNote.E -> "[659, "
-        MusicNote.F -> "[698, "
-        MusicNote.G -> "[784, "
-        MusicNote.SILENCE -> "[0, "
-        MusicNote.RANDOM -> listOf(
+    private fun getMusicNote(musicNote: Modifier?) = when (musicNote) {
+        Modifier.NOTA_A -> "[440, "
+        Modifier.NOTA_B -> "[494, "
+        Modifier.NOTA_C -> "[523, "
+        Modifier.NOTA_D -> "[587, "
+        Modifier.NOTA_E -> "[659, "
+        Modifier.NOTA_F -> "[698, "
+        Modifier.NOTA_G -> "[784, "
+        Modifier.NO_SONIDO -> "[0, "
+        else -> listOf(
             "[440, ",
             "[494, ",
             "[523, ",
@@ -73,13 +75,13 @@ class InstructionsParserImpl @Inject constructor() : InstructionsParser {
         ).random()
     }
 
-    private fun getSteps(steps: Steps) = when (steps) {
-        Steps.STEPS_2 -> "${STEP_DISTANCE * 2}"
-        Steps.STEPS_3 -> "${STEP_DISTANCE * 3}"
-        Steps.STEPS_4 -> "${STEP_DISTANCE * 4}"
-        Steps.STEPS_5 -> "${STEP_DISTANCE * 5}"
-        Steps.STEPS_6 -> "${STEP_DISTANCE * 6}"
-        Steps.RANDOM -> listOf(
+    private fun getSteps(steps: Modifier?) = when (steps) {
+        Modifier.NUMERO_2 -> "${STEP_DISTANCE * 2}"
+        Modifier.NUMERO_3 -> "${STEP_DISTANCE * 3}"
+        Modifier.NUMERO_4 -> "${STEP_DISTANCE * 4}"
+        Modifier.NUMERO_5 -> "${STEP_DISTANCE * 5}"
+        Modifier.NUMERO_6 -> "${STEP_DISTANCE * 6}"
+        else -> listOf(
             "${STEP_DISTANCE * 2}",
             "${STEP_DISTANCE * 3}",
             "${STEP_DISTANCE * 4}",
@@ -88,29 +90,29 @@ class InstructionsParserImpl @Inject constructor() : InstructionsParser {
         ).random()
     }
 
-    private fun getRotationAngle(modifier: RotationAngle) = when (modifier) {
-        RotationAngle.ANGLE_30 -> "30"
-        RotationAngle.ANGLE_36 -> "36"
-        RotationAngle.ANGLE_45 -> "45"
-        RotationAngle.ANGLE_60 -> "60"
-        RotationAngle.ANGLE_72 -> "72"
-        RotationAngle.ANGLE_108 -> "108"
-        RotationAngle.ANGLE_120 -> "120"
-        RotationAngle.ANGLE_135 -> "135"
-        RotationAngle.ANGLE_144 -> "144"
-        RotationAngle.ANGLE_150 -> "150"
-        RotationAngle.RANDOM -> listOf("30", "36", "45", "60", "72", "108", "120", "135", "144", "150").random()
+    private fun getRotationAngle(modifier: Modifier?) = when (modifier) {
+        Modifier.ANGULO_30 -> "30"
+        Modifier.ANGULO_36 -> "36"
+        Modifier.ANGULO_45 -> "45"
+        Modifier.ANGULO_60 -> "60"
+        Modifier.ANGULO_72 -> "72"
+        Modifier.ANGULO_108 -> "108"
+        Modifier.ANGULO_120 -> "120"
+        Modifier.ANGULO_135 -> "135"
+        Modifier.ANGULO_144 -> "144"
+        Modifier.ANGULO_150 -> "150"
+        else -> listOf("30", "36", "45", "60", "72", "108", "120", "135", "144", "150").random()
     }
 
-    private fun getLedColor(modifier: LedColor) = when (modifier) {
-        LedColor.RED -> "[2, 255, 0, 0]"
-        LedColor.BLUE -> "[2, 0, 0, 255]"
-        LedColor.GREEN -> "[2, 0, 255, 0]"
-        LedColor.PINK -> "[2, 255, 192, 203]"
-        LedColor.YELLOW -> "[2, 255, 255, 0]"
-        LedColor.LIGHT_BLUE -> "[2, 68, 85, 90]"
-        LedColor.WHITE -> "[2, 255, 255, 255]"
-        LedColor.RANDOM -> listOf(
+    private fun getLedColor(modifier: Modifier?) = when (modifier) {
+        Modifier.COLOR_ROJO -> "[2, 255, 0, 0]"
+        Modifier.COLOR_AZUL -> "[2, 0, 0, 255]"
+        Modifier.COLOR_VERDE -> "[2, 0, 255, 0]"
+        Modifier.COLOR_ROSA -> "[2, 255, 192, 203]"
+        Modifier.COLOR_AMARILLO -> "[2, 255, 255, 0]"
+        Modifier.COLOR_CELESTE -> "[2, 68, 85, 90]"
+        Modifier.NO_COLOR -> "[2, 0, 0, 0]"
+        else -> listOf(
             "[2, 255, 0, 0]",
             "[2, 0, 0, 255]",
             "[2, 0, 255, 0]",
@@ -119,7 +121,6 @@ class InstructionsParserImpl @Inject constructor() : InstructionsParser {
             "[2, 68, 85, 90]",
             "[2, 255, 255, 255]",
         ).random()
-        LedColor.NONE -> "[2, 0, 0, 0]"
     }
 
     private fun getPrefix() = """{"CMD":["""

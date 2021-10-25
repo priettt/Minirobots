@@ -11,11 +11,16 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentTakePictureBinding
+import com.example.minirobots.takePicture.presentation.Event.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
+import kotlinx.coroutines.flow.onEach
 import java.io.File
 
 private const val SAVED_PICTURE_PREFIX = "Minirobots-"
@@ -51,46 +56,6 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
         }
     }
 
-    private fun observeViewModel() {
-        viewModel.navigation.asLiveData().observe(viewLifecycleOwner, ::handleNavigation)
-    }
-
-    private fun handleNavigation(state: TakePictureNavigation?) {
-        when (state) {
-            TakePictureNavigation.GoToInstructions -> goToInstructionsScreen()
-            TakePictureNavigation.ShowSpinner -> showSpinner()
-            TakePictureNavigation.ShowRecognitionError -> {
-                Toast.makeText(requireContext(), "There was an error analyzing the image. Please try again", Toast.LENGTH_SHORT).show()
-                hideSpinner()
-            }
-            TakePictureNavigation.ShowTakePictureError -> {
-                Toast.makeText(requireContext(), "Couldn't retrieve picture, please, try again.", Toast.LENGTH_SHORT).show()
-                hideSpinner()
-            }
-            else -> { //Do nothing
-            }
-        }
-    }
-
-    private fun showSpinner() {
-        binding.loadingView.progressOverlay.visibility = VISIBLE
-    }
-
-    private fun hideSpinner() {
-        binding.loadingView.progressOverlay.visibility = GONE
-    }
-
-    private fun goToInstructionsScreen() {
-        hideSpinner()
-        findNavController().navigate(
-            TakePictureFragmentDirections.actionTakePictureFragmentToInstructionListFragment()
-        )
-    }
-
-    private fun onGetPictureFromGalleryClicked() {
-        getPictureFromGallery.launch("image/*")
-    }
-
     private fun onTakePictureClicked() {
         val pictureUri = generatePictureUri()
         viewModel.onPictureUriCreated(pictureUri)
@@ -102,5 +67,50 @@ class TakePictureFragment : Fragment(R.layout.fragment_take_picture) {
         val postfix = System.currentTimeMillis().toString()
         val directory = requireContext().getExternalFilesDir(Environment.DIRECTORY_PICTURES)
         return FileProvider.getUriForFile(requireContext(), FILE_PROVIDER_AUTHORITY, File.createTempFile(prefix, postfix, directory))
+    }
+
+    private fun onGetPictureFromGalleryClicked() {
+        getPictureFromGallery.launch("image/*")
+    }
+
+    private fun observeViewModel() {
+        viewModel.events
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach(::handleEvent)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun handleEvent(event: Event) {
+        when (event) {
+            GoToInstructions -> goToInstructionsScreen()
+            ShowSpinner -> showSpinner()
+            ShowRecognitionError -> onRecognitionError()
+            ShowTakePictureError -> onShowTakePictureError()
+        }
+    }
+
+    private fun goToInstructionsScreen() {
+        hideSpinner()
+        findNavController().navigate(
+            TakePictureFragmentDirections.actionTakePictureFragmentToInstructionListFragment()
+        )
+    }
+
+    private fun showSpinner() {
+        binding.loadingView.progressOverlay.visibility = VISIBLE
+    }
+
+    private fun hideSpinner() {
+        binding.loadingView.progressOverlay.visibility = GONE
+    }
+
+    private fun onRecognitionError() {
+        Toast.makeText(requireContext(), "There was an error analyzing the image. Please try again", Toast.LENGTH_SHORT).show()
+        hideSpinner()
+    }
+
+    private fun onShowTakePictureError() {
+        Toast.makeText(requireContext(), "Couldn't retrieve picture, please, try again.", Toast.LENGTH_SHORT).show()
+        hideSpinner()
     }
 }

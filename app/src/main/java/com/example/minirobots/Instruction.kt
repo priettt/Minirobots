@@ -1,5 +1,7 @@
 package com.example.minirobots
 
+import java.util.*
+
 /*
     Not sure if this is the best approach, because it involves a lot of mapping.
     It is cleaner to store, as we only have actions and modifiers, and then we
@@ -10,7 +12,11 @@ package com.example.minirobots
  */
 
 
-data class Instruction(val action: Action, val modifier: Modifier?)
+data class Instruction(
+    val action: Action,
+    val modifier: Modifier?,
+    val id: UUID = UUID.randomUUID(),
+)
 
 enum class Action {
     AVANZAR,
@@ -47,9 +53,8 @@ enum class Modifier {
     COLOR_AL_AZAR,
     COLOR_AMARILLO,
     COLOR_AZUL,
-    COLOR_BLANCO,
-    COLOR_CIAN,
-    COLOR_MAGENTA,
+    COLOR_CELESTE,
+    COLOR_ROSA,
     COLOR_ROJO,
     COLOR_VERDE,
     NO_COLOR,

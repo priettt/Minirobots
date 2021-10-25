@@ -5,7 +5,7 @@ import com.example.minirobots.Instruction
 import com.example.minirobots.Modifier
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName.*
-import junit.framework.Assert.assertEquals
+import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class PieceNamesMapperTest {
@@ -20,17 +20,17 @@ class PieceNamesMapperTest {
     }
 
     @Test
-    fun `list with only one action`() {
-        val namesList = givenSingleActionName()
-        val result = whenMappingPieceNames(namesList)
-        shouldReturnInstructionWithRandomModifier(result)
-    }
-
-    @Test
     fun `list with only one modifier`() {
         val namesList = givenSingleModifierName()
         val result = whenMappingPieceNames(namesList)
         shouldReturnEmptyInstructionList(result)
+    }
+
+    @Test
+    fun `list with only one action`() {
+        val namesList = givenSingleActionName()
+        val result = whenMappingPieceNames(namesList)
+        shouldReturnInstructionWithRandomModifier(result)
     }
 
     @Test
@@ -55,7 +55,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -66,7 +66,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -77,7 +77,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_AL_AZAR),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_30),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -88,7 +88,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -99,7 +99,7 @@ class PieceNamesMapperTest {
             Instruction(Action.BAJAR_LAPIZ, null),
             Instruction(Action.LEVANTAR_LAPIZ, null),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -110,7 +110,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -122,7 +122,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -134,7 +134,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -146,7 +146,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -158,7 +158,7 @@ class PieceNamesMapperTest {
             Instruction(Action.BAJAR_LAPIZ, null),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -170,7 +170,7 @@ class PieceNamesMapperTest {
             Instruction(Action.BAJAR_LAPIZ, null),
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     @Test
@@ -182,7 +182,7 @@ class PieceNamesMapperTest {
             Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
             Instruction(Action.BAJAR_LAPIZ, null),
         )
-        assertEquals(expected, result)
+        assertInstructionListsAreEquals(expected, result)
     }
 
     private fun givenEmptyPieceNames() = emptyList<PieceName>()
@@ -202,16 +202,23 @@ class PieceNamesMapperTest {
         assertEquals(emptyList<Instruction>(), result)
 
     private fun shouldReturnSinglePieceInstruction(result: List<Instruction>) =
-        assertEquals(listOf(Instruction(Action.BAJAR_LAPIZ, null)), result)
+        assertInstructionListsAreEquals(listOf(Instruction(Action.BAJAR_LAPIZ, null)), result)
 
     private fun shouldReturnInstructionWithRandomModifier(result: List<Instruction>) {
         val instructionListWithRandomModifier = listOf(Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_AL_AZAR))
-        assertEquals(instructionListWithRandomModifier, result)
+        assertInstructionListsAreEquals(instructionListWithRandomModifier, result)
+    }
+
+    private fun assertInstructionListsAreEquals(expected: List<Instruction>, result: List<Instruction>) {
+        expected.forEachIndexed { index, instruction ->
+            assertEquals(instruction.action, result.getOrNull(index)?.action)
+            assertEquals(instruction.modifier, result.getOrNull(index)?.modifier)
+        }
     }
 
     private fun shouldReturnInstructionWithActionAndModifier(result: List<Instruction>) {
         val instructionWithActionAndModifier = listOf(Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30))
-        assertEquals(instructionWithActionAndModifier, result)
+        assertInstructionListsAreEquals(instructionWithActionAndModifier, result)
     }
 
 }

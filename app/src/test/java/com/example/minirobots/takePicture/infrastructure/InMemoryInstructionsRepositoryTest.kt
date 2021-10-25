@@ -1,11 +1,21 @@
 package com.example.minirobots.takePicture.infrastructure
 
-import com.example.minirobots.instructionsList.domain.entities.*
+import com.example.minirobots.Action
+import com.example.minirobots.Instruction
+import com.example.minirobots.Modifier
 import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
+import java.util.*
 
-val LIST_OF_INSTRUCTIONS = listOf(ProgramStart(), MoveForward(), Led(), MoveBackward(), ProgramEnd())
+private val testUUID = UUID.randomUUID()
+
+val LIST_OF_INSTRUCTIONS = listOf(
+    Instruction(Action.AVANZAR, Modifier.NUMERO_2, testUUID),
+    Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_144, testUUID),
+    Instruction(Action.LEVANTAR_LAPIZ, null, testUUID),
+    Instruction(Action.RETROCEDER, Modifier.NUMERO_3, testUUID),
+)
 
 class InMemoryInstructionsRepositoryTest {
 
@@ -14,7 +24,7 @@ class InMemoryInstructionsRepositoryTest {
     @Before
     fun setUp() {
         instructionsRepository = InMemoryInstructionsRepository()
-        instructionsRepository.add(LIST_OF_INSTRUCTIONS)
+        LIST_OF_INSTRUCTIONS.forEach { instructionsRepository.add(it) }
     }
 
     @Test
@@ -26,14 +36,24 @@ class InMemoryInstructionsRepositoryTest {
 
     @Test
     fun `move instruction forward should update index positions`() {
-        val expectedList = listOf(ProgramStart(), Led(), MoveBackward(), MoveForward(), ProgramEnd())
+        val expectedList = listOf(
+            Instruction(Action.AVANZAR, Modifier.NUMERO_2, testUUID),
+            Instruction(Action.LEVANTAR_LAPIZ, null, testUUID),
+            Instruction(Action.RETROCEDER, Modifier.NUMERO_3, testUUID),
+            Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_144, testUUID),
+        )
         instructionsRepository.move(1, 3)
         assertEquals(expectedList, instructionsRepository.getAll())
     }
 
     @Test
     fun `move instruction backwards should update index positions`() {
-        val expectedList = listOf(ProgramStart(), MoveBackward(), MoveForward(), Led(), ProgramEnd())
+        val expectedList = listOf(
+            Instruction(Action.AVANZAR, Modifier.NUMERO_2, testUUID),
+            Instruction(Action.RETROCEDER, Modifier.NUMERO_3, testUUID),
+            Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_144, testUUID),
+            Instruction(Action.LEVANTAR_LAPIZ, null, testUUID),
+        )
         instructionsRepository.move(3, 1)
         assertEquals(expectedList, instructionsRepository.getAll())
     }

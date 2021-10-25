@@ -15,15 +15,17 @@ class SendInstructionsViewModel @Inject constructor(
 ) : ViewModel() {
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
-    val eventsFlow = eventChannel.receiveAsFlow()
+    val events = eventChannel.receiveAsFlow()
 
     fun onViewCreated() {
+        postInstructions()
+    }
+
+    private fun postInstructions() {
         viewModelScope.launch {
-            sendInstructions().onSuccess {
-                sendEvent(Event.ShowSuccess)
-            }.onFailure {
-                sendEvent(Event.ShowFailure)
-            }
+            sendInstructions()
+                .onSuccess { sendEvent(Event.ShowSuccess) }
+                .onFailure { sendEvent(Event.ShowFailure) }
         }
     }
 
@@ -35,13 +37,7 @@ class SendInstructionsViewModel @Inject constructor(
 
     fun onRetryPressed() {
         sendEvent(Event.ShowLoading)
-        viewModelScope.launch {
-            sendInstructions().onSuccess {
-                sendEvent(Event.ShowSuccess)
-            }.onFailure {
-                sendEvent(Event.ShowFailure)
-            }
-        }
+        postInstructions()
     }
 
     sealed class Event {

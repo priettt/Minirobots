@@ -6,15 +6,20 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.activityViewModels
 import androidx.fragment.app.viewModels
-import androidx.lifecycle.asLiveData
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
+import androidx.lifecycle.repeatOnLifecycle
 import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentEditInstructionBinding
 import com.example.minirobots.instructionsList.presentation.instructionlist.InstructionsListViewModel
-import com.example.minirobots.utilities.observeIn
 import com.google.android.material.bottomsheet.BottomSheetDialogFragment
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.collect
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
+import kotlinx.coroutines.launch
 
 @AndroidEntryPoint
 class EditInstructionFragment : BottomSheetDialogFragment() {
@@ -38,6 +43,7 @@ class EditInstructionFragment : BottomSheetDialogFragment() {
         super.onViewCreated(view, savedInstanceState)
         setupBinding(view)
         observeViewModel()
+        viewModel.onViewCreated(instructionListViewModel.clickedInstruction)
     }
 
     private fun setupBinding(view: View) {
@@ -46,23 +52,29 @@ class EditInstructionFragment : BottomSheetDialogFragment() {
     }
 
     private fun observeViewModel() {
-        viewModel.modifiersFlow.asLiveData()
-            .observe(viewLifecycleOwner, { modifiers ->
-                adapter.submitList(modifiers)
-            })
-
-        viewModel.eventsFlow
-            .onEach {
-                when (it) {
-                    is EditInstructionViewModel.Event.InstructionEdited -> onInstructionEdited(it.index)
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.modifiers.collect {
+                    adapter.submitList(it)
                 }
             }
-            .observeIn(this)
+        }
+
+        viewModel.events
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach(::handleEvent)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
-    private fun onInstructionEdited(index: Int) {
-        instructionListViewModel.onInstructionEdited(index)
+    private fun onInstructionEdited() {
+        instructionListViewModel.onInstructionEdited()
         findNavController().navigateUp()
+    }
+
+    private fun handleEvent(event: EditInstructionViewModel.Event) {
+        when (event) {
+            EditInstructionViewModel.Event.InstructionEdited -> onInstructionEdited()
+        }
     }
 
 }

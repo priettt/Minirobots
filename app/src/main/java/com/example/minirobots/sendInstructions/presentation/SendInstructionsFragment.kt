@@ -6,10 +6,15 @@ import android.view.View.GONE
 import android.view.View.VISIBLE
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.flowWithLifecycle
+import androidx.lifecycle.lifecycleScope
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentSendInstructionsBinding
-import com.example.minirobots.utilities.observeIn
+import com.example.minirobots.sendInstructions.presentation.SendInstructionsViewModel.Event
+import com.example.minirobots.sendInstructions.presentation.SendInstructionsViewModel.Event.*
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.launchIn
 import kotlinx.coroutines.flow.onEach
 
 @AndroidEntryPoint
@@ -33,15 +38,18 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
     }
 
     private fun observeViewModel() {
-        viewModel.eventsFlow
-            .onEach {
-                when (it) {
-                    SendInstructionsViewModel.Event.ShowFailure -> showFailure()
-                    SendInstructionsViewModel.Event.ShowSuccess -> showSuccess()
-                    SendInstructionsViewModel.Event.ShowLoading -> showLoading()
-                }
-            }
-            .observeIn(this)
+        viewModel.events
+            .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
+            .onEach(::handleEvent)
+            .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun handleEvent(event: Event) {
+        when (event) {
+            ShowFailure -> showFailure()
+            ShowSuccess -> showSuccess()
+            ShowLoading -> showLoading()
+        }
     }
 
     private fun showSuccess() {

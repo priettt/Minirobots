@@ -25,5 +25,3 @@ class SendInstructions @Inject constructor(
         }
     }
 }
-
-class InvalidNetworkError : Error()
