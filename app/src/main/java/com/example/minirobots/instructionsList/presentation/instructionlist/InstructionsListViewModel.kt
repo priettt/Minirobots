@@ -30,7 +30,7 @@ class InstructionsListViewModel @Inject constructor(
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
 
-    init {
+    fun onViewCreated() {
         fetchInstructions()
     }
 

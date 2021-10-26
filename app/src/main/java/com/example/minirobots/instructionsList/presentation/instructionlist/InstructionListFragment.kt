@@ -35,6 +35,7 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding(view)
         observeViewModel()
+        viewModel.onViewCreated()
     }
 
     private fun setupBinding(view: View) {
