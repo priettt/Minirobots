@@ -8,7 +8,7 @@
     <string name="instructions_screen_send_instructions_button_text">Send instructions</string>
     <string name="add_instruction_title">Choose an instruction to add: </string>
     <string name="add_instruction_button_description">Add instruction</string>
-    <string name="send_instruction_button_description">Send instruction</string>
+    <string name="send_instruction_button_description">Send instructions</string>
     <string name="edit_instruction_title">Choose an instruction to edit: </string>
     <string name="send_instructions_loading_title">Sending instructions to the robot</string>
     <string name="send_instructions_error_title">There was an error sending the instructions</string>

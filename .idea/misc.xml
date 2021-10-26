@@ -3,14 +3,20 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/adelante.xml" value="0.23541666666666666" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/angulo_108.xml" value="0.23541666666666666" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/angulo_120.xml" value="0.2312820512820513" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/angulo_135.xml" value="0.23489583333333333" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/angulo_144.xml" value="0.2953125" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.23645833333333333" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/color_apagado.xml" value="0.23489583333333333" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/melodia.xml" value="0.2953125" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_add_instruction.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_edit_instruction.xml" value="0.33" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_instruction_list.xml" value="0.33" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_send_instructions.xml" value="0.33" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_take_picture.xml" value="0.33" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_add_instruction.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_edit_instruction.xml" value="0.2848731884057971" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_instruction.xml" value="0.1" />
         <entry key="app/src/main/res/layout/fragment_instruction_list.xml" value="0.21354166666666666" />

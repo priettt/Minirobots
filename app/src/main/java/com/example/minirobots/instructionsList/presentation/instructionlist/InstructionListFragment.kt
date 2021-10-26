@@ -29,6 +29,8 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
         viewModel.onInstructionClicked(index)
     }
 
+    private lateinit var binding: FragmentInstructionListBinding
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         setupBinding(view)
@@ -36,7 +38,7 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
     }
 
     private fun setupBinding(view: View) {
-        val binding = FragmentInstructionListBinding.bind(view)
+        binding = FragmentInstructionListBinding.bind(view)
         binding.instructionsList.adapter = adapter
         binding.addButton.setOnClickListener {
             viewModel.onAddButtonClicked()
@@ -67,7 +69,12 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
             Event.ShowAddInstructionMenu -> showAddInstructionMenu()
             Event.ShowEditInstructionMenu -> showEditInstructionMenu()
             Event.ShowSendInstructionsScreen -> goToSendInstructionsScreen()
+            Event.ScrollToBottom -> scrollToBottom()
         }
+    }
+
+    private fun scrollToBottom() {
+        binding.instructionsList.smoothScrollToPosition(adapter.itemCount)
     }
 
     private fun goToSendInstructionsScreen() {

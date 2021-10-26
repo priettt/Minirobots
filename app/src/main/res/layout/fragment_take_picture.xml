@@ -11,6 +11,7 @@
         android:layout_height="200dp"
         android:layout_marginHorizontal="24dp"
         android:layout_marginVertical="20dp"
+        android:contentDescription="@null"
         android:src="@drawable/minirobots_logo_with_text"
         app:layout_constraintBottom_toTopOf="@id/takePictureTitle"
         app:layout_constraintEnd_toEndOf="parent"

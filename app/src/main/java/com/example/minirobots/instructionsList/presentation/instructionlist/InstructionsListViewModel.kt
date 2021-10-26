@@ -36,6 +36,7 @@ class InstructionsListViewModel @Inject constructor(
 
     fun onInstructionAdded() {
         fetchInstructions()
+        sendEvent(Event.ScrollToBottom)
     }
 
     fun onInstructionEdited() {
@@ -81,6 +82,7 @@ sealed class Event {
     object ShowAddInstructionMenu : Event()
     object ShowEditInstructionMenu : Event()
     object ShowSendInstructionsScreen : Event()
+    object ScrollToBottom : Event()
 }
 
 
