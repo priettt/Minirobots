@@ -21,14 +21,14 @@ class InstructionsListViewModel @Inject constructor(
     private val moveInstruction: MoveInstruction,
 ) : ViewModel() {
 
+    var clickedInstruction = 0
+
     private val mutableInstructions = MutableStateFlow<List<UIInstruction>>(emptyList())
     val instructions: StateFlow<List<UIInstruction>>
         get() = mutableInstructions
 
-    var clickedInstruction = 0
-
-    private val eventChannel = Channel<Event>(Channel.BUFFERED)
-    val events = eventChannel.receiveAsFlow()
+    private val mutableEvents = Channel<Event>(Channel.BUFFERED)
+    val events = mutableEvents.receiveAsFlow()
 
     fun onViewCreated() {
         fetchInstructions()
@@ -41,16 +41,6 @@ class InstructionsListViewModel @Inject constructor(
 
     fun onInstructionEdited() {
         fetchInstructions()
-    }
-
-    private fun fetchInstructions() {
-        mutableInstructions.value = getUIInstructions()
-    }
-
-    private fun sendEvent(event: Event) {
-        viewModelScope.launch {
-            eventChannel.send(event)
-        }
     }
 
     fun onItemDeleted(index: Int) {
@@ -76,6 +66,15 @@ class InstructionsListViewModel @Inject constructor(
         sendEvent(Event.ShowSendInstructionsScreen)
     }
 
+    private fun fetchInstructions() {
+        mutableInstructions.value = getUIInstructions()
+    }
+
+    private fun sendEvent(event: Event) {
+        viewModelScope.launch {
+            mutableEvents.send(event)
+        }
+    }
 }
 
 sealed class Event {

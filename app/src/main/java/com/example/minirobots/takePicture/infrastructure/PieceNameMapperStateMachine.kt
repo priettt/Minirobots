@@ -3,10 +3,12 @@ package com.example.minirobots.takePicture.infrastructure
 import com.example.minirobots.Action
 import com.example.minirobots.Instruction
 import com.example.minirobots.Modifier
+import com.example.minirobots.instructionsList.domain.actions.GetAvailableModifiers
 import javax.inject.Inject
 
 class PieceNameMapperStateMachine @Inject constructor(
     private val createInstructionWithRandomModifier: CreateInstructionWithRandomModifier,
+    private val getAvailableModifiers: GetAvailableModifiers,
 ) {
     private var state: State = State.Base
 
@@ -41,7 +43,12 @@ class PieceNameMapperStateMachine @Inject constructor(
 
     private fun goToBaseState(action: Action, modifier: Modifier): Instruction {
         state = State.Base
-        return Instruction(action, modifier)
+        val availableModifiers = getAvailableModifiers(action)
+        return if (modifier in availableModifiers) {
+            Instruction(action, modifier)
+        } else {
+            createInstructionWithRandomModifier(action)
+        }
     }
 
     private fun goToStoredModifierState(modifier: Modifier): Instruction? {

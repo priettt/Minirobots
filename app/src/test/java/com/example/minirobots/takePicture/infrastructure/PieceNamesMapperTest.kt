@@ -3,6 +3,7 @@ package com.example.minirobots.takePicture.infrastructure
 import com.example.minirobots.Action
 import com.example.minirobots.Instruction
 import com.example.minirobots.Modifier
+import com.example.minirobots.instructionsList.domain.actions.GetAvailableModifiers
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName.*
 import org.junit.Assert.assertEquals
@@ -10,7 +11,8 @@ import org.junit.Test
 
 class PieceNamesMapperTest {
 
-    private val pieceNamesMapper = PieceNamesMapper(PieceNameMapper(), PieceNameMapperStateMachine(CreateInstructionWithRandomModifier()))
+    private val pieceNamesMapper =
+        PieceNamesMapper(PieceNameMapper(), PieceNameMapperStateMachine(CreateInstructionWithRandomModifier(), GetAvailableModifiers()))
 
     @Test
     fun `empty piece names list`() {
@@ -185,6 +187,19 @@ class PieceNamesMapperTest {
         assertInstructionListsAreEquals(expected, result)
     }
 
+    @Test
+    fun `list with instructions with unrelated modifiers`() {
+        val namesList = listOf(ANGULO_30, AVANZAR, TOCAR_MELODIA, LEDS, BAJAR_LAPIZ)
+        val result = whenMappingPieceNames(namesList)
+        val expected = listOf(
+            Instruction(Action.AVANZAR, Modifier.NUMERO_AL_AZAR),
+            Instruction(Action.TOCAR_MELODIA, Modifier.NOTA_AL_AZAR),
+            Instruction(Action.BAJAR_LAPIZ, null),
+            Instruction(Action.LEDS, Modifier.COLOR_AL_AZAR),
+        )
+        assertInstructionListsAreEquals(expected, result)
+    }
+
     private fun givenEmptyPieceNames() = emptyList<PieceName>()
 
     private fun givenSingleActionName() = listOf(GIRAR_DERECHA)
@@ -210,6 +225,7 @@ class PieceNamesMapperTest {
     }
 
     private fun assertInstructionListsAreEquals(expected: List<Instruction>, result: List<Instruction>) {
+        assertEquals(expected.size, result.size)
         expected.forEachIndexed { index, instruction ->
             assertEquals(instruction.action, result.getOrNull(index)?.action)
             assertEquals(instruction.modifier, result.getOrNull(index)?.modifier)
