@@ -10,7 +10,11 @@
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/angulo_144.xml" value="0.2953125" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/bottom_sheet_background.xml" value="0.23645833333333333" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/color_apagado.xml" value="0.23489583333333333" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/fin_funcion.xml" value="0.11875" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/melodia.xml" value="0.2953125" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/numero_al_azar.xml" value="0.11875" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/programa_comienzo.xml" value="0.11875" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/drawable/programa_fin.xml" value="0.11875" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/activity_main.xml" value="0.11203703703703703" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_add_instruction.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_edit_instruction.xml" value="0.33" />
@@ -20,6 +24,7 @@
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_add_instruction.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_edit_instruction.xml" value="0.2848731884057971" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_instruction.xml" value="0.1" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/progress_overlay.xml" value="0.2265625" />
         <entry key="app/src/main/res/layout/fragment_instruction_list.xml" value="0.21354166666666666" />
       </map>
     </option>

@@ -37,7 +37,7 @@ class UIActionMapper @Inject constructor() {
         Action.GIRAR_IZQUIERDA -> UIAction("Girar a la izquierda", R.drawable.girar_izquierda)
         Action.LEDS -> UIAction("Leds", R.drawable.leds)
         Action.LEVANTAR_LAPIZ -> UIAction("Levantar lápiz", R.drawable.lapiz_arriba)
-        Action.PROGRAMA_COMIENZO -> UIAction("Inicio del programa", R.drawable.inicio_programa)
+        Action.PROGRAMA_COMIENZO -> UIAction("Inicio del programa", R.drawable.programa_comienzo)
         Action.PROGRAMA_FIN -> UIAction("Fin del programa", R.drawable.programa_fin)
         Action.REPETIR_COMIENZO -> UIAction("Inicio de repetición", R.drawable.repetir_comienzo)
         Action.REPETIR_FIN -> UIAction("Fin de repetición", R.drawable.repetir_fin)

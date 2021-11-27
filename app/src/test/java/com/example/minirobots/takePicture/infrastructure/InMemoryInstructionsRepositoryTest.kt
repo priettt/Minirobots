@@ -19,7 +19,7 @@ val LIST_OF_INSTRUCTIONS = listOf(
 
 class InMemoryInstructionsRepositoryTest {
 
-    var instructionsRepository = InMemoryInstructionsRepository()
+    private var instructionsRepository = InMemoryInstructionsRepository()
 
     @Before
     fun setUp() {
