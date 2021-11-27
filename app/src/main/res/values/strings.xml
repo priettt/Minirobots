@@ -12,8 +12,11 @@
     <string name="edit_instruction_title">Choose an instruction to edit: </string>
     <string name="send_instructions_loading_title">Sending instructions to the robot</string>
     <string name="send_instructions_error_title">There was an error sending the instructions</string>
+    <string name="send_instructions_invalid_program_title">Invalid program</string>
+    <string name="send_instructions_invalid_program_subtitle">Please, verify that the program starts and ends with the correct instructions</string>
     <string name="send_instructions_success_title">The instructions were sent successfully!</string>
     <string name="send_instructions_error_retry">Retry</string>
+    <string name="send_instructions_invalid_program_button">Go back</string>
     <string name="send_instructions_success_button">Start again</string>
     <string name="take_picture_subtitle">Let\'s get a picture to search for instructions</string>
 </resources>

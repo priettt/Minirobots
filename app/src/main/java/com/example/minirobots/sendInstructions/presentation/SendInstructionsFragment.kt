@@ -9,6 +9,7 @@ import androidx.fragment.app.viewModels
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
+import androidx.navigation.fragment.findNavController
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentSendInstructionsBinding
 import com.example.minirobots.sendInstructions.presentation.SendInstructionsViewModel.Event
@@ -35,6 +36,9 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
         binding.sendInstructionsRetryButton.setOnClickListener {
             viewModel.onRetryPressed()
         }
+        binding.sendInstructionsGoBackButton.setOnClickListener {
+            findNavController().navigateUp()
+        }
     }
 
     private fun observeViewModel() {
@@ -49,25 +53,36 @@ class SendInstructionsFragment : Fragment(R.layout.fragment_send_instructions) {
             ShowFailure -> showFailure()
             ShowSuccess -> showSuccess()
             ShowLoading -> showLoading()
+            ShowInvalidProgram -> showInvalidProgram()
         }
+    }
+
+    private fun showInvalidProgram() {
+        binding.loadingGroup.visibility = GONE
+        binding.successGroup.visibility = GONE
+        binding.errorGroup.visibility = GONE
+        binding.invalidProgramGroup.visibility = VISIBLE
     }
 
     private fun showSuccess() {
         binding.successGroup.visibility = VISIBLE
         binding.errorGroup.visibility = GONE
         binding.loadingGroup.visibility = GONE
+        binding.invalidProgramGroup.visibility = GONE
     }
 
     private fun showLoading() {
         binding.loadingGroup.visibility = VISIBLE
         binding.successGroup.visibility = GONE
         binding.errorGroup.visibility = GONE
+        binding.invalidProgramGroup.visibility = GONE
     }
 
     private fun showFailure() {
         binding.loadingGroup.visibility = GONE
         binding.successGroup.visibility = GONE
         binding.errorGroup.visibility = VISIBLE
+        binding.invalidProgramGroup.visibility = GONE
     }
 
 }

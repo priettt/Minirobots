@@ -29,26 +29,26 @@ class GetAvailableModifiers @Inject constructor() {
     )
 
     private val colorModifiers = listOf(
-        Modifier.COLOR_AL_AZAR,
         Modifier.COLOR_AMARILLO,
         Modifier.COLOR_AZUL,
         Modifier.COLOR_CELESTE,
         Modifier.COLOR_ROSA,
         Modifier.COLOR_ROJO,
         Modifier.COLOR_VERDE,
+        Modifier.COLOR_AL_AZAR,
         Modifier.NO_COLOR,
     )
 
     private val musicModifiers = listOf(
-        Modifier.NO_SONIDO,
         Modifier.NOTA_A,
-        Modifier.NOTA_AL_AZAR,
         Modifier.NOTA_B,
         Modifier.NOTA_C,
         Modifier.NOTA_D,
         Modifier.NOTA_E,
         Modifier.NOTA_F,
         Modifier.NOTA_G,
+        Modifier.NO_SONIDO,
+        Modifier.NOTA_AL_AZAR,
     )
 
     operator fun invoke(action: Action?): List<Modifier> {

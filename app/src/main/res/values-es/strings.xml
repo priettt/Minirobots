@@ -13,6 +13,9 @@
     <string name="take_picture_subtitle">Elige una de las siguientes opciones para empezar con la búsqueda de instrucciones</string>
     <string name="send_instructions_success_title">¡Las instrucciones fueron enviadas con éxito!</string>
     <string name="send_instructions_success_button">Volver al comienzo</string>
+    <string name="send_instructions_invalid_program_button">Volver</string>
+    <string name="send_instructions_invalid_program_title">Programa inválido</string>
+    <string name="send_instructions_invalid_program_subtitle">Por favor, verifique si el programa empieza y termina con las instrucciones correctas</string>
     <string name="add_instruction_button_description">Agregar instrucción</string>
     <string name="send_instruction_button_description">Enviar instrucciones</string>
 </resources>

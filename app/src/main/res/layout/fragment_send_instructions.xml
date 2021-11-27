@@ -64,12 +64,57 @@
         app:layout_constraintTop_toBottomOf="@id/sendInstructionsErrorTitle" />
 
     <androidx.constraintlayout.widget.Group
+        android:id="@+id/invalidProgramGroup"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:visibility="gone"
+        app:constraint_referenced_ids="sendInstructionsInvalidProgramTitle,sendInstructionsInvalidProgramSubtitle, sendInstructionsGoBackButton"
+        tools:visibility="visible" />
+
+    <TextView
+        android:id="@+id/sendInstructionsInvalidProgramTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/send_instructions_invalid_program_title"
+        android:textAlignment="center"
+        android:textSize="24sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/sendInstructionsInvalidProgramSubtitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="16dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/send_instructions_invalid_program_subtitle"
+        android:textAlignment="center"
+        android:textSize="18sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendInstructionsInvalidProgramTitle" />
+
+    <Button
+        android:id="@+id/sendInstructionsGoBackButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginHorizontal="20dp"
+        android:layout_marginTop="32dp"
+        android:text="@string/send_instructions_invalid_program_button"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/sendInstructionsInvalidProgramSubtitle" />
+
+    <androidx.constraintlayout.widget.Group
         android:id="@+id/successGroup"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:visibility="gone"
         app:constraint_referenced_ids="sendInstructionsSuccessTitle, sendInstructionsSuccessImage, sendInstructionsSuccessButton"
-        tools:visibility="visible" />
+        tools:visibility="gone" />
 
     <TextView
         android:id="@+id/sendInstructionsSuccessTitle"

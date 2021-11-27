@@ -3,6 +3,7 @@ package com.example.minirobots.sendInstructions.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.sendInstructions.domain.actions.SendInstructions
+import com.example.minirobots.sendInstructions.domain.actions.SendInstructionsError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -25,8 +26,15 @@ class SendInstructionsViewModel @Inject constructor(
         viewModelScope.launch {
             sendInstructions()
                 .onSuccess { sendEvent(Event.ShowSuccess) }
-                .onFailure { sendEvent(Event.ShowFailure) }
+                .onFailure { handleFailure(it) }
         }
+    }
+
+    private fun handleFailure(error: Throwable) {
+        if (error is SendInstructionsError.InvalidProgram)
+            sendEvent(Event.ShowInvalidProgram)
+        else
+            sendEvent(Event.ShowFailure)
     }
 
     private fun sendEvent(event: Event) {
@@ -44,6 +52,7 @@ class SendInstructionsViewModel @Inject constructor(
         object ShowSuccess : Event()
         object ShowFailure : Event()
         object ShowLoading : Event()
+        object ShowInvalidProgram : Event()
     }
 
 }
