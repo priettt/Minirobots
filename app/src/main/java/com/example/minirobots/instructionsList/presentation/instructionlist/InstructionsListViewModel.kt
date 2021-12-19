@@ -6,6 +6,10 @@ import com.example.minirobots.instructionsList.domain.actions.DeleteInstruction
 import com.example.minirobots.instructionsList.domain.actions.GetUIInstructions
 import com.example.minirobots.instructionsList.domain.actions.MoveInstruction
 import com.example.minirobots.instructionsList.domain.entities.UIInstruction
+import com.example.minirobots.sendInstructions.domain.actions.SendInstructions
+import com.example.minirobots.sendInstructions.domain.actions.SendInstructionsResult
+import com.example.minirobots.sendInstructions.infrastructure.ProgramValidationState
+import com.example.minirobots.sendInstructions.infrastructure.ProgramValidator
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -19,6 +23,8 @@ class InstructionsListViewModel @Inject constructor(
     private val getUIInstructions: GetUIInstructions,
     private val deleteInstruction: DeleteInstruction,
     private val moveInstruction: MoveInstruction,
+    private val programValidator: ProgramValidator,
+    private val sendInstructions: SendInstructions
 ) : ViewModel() {
 
     var clickedInstruction = 0
@@ -26,6 +32,10 @@ class InstructionsListViewModel @Inject constructor(
     private val mutableInstructions = MutableStateFlow<List<UIInstruction>>(emptyList())
     val instructions: StateFlow<List<UIInstruction>>
         get() = mutableInstructions
+
+    private val mutableErrorState = MutableStateFlow<InstructionsListError>(InstructionsListError.NoError)
+    val errorState: StateFlow<InstructionsListError>
+        get() = mutableErrorState
 
     private val mutableEvents = Channel<Event>(Channel.BUFFERED)
     val events = mutableEvents.receiveAsFlow()
@@ -63,12 +73,29 @@ class InstructionsListViewModel @Inject constructor(
     }
 
     fun onSendInstructionsButtonClicked() {
-        sendEvent(Event.ShowSendInstructionsScreen)
+        sendEvent(Event.ShowLoadingScreen)
+        viewModelScope.launch {
+            when (sendInstructions()) {
+                SendInstructionsResult.FunctionStored -> sendEvent(Event.ShowFunctionStoredScreen)
+                SendInstructionsResult.NetworkFailure -> sendEvent(Event.ShowNetworkFailureScreen)
+                SendInstructionsResult.ProgramSent -> sendEvent(Event.ShowProgramSentScreen)
+            }
+        }
     }
 
     private fun fetchInstructions() {
         mutableInstructions.value = getUIInstructions()
+        mutableErrorState.value = getErrorState()
     }
+
+    private fun getErrorState(): InstructionsListError =
+        when (programValidator.getProgramValidationState()) {
+            ProgramValidationState.FunctionNotStored -> InstructionsListError.FunctionNotStoredError
+            ProgramValidationState.IncorrectStartAndEndInstructions -> InstructionsListError.InvalidProgramError
+            ProgramValidationState.EmptyProgram -> InstructionsListError.EmptyProgramError
+            ProgramValidationState.Valid -> InstructionsListError.NoError
+        }
+
 
     private fun sendEvent(event: Event) {
         viewModelScope.launch {
@@ -80,8 +107,18 @@ class InstructionsListViewModel @Inject constructor(
 sealed class Event {
     object ShowAddInstructionMenu : Event()
     object ShowEditInstructionMenu : Event()
-    object ShowSendInstructionsScreen : Event()
+    object ShowNetworkFailureScreen : Event()
+    object ShowProgramSentScreen : Event()
+    object ShowFunctionStoredScreen : Event()
+    object ShowLoadingScreen : Event()
     object ScrollToBottom : Event()
+}
+
+sealed class InstructionsListError {
+    object NoError : InstructionsListError()
+    object InvalidProgramError : InstructionsListError()
+    object EmptyProgramError : InstructionsListError()
+    object FunctionNotStoredError : InstructionsListError()
 }
 
 

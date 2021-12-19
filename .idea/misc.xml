@@ -19,7 +19,9 @@
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_add_instruction.xml" value="0.21557971014492755" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_edit_instruction.xml" value="0.33" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_instruction_list.xml" value="0.33" />
-        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_send_instructions.xml" value="0.33" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_instructions_sent.xml" value="0.18819655521783182" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_network_failure.xml" value="0.1" />
+        <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_send_instructions.xml" value="0.1" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/fragment_take_picture.xml" value="0.33" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_add_instruction.xml" value="0.21927083333333333" />
         <entry key="..\:/Users/Francisco/StudioProjects/Minirobots/app/src/main/res/layout/item_edit_instruction.xml" value="0.2848731884057971" />

@@ -3,10 +3,7 @@ package com.example.minirobots.di
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsParser
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsParserImpl
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsService
-import com.example.minirobots.takePicture.infrastructure.InMemoryInstructionsRepository
-import com.example.minirobots.takePicture.infrastructure.InstructionsRepository
-import com.example.minirobots.takePicture.infrastructure.LevenshteinDistanceCalculator
-import com.example.minirobots.takePicture.infrastructure.StringDistanceCalculator
+import com.example.minirobots.takePicture.infrastructure.*
 import com.example.minirobots.utilities.network.SocketTimeoutRetryInterceptor
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions
@@ -69,6 +66,17 @@ abstract class InstructionsRepositoryModule {
     abstract fun bindInstructionsRepository(
         inMemoryInstructionsRepository: InMemoryInstructionsRepository
     ): InstructionsRepository
+}
+
+@Module
+@InstallIn(SingletonComponent::class)
+abstract class FunctionsRepositoryModule {
+
+    @Singleton
+    @Binds
+    abstract fun bindFunctionsRepository(
+        inMemoryFunctionsRepository: InMemoryFunctionsRepository
+    ): FunctionsRepository
 }
 
 @Module

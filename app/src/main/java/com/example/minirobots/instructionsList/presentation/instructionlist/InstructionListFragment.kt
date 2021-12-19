@@ -41,7 +41,7 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
     private fun setupBinding(view: View) {
         binding = FragmentInstructionListBinding.bind(view)
         binding.instructionsList.adapter = adapter
-        binding.addButton.setOnClickListener {
+        binding.addInstructionButton.setOnClickListener {
             viewModel.onAddButtonClicked()
         }
         binding.sendInstructionsButton.setOnClickListener {
@@ -59,29 +59,60 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
             }
         }
 
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.errorState.collect {
+                    when (it) {
+                        InstructionsListError.FunctionNotStoredError -> showError(getString(R.string.instructions_list_function_not_stored_error))
+                        InstructionsListError.InvalidProgramError -> showError(getString(R.string.instructions_list_invalid_program_error))
+                        InstructionsListError.EmptyProgramError -> showError(getString(R.string.instructions_list_empty_program_error))
+                        InstructionsListError.NoError -> hideError()
+                    }
+                }
+            }
+        }
+
         viewModel.events
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach(::handleEvent)
             .launchIn(viewLifecycleOwner.lifecycleScope)
     }
 
+    private fun showError(message: String) {
+        binding.errorText.visibility = View.VISIBLE
+        binding.errorText.text = message
+        binding.sendInstructionsButton.isEnabled = false
+    }
+
+    private fun hideError() {
+        binding.errorText.visibility = View.GONE
+        binding.sendInstructionsButton.isEnabled = true
+    }
+
     private fun handleEvent(event: Event) {
         when (event) {
             Event.ShowAddInstructionMenu -> showAddInstructionMenu()
             Event.ShowEditInstructionMenu -> showEditInstructionMenu()
-            Event.ShowSendInstructionsScreen -> goToSendInstructionsScreen()
             Event.ScrollToBottom -> scrollToBottom()
+            Event.ShowFunctionStoredScreen -> showFunctionStoredScreen()
+            Event.ShowNetworkFailureScreen -> showNetworkFailureScreen()
+            Event.ShowProgramSentScreen -> showProgramSentScreen()
+            Event.ShowLoadingScreen -> showLoading()
         }
+    }
+
+    private fun showLoading() {
+        binding.loadingView.progressOverlay.visibility = View.VISIBLE
+        binding.instructionsList.visibility = View.INVISIBLE
+    }
+
+    private fun hideLoading() {
+        binding.loadingView.progressOverlay.visibility = View.GONE
+        binding.instructionsList.visibility = View.VISIBLE
     }
 
     private fun scrollToBottom() {
         binding.instructionsList.smoothScrollToPosition(adapter.itemCount)
-    }
-
-    private fun goToSendInstructionsScreen() {
-        findNavController().navigate(
-            InstructionListFragmentDirections.actionInstructionListFragmentToSendInstructionsFragment()
-        )
     }
 
     private fun showAddInstructionMenu() {
@@ -94,6 +125,25 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
         findNavController().navigate(
             InstructionListFragmentDirections.actionInstructionListFragmentToEditInstructionFragment()
         )
+    }
+
+    private fun showProgramSentScreen() {
+        hideLoading()
+        findNavController().navigate(
+            InstructionListFragmentDirections.actionInstructionListFragmentToInstructionsSentFragment()
+        )
+    }
+
+    private fun showNetworkFailureScreen() {
+        hideLoading()
+        findNavController().navigate(
+            InstructionListFragmentDirections.actionInstructionListFragmentToNetworkFailureFragment()
+        )
+    }
+
+    private fun showFunctionStoredScreen() {
+        hideLoading()
+
     }
 
     private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {

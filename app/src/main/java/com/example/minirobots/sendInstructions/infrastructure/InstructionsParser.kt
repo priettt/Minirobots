@@ -3,44 +3,47 @@ package com.example.minirobots.sendInstructions.infrastructure
 import com.example.minirobots.Action
 import com.example.minirobots.Instruction
 import com.example.minirobots.Modifier
+import com.example.minirobots.takePicture.infrastructure.FunctionsRepository
 import javax.inject.Inject
 
 private const val STEP_DISTANCE = 30
+
+private const val PREFIX = """{"CMD":["""
+private const val SUFFIX = "]}"
 
 interface InstructionsParser {
     fun parse(instructions: List<Instruction>): String
 }
 
-class InstructionsParserImpl @Inject constructor() : InstructionsParser {
+class InstructionsParserImpl @Inject constructor(
+    private val functionsRepository: FunctionsRepository
+) : InstructionsParser {
     override fun parse(instructions: List<Instruction>) =
-        getPrefix() + getParsedInstructions(instructions) + getSuffix()
+        PREFIX + getParsedInstructions(instructions) + SUFFIX
 
-    private fun getParsedInstructions(instructions: List<Instruction>): String {
-        return instructions.joinToString {
-            parseInstruction(it)
-        }
+    private fun getParsedInstructions(instructions: List<Instruction>) = instructions.joinToString {
+        parseInstruction(it)
     }
 
     private fun parseInstruction(instruction: Instruction): String {
         return when (instruction.action) {
             Action.AVANZAR -> """["FD", ${getSteps(instruction.modifier)}]"""
             Action.BAJAR_LAPIZ -> """["PN", 1]"""
-            Action.FUNCION -> ""
-            Action.FUNCION_COMIENZO -> ""
-            Action.FUNCION_FIN -> ""
+            Action.FUNCION -> parseStoredFunction()
             Action.GIRAR_DERECHA -> """["RT", ${getRotationAngle(instruction.modifier)}]"""
             Action.GIRAR_IZQUIERDA -> """["LT", ${getRotationAngle(instruction.modifier)}]"""
             Action.LEDS -> """["LD", ${getLedColor(instruction.modifier)}]"""
             Action.LEVANTAR_LAPIZ -> """["PN", 0]"""
-            Action.PROGRAMA_COMIENZO -> ""
-            Action.PROGRAMA_FIN -> ""
-            Action.REPETIR_COMIENZO -> ""
-            Action.REPETIR_FIN -> ""
             Action.RETROCEDER -> """["BD", ${getSteps(instruction.modifier)}]"""
             Action.TOCAR_CORCHEA -> """["TE", ${getMusicNote(instruction.modifier)} 60]]"""
             Action.TOCAR_MELODIA -> getMelody(instruction.modifier)
             Action.TOCAR_NEGRA -> """["TE", ${getMusicNote(instruction.modifier)} 120]]"""
+            else -> ""
         }
+    }
+
+    private fun parseStoredFunction() = functionsRepository.getAll().joinToString {
+        parseInstruction(it)
     }
 
     private fun getMelody(musicNote: Modifier?): String = when (musicNote) {
@@ -122,8 +125,5 @@ class InstructionsParserImpl @Inject constructor() : InstructionsParser {
             "[2, 255, 255, 255]",
         ).random()
     }
-
-    private fun getPrefix() = """{"CMD":["""
-    private fun getSuffix() = "]}"
 
 }

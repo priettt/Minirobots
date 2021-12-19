@@ -1,37 +1,52 @@
 package com.example.minirobots.sendInstructions.domain.actions
 
+import com.example.minirobots.Action
+import com.example.minirobots.Instruction
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsParser
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsService
-import com.example.minirobots.sendInstructions.infrastructure.ProgramValidator
+import com.example.minirobots.takePicture.infrastructure.FunctionsRepository
 import com.example.minirobots.takePicture.infrastructure.InstructionsRepository
 import javax.inject.Inject
 
 class SendInstructions @Inject constructor(
     private val instructionsRepository: InstructionsRepository,
-    private val programValidator: ProgramValidator,
+    private val functionsRepository: FunctionsRepository,
     private val instructionsParser: InstructionsParser,
     private val instructionsService: InstructionsService
 ) {
-    suspend operator fun invoke(): Result<Unit> {
-        val instructions = instructionsRepository.getAll()
-        if (!programValidator.isProgramValid(instructions)) {
-            return Result.failure(SendInstructionsError.InvalidProgram)
+    suspend operator fun invoke(): SendInstructionsResult {
+        val program = instructionsRepository.getAll()
+        return if (isFunction(program)) {
+            storeFunction(program)
+        } else {
+            sendProgram(program)
         }
-        val parsedInstructions = instructionsParser.parse(instructions)
+    }
+
+    private fun isFunction(program: List<Instruction>) = program.firstOrNull()?.action == Action.FUNCION_COMIENZO
+
+    private fun storeFunction(program: List<Instruction>): SendInstructionsResult {
+        functionsRepository.overwrite(program)
+        return SendInstructionsResult.FunctionStored
+    }
+
+    private suspend fun sendProgram(program: List<Instruction>): SendInstructionsResult {
+        val parsedInstructions = instructionsParser.parse(program)
         return try {
             val sendInstructionsResult = instructionsService.sendInstructions(parsedInstructions)
             if (sendInstructionsResult.isSuccessful) {
-                Result.success(Unit)
+                SendInstructionsResult.ProgramSent
             } else {
-                Result.failure(SendInstructionsError.NetworkFailure)
+                SendInstructionsResult.NetworkFailure
             }
         } catch (exception: Exception) {
-            Result.failure(SendInstructionsError.NetworkFailure)
+            SendInstructionsResult.NetworkFailure
         }
     }
 }
 
-sealed class SendInstructionsError : Error() {
-    object InvalidProgram : SendInstructionsError()
-    object NetworkFailure : SendInstructionsError()
+sealed class SendInstructionsResult {
+    object ProgramSent : SendInstructionsResult()
+    object FunctionStored : SendInstructionsResult()
+    object NetworkFailure : SendInstructionsResult()
 }

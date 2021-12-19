@@ -5,6 +5,7 @@
     <string name="take_picture_get_from_gallery_button">Usar foto existente</string>
     <string name="instructions_list_title">Las siguientes instrucciones serán enviadas al robot:</string>
     <string name="instructions_screen_send_instructions_button_text">Enviar instrucciones</string>
+    <string name="instructions_list_function_not_stored_error">No hay funciones almacenadas. Envía una función para almacenarla, o elimina la instrucción.</string>
     <string name="send_instructions_loading_title">Enviando instrucciones al robot</string>
     <string name="send_instructions_error_title">Hubo un error enviando las instrucciones</string>
     <string name="send_instructions_error_retry">Intentar de nuevo</string>
@@ -15,7 +16,9 @@
     <string name="send_instructions_success_button">Volver al comienzo</string>
     <string name="send_instructions_invalid_program_button">Volver</string>
     <string name="send_instructions_invalid_program_title">Programa inválido</string>
+    <string name="instructions_list_invalid_program_error">Por favor, verifique si el programa empieza y termina con las instrucciones correctas</string>
+    <string name="instructions_list_empty_program_error">Agrega instrucciones al programa para enviarlas al robot.</string>
     <string name="send_instructions_invalid_program_subtitle">Por favor, verifique si el programa empieza y termina con las instrucciones correctas</string>
-    <string name="add_instruction_button_description">Agregar instrucción</string>
-    <string name="send_instruction_button_description">Enviar instrucciones</string>
+    <string name="instructions_list_add_instruction_button">Agregar instrucción</string>
+    <string name="instructions_list_send_instruction_button">Enviar instrucciones</string>
 </resources>

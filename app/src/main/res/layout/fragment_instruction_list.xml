@@ -3,18 +3,17 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent">
+    android:layout_height="match_parent"
+    android:layout_margin="16dp">
 
     <TextView
         android:id="@+id/instructionsListTitle"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_marginStart="16dp"
-        android:layout_marginTop="32dp"
-        android:layout_marginEnd="16dp"
         android:text="@string/instructions_list_title"
         android:textAlignment="center"
         android:textSize="18sp"
+        app:layout_constraintBottom_toTopOf="@id/instructionsList"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -23,34 +22,50 @@
         android:id="@+id/instructionsList"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:layout_margin="24dp"
+        android:layout_marginVertical="8dp"
         app:layoutManager="LinearLayoutManager"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/errorText"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@id/instructionsListTitle"
         tools:listitem="@layout/item_instruction" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/addButton"
-        android:layout_width="wrap_content"
+    <TextView
+        android:id="@+id/errorText"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="#00B8D4"
-        android:contentDescription="@string/add_instruction_title"
-        android:src="@drawable/ic_baseline_add_24"
-        app:layout_constraintBottom_toTopOf="@id/sendInstructionsButton"
-        app:layout_constraintEnd_toEndOf="parent" />
+        android:layout_marginVertical="8dp"
+        android:textSize="16sp"
+        android:visibility="gone"
+        android:text="@string/instructions_list_function_not_stored_error"
+        app:layout_constraintBottom_toTopOf="@id/addInstructionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/instructionsList" />
 
-    <com.google.android.material.floatingactionbutton.FloatingActionButton
-        android:id="@+id/sendInstructionsButton"
-        android:layout_width="wrap_content"
+    <Button
+        android:id="@+id/addInstructionButton"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:layout_margin="16dp"
-        android:backgroundTint="#006064"
-        android:contentDescription="@string/send_instruction_button_description"
-        android:src="@drawable/ic_baseline_check_24"
+        android:layout_marginEnd="8dp"
+        android:text="@string/instructions_list_add_instruction_button"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent" />
+        app:layout_constraintEnd_toStartOf="@id/sendInstructionsButton"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/errorText" />
+
+    <Button
+        android:id="@+id/sendInstructionsButton"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/instructions_list_send_instruction_button"
+        app:layout_constraintBottom_toBottomOf="@id/addInstructionButton"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/addInstructionButton"
+        app:layout_constraintTop_toTopOf="@id/addInstructionButton" />
+
+    <include
+        android:id="@+id/loadingView"
+        layout="@layout/progress_overlay" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

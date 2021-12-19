@@ -3,7 +3,6 @@ package com.example.minirobots.sendInstructions.presentation
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.minirobots.sendInstructions.domain.actions.SendInstructions
-import com.example.minirobots.sendInstructions.domain.actions.SendInstructionsError
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.receiveAsFlow
@@ -19,23 +18,23 @@ class SendInstructionsViewModel @Inject constructor(
     val events = eventChannel.receiveAsFlow()
 
     fun onViewCreated() {
-        postInstructions()
+//        postInstructions()
     }
 
-    private fun postInstructions() {
-        viewModelScope.launch {
-            sendInstructions()
-                .onSuccess { sendEvent(Event.ShowSuccess) }
-                .onFailure { handleFailure(it) }
-        }
-    }
-
-    private fun handleFailure(error: Throwable) {
-        if (error is SendInstructionsError.InvalidProgram)
-            sendEvent(Event.ShowInvalidProgram)
-        else
-            sendEvent(Event.ShowFailure)
-    }
+//    private fun postInstructions() {
+//        viewModelScope.launch {
+//            sendInstructions()
+//                .onSuccess { sendEvent(Event.ShowSuccess) }
+//                .onFailure { handleFailure(it) }
+//        }
+//    }
+//
+//    private fun handleFailure(error: Throwable) {
+//        if (error is SendInstructionsError.InvalidProgram)
+//            sendEvent(Event.ShowInvalidProgram)
+//        else
+//            sendEvent(Event.ShowFailure)
+//    }
 
     private fun sendEvent(event: Event) {
         viewModelScope.launch {
@@ -45,7 +44,7 @@ class SendInstructionsViewModel @Inject constructor(
 
     fun onRetryPressed() {
         sendEvent(Event.ShowLoading)
-        postInstructions()
+//        postInstructions()
     }
 
     sealed class Event {
