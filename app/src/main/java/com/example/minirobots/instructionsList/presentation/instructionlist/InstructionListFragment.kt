@@ -2,6 +2,7 @@ package com.example.minirobots.instructionsList.presentation.instructionlist
 
 import android.os.Bundle
 import android.view.View
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.activityViewModels
 import androidx.lifecycle.Lifecycle
@@ -14,6 +15,7 @@ import androidx.recyclerview.widget.ItemTouchHelper.*
 import androidx.recyclerview.widget.RecyclerView
 import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentInstructionListBinding
+import com.example.minirobots.instructionsList.domain.actions.InstructionsType
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.launchIn
@@ -61,14 +63,13 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
 
         lifecycleScope.launch {
             repeatOnLifecycle(Lifecycle.State.STARTED) {
-                viewModel.errorState.collect {
-                    when (it) {
-                        InstructionsListError.FunctionNotStoredError -> showError(getString(R.string.instructions_list_function_not_stored_error))
-                        InstructionsListError.InvalidProgramError -> showError(getString(R.string.instructions_list_invalid_program_error))
-                        InstructionsListError.EmptyProgramError -> showError(getString(R.string.instructions_list_empty_program_error))
-                        InstructionsListError.NoError -> hideError()
-                    }
-                }
+                viewModel.errorState.collect(::onErrorStateChange)
+            }
+        }
+
+        lifecycleScope.launch {
+            repeatOnLifecycle(Lifecycle.State.STARTED) {
+                viewModel.instructionsType.collect(::onInstructionsTypeChanged)
             }
         }
 
@@ -76,6 +77,22 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
             .flowWithLifecycle(viewLifecycleOwner.lifecycle, Lifecycle.State.STARTED)
             .onEach(::handleEvent)
             .launchIn(viewLifecycleOwner.lifecycleScope)
+    }
+
+    private fun onErrorStateChange(error: InstructionsListError) {
+        when (error) {
+            InstructionsListError.FunctionNotStoredError -> showError(getString(R.string.instructions_list_function_not_stored_error))
+            InstructionsListError.InvalidProgramError -> showError(getString(R.string.instructions_list_invalid_program_error))
+            InstructionsListError.EmptyProgramError -> showError(getString(R.string.instructions_list_empty_program_error))
+            InstructionsListError.NoError -> hideError()
+        }
+    }
+
+    private fun onInstructionsTypeChanged(type: InstructionsType) {
+        binding.sendInstructionsButton.text = when (type) {
+            InstructionsType.Program -> getString(R.string.instructions_list_send_program_button)
+            InstructionsType.Function -> getString(R.string.instructions_list_store_function_button)
+        }
     }
 
     private fun showError(message: String) {
@@ -143,7 +160,7 @@ class InstructionListFragment : Fragment(R.layout.fragment_instruction_list) {
 
     private fun showFunctionStoredScreen() {
         hideLoading()
-
+        Toast.makeText(context, getString(R.string.instructions_list_function_has_been_stored), Toast.LENGTH_SHORT).show()
     }
 
     private val itemTouchHelper = ItemTouchHelper(object : ItemTouchHelper.Callback() {

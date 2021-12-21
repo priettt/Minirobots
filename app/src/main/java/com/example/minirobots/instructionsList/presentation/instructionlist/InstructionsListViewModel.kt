@@ -2,9 +2,7 @@ package com.example.minirobots.instructionsList.presentation.instructionlist
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import com.example.minirobots.instructionsList.domain.actions.DeleteInstruction
-import com.example.minirobots.instructionsList.domain.actions.GetUIInstructions
-import com.example.minirobots.instructionsList.domain.actions.MoveInstruction
+import com.example.minirobots.instructionsList.domain.actions.*
 import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 import com.example.minirobots.sendInstructions.domain.actions.SendInstructions
 import com.example.minirobots.sendInstructions.domain.actions.SendInstructionsResult
@@ -24,7 +22,8 @@ class InstructionsListViewModel @Inject constructor(
     private val deleteInstruction: DeleteInstruction,
     private val moveInstruction: MoveInstruction,
     private val programValidator: ProgramValidator,
-    private val sendInstructions: SendInstructions
+    private val sendInstructions: SendInstructions,
+    private val getInstructionsType: GetInstructionsType
 ) : ViewModel() {
 
     var clickedInstruction = 0
@@ -36,6 +35,10 @@ class InstructionsListViewModel @Inject constructor(
     private val mutableErrorState = MutableStateFlow<InstructionsListError>(InstructionsListError.NoError)
     val errorState: StateFlow<InstructionsListError>
         get() = mutableErrorState
+
+    private val mutableInstructionsType = MutableStateFlow<InstructionsType>(InstructionsType.Program)
+    val instructionsType: StateFlow<InstructionsType>
+        get() = mutableInstructionsType
 
     private val mutableEvents = Channel<Event>(Channel.BUFFERED)
     val events = mutableEvents.receiveAsFlow()
@@ -86,6 +89,7 @@ class InstructionsListViewModel @Inject constructor(
     private fun fetchInstructions() {
         mutableInstructions.value = getUIInstructions()
         mutableErrorState.value = getErrorState()
+        mutableInstructionsType.value = getInstructionsType() ?: InstructionsType.Program
     }
 
     private fun getErrorState(): InstructionsListError =
@@ -95,7 +99,6 @@ class InstructionsListViewModel @Inject constructor(
             ProgramValidationState.EmptyProgram -> InstructionsListError.EmptyProgramError
             ProgramValidationState.Valid -> InstructionsListError.NoError
         }
-
 
     private fun sendEvent(event: Event) {
         viewModelScope.launch {
@@ -120,5 +123,6 @@ sealed class InstructionsListError {
     object EmptyProgramError : InstructionsListError()
     object FunctionNotStoredError : InstructionsListError()
 }
+
 
 

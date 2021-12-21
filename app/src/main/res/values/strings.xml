@@ -6,10 +6,12 @@
     <string name="take_picture_get_from_gallery_button">Get picture from gallery</string>
     <string name="instructions_list_title">The following instructions will be sent to the robot: </string>
     <string name="instructions_list_function_not_stored_error">There are not stored functions. Please, send a function to store it, or remove the function instruction.</string>
+    <string name="instructions_list_function_has_been_stored">The function has been stored.</string>
     <string name="instructions_screen_send_instructions_button_text">Send instructions</string>
     <string name="add_instruction_title">Choose an instruction to add: </string>
     <string name="instructions_list_add_instruction_button">Add instruction</string>
-    <string name="instructions_list_send_instruction_button">Send instructions</string>
+    <string name="instructions_list_send_program_button">Send program</string>
+    <string name="instructions_list_store_function_button">Store function</string>
     <string name="edit_instruction_title">Choose an instruction to edit: </string>
     <string name="send_instructions_loading_title">Sending instructions to the robot</string>
     <string name="send_instructions_error_title">There was an error sending the instructions</string>
