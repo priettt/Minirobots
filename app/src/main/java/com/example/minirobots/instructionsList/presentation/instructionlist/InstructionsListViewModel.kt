@@ -23,7 +23,8 @@ class InstructionsListViewModel @Inject constructor(
     private val moveInstruction: MoveInstruction,
     private val programValidator: ProgramValidator,
     private val sendInstructions: SendInstructions,
-    private val getInstructionsType: GetInstructionsType
+    private val getInstructionsType: GetInstructionsType,
+    private val isInstructionEditAllowed: IsInstructionEditAllowed,
 ) : ViewModel() {
 
     var clickedInstruction = 0
@@ -68,7 +69,8 @@ class InstructionsListViewModel @Inject constructor(
 
     fun onInstructionClicked(index: Int) {
         clickedInstruction = index
-        sendEvent(Event.ShowEditInstructionMenu)
+        if (isInstructionEditAllowed(clickedInstruction))
+            sendEvent(Event.ShowEditInstructionMenu)
     }
 
     fun onAddButtonClicked() {
