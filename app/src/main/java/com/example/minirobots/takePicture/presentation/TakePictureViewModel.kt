@@ -16,7 +16,7 @@ class TakePictureViewModel @Inject constructor(
     private val recognizeInstructions: RecognizeInstructions,
 ) : ViewModel() {
 
-    private lateinit var pictureUri: Uri
+    private var pictureUri: Uri? = null
 
     private val eventChannel = Channel<Event>(Channel.BUFFERED)
     val events = eventChannel.receiveAsFlow()
@@ -48,6 +48,7 @@ class TakePictureViewModel @Inject constructor(
                 Log.d("MINIROBOTS", "Instructions processed in ${System.currentTimeMillis() - startTime}")
                 sendEvent(Event.GoToInstructions)
             }.onFailure {
+                Log.d("MINIROBOTS", "Error ${it.localizedMessage}")
                 sendEvent(Event.ShowRecognitionError)
             }
         }

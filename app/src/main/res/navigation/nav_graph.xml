@@ -38,9 +38,6 @@
             android:id="@+id/action_instructionListFragment_to_editInstructionFragment"
             app:destination="@id/editInstructionFragment" />
         <action
-            android:id="@+id/action_instructionListFragment_to_sendInstructionsFragment"
-            app:destination="@id/sendInstructionsFragment" />
-        <action
             android:id="@+id/action_instructionListFragment_to_instructionsSentFragment"
             app:destination="@id/instructionsSentFragment" />
         <action
@@ -57,11 +54,6 @@
         android:name="com.example.minirobots.instructionsList.presentation.editinstructionmenu.EditInstructionFragment"
         android:label="EditInstructionFragment"
         tools:layout="@layout/fragment_edit_instruction" />
-    <fragment
-        android:id="@+id/sendInstructionsFragment"
-        android:name="com.example.minirobots.sendInstructions.presentation.SendInstructionsFragment"
-        android:label="SendInstructionsFragment"
-        tools:layout="@layout/fragment_send_instructions" />
     <fragment
         android:id="@+id/instructionsSentFragment"
         android:name="com.example.minirobots.InstructionsSentFragment"

@@ -14,7 +14,8 @@ class RecognizeInstructions @Inject constructor(
     private val mlKitInstructionsRecognizer: MLKitInstructionsRecognizer
 ) {
 
-    suspend operator fun invoke(uri: Uri): Result<Unit> = withContext(dispatcher) {
+    suspend operator fun invoke(uri: Uri?): Result<Unit> = withContext(dispatcher) {
+        if (uri == null) return@withContext Result.failure(Error("Null picture uri (!)"))
         val recognizedInstructions = mlKitInstructionsRecognizer.recognize(uri)
         if (recognizedInstructions.isEmpty())
             Result.failure(Error("Recognition Error"))
