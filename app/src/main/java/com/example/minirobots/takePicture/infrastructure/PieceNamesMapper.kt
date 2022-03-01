@@ -44,7 +44,6 @@ import javax.inject.Inject
 
  */
 
-
 class PieceNamesMapper @Inject constructor(
     private val pieceMapper: PieceNameMapper,
     private val pieceNamesMapperStateMachine: PieceNameMapperStateMachine

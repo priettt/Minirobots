@@ -18,14 +18,18 @@ class PieceNameMapperStateMachine @Inject constructor(
         else -> null
     }
 
-    fun finish(): Instruction? = when (val state = state) {
-        is State.StoredAction -> createInstructionWithRandomModifier(state.action)
-        else -> null
+    fun finish(): Instruction? {
+        val auxState = state
+        state = State.Base
+        return when (auxState) {
+            is State.StoredAction -> createInstructionWithRandomModifier(auxState.action)
+            else -> null
+        }
     }
 
     private fun consumeAction(action: Action): Instruction? {
         if (action.isSinglePieceInstruction())
-            return Instruction(action, null)
+            return consumeSingleAction(action)
         return when (val state = state) {
             State.Base -> goToStoredActionState(action)
             is State.StoredAction -> stayInStoredActionState(state.action, action)
@@ -38,6 +42,13 @@ class PieceNameMapperStateMachine @Inject constructor(
             State.Base -> goToStoredModifierState(modifier)
             is State.StoredAction -> goToBaseState(state.action, modifier)
             is State.StoredModifier -> goToStoredModifierState(modifier)
+        }
+    }
+
+    private fun consumeSingleAction(action: Action): Instruction {
+        return when (val state = state) {
+            is State.StoredAction -> stayInStoredActionState(state.action, action)
+            else -> Instruction(action, null)
         }
     }
 
@@ -63,6 +74,8 @@ class PieceNameMapperStateMachine @Inject constructor(
 
     private fun stayInStoredActionState(storedAction: Action, consumedAction: Action): Instruction {
         state = State.StoredAction(consumedAction)
+        if (storedAction.isSinglePieceInstruction())
+            return Instruction(storedAction, null)
         return createInstructionWithRandomModifier(storedAction)
     }
 

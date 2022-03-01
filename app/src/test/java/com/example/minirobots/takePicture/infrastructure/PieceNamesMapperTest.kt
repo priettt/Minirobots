@@ -152,6 +152,17 @@ class PieceNamesMapperTest {
     }
 
     @Test
+    fun `list with two instructions - action, single action`() {
+        val namesList = listOf(TOCAR_MELODIA, BAJAR_LAPIZ)
+        val result = whenMappingPieceNames(namesList)
+        val expected = listOf(
+            Instruction(Action.TOCAR_MELODIA, Modifier.NOTA_AL_AZAR),
+            Instruction(Action.BAJAR_LAPIZ, null),
+        )
+        assertInstructionListsAreEquals(expected, result)
+    }
+
+    @Test
     fun `list with three instructions - modifier, action, single action, modifier, action`() {
         val namesList = listOf(ANGULO_30, GIRAR_DERECHA, BAJAR_LAPIZ, ANGULO_36, GIRAR_IZQUIERDA)
         val result = whenMappingPieceNames(namesList)
@@ -194,8 +205,8 @@ class PieceNamesMapperTest {
         val expected = listOf(
             Instruction(Action.AVANZAR, Modifier.NUMERO_AL_AZAR),
             Instruction(Action.TOCAR_MELODIA, Modifier.NOTA_AL_AZAR),
-            Instruction(Action.BAJAR_LAPIZ, null),
             Instruction(Action.LEDS, Modifier.COLOR_AL_AZAR),
+            Instruction(Action.BAJAR_LAPIZ, null),
         )
         assertInstructionListsAreEquals(expected, result)
     }

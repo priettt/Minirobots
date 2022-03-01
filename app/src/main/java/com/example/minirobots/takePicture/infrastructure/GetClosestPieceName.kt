@@ -3,7 +3,7 @@ package com.example.minirobots.takePicture.infrastructure
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import javax.inject.Inject
 
-const val DISTANCE_THRESHOLD = 3
+const val DISTANCE_THRESHOLD = 2
 
 /*
     Receives a text, compares it with all the available piece names
@@ -34,7 +34,7 @@ class GetClosestPieceName @Inject constructor(
 
     private fun logClosestPiece(text: String, closestPiece: ClosestPiece) {
         logger.log(
-            this.javaClass.name,
+            "MinirobotsDebug",
             "Recognizing text: $text. Closest piece ${closestPiece.name?.text} with a distance ${closestPiece.distance}"
         )
     }

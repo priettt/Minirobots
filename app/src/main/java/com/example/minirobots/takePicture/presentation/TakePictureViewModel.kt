@@ -45,10 +45,10 @@ class TakePictureViewModel @Inject constructor(
         viewModelScope.launch {
             val startTime = System.currentTimeMillis()
             recognizeInstructions(pictureUri).onSuccess {
-                Log.d("MINIROBOTS", "Instructions processed in ${System.currentTimeMillis() - startTime}")
+                Log.d("MinirobotsDebug", "Instructions processed in ${System.currentTimeMillis() - startTime}")
                 sendEvent(Event.GoToInstructions)
             }.onFailure {
-                Log.d("MINIROBOTS", "Error ${it.localizedMessage}")
+                Log.d("MinirobotsDebug", "Error ${it.localizedMessage}")
                 sendEvent(Event.ShowRecognitionError)
             }
         }

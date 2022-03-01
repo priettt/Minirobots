@@ -1,6 +1,7 @@
 package com.example.minirobots.takePicture.infrastructure
 
 import android.net.Uri
+import android.util.Log
 import com.example.minirobots.Instruction
 import com.example.minirobots.takePicture.domain.actions.GetInputImage
 import com.example.minirobots.takePicture.domain.actions.RecognizeImage
@@ -107,6 +108,7 @@ class MLKitInstructionsRecognizer @Inject constructor(
         val inputImage = getInputImage(uri) ?: return emptyList()
         val mlKitText = recognizeImage(inputImage) ?: return emptyList()
         val pieceNames = mlKitTextMapper.map(mlKitText)
+        Log.d("MinirobotsDebug", "Pieces found: $pieceNames")
         return pieceNamesMapper.map(pieceNames)
     }
 
