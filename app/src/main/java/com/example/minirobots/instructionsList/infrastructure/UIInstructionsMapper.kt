@@ -28,7 +28,7 @@ class UIInstructionsMapper @Inject constructor(
 
 class UIActionMapper @Inject constructor() {
     fun map(action: Action) = when (action) {
-        Action.AVANZAR -> UIAction("Avanzar", R.drawable.adelante)
+        Action.AVANZAR -> UIAction("Adelante", R.drawable.adelante)
         Action.BAJAR_LAPIZ -> UIAction("Bajar lápiz", R.drawable.lapiz_abajo)
         Action.FUNCION -> UIAction("Ejecutar función", R.drawable.funcion)
         Action.FUNCION_COMIENZO -> UIAction("Inicio de función", R.drawable.inicio_funcion)
@@ -41,14 +41,14 @@ class UIActionMapper @Inject constructor() {
         Action.PROGRAMA_FIN -> UIAction("Fin del programa", R.drawable.programa_fin)
         Action.REPETIR_COMIENZO -> UIAction("Inicio de repetición", R.drawable.repetir_comienzo)
         Action.REPETIR_FIN -> UIAction("Fin de repetición", R.drawable.repetir_fin)
-        Action.RETROCEDER -> UIAction("Retroceder", R.drawable.atras)
+        Action.RETROCEDER -> UIAction("Atras", R.drawable.atras)
         Action.TOCAR_CORCHEA -> UIAction("Reproducir corchea", R.drawable.corchea)
         Action.TOCAR_MELODIA -> UIAction("Reproducir melodía", R.drawable.melodia)
         Action.TOCAR_NEGRA -> UIAction("Reproducir negra", R.drawable.negra)
     }
 
     fun map(uiAction: UIAction) = when (uiAction.name) {
-        "Avanzar" -> Action.AVANZAR
+        "Adelante" -> Action.AVANZAR
         "Bajar lápiz" -> Action.BAJAR_LAPIZ
         "Ejecutar función" -> Action.FUNCION
         "Inicio de función" -> Action.FUNCION_COMIENZO
@@ -61,7 +61,7 @@ class UIActionMapper @Inject constructor() {
         "Fin del programa" -> Action.PROGRAMA_FIN
         "Inicio de repetición" -> Action.REPETIR_COMIENZO
         "Fin de repetición" -> Action.REPETIR_FIN
-        "Retroceder" -> Action.RETROCEDER
+        "Atras" -> Action.RETROCEDER
         "Reproducir corchea" -> Action.TOCAR_CORCHEA
         "Reproducir melodía" -> Action.TOCAR_MELODIA
         "Reproducir negra" -> Action.TOCAR_NEGRA

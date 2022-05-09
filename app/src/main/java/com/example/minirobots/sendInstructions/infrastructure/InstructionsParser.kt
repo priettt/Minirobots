@@ -6,7 +6,7 @@ import com.example.minirobots.Modifier
 import com.example.minirobots.takePicture.infrastructure.FunctionsRepository
 import javax.inject.Inject
 
-private const val STEP_DISTANCE = 30
+private const val STEP_DISTANCE = 300
 
 private const val PREFIX = """{"CMD":["""
 private const val SUFFIX = "]}"
@@ -84,13 +84,7 @@ class InstructionsParserImpl @Inject constructor(
         Modifier.NUMERO_4 -> "${STEP_DISTANCE * 4}"
         Modifier.NUMERO_5 -> "${STEP_DISTANCE * 5}"
         Modifier.NUMERO_6 -> "${STEP_DISTANCE * 6}"
-        else -> listOf(
-            "${STEP_DISTANCE * 2}",
-            "${STEP_DISTANCE * 3}",
-            "${STEP_DISTANCE * 4}",
-            "${STEP_DISTANCE * 5}",
-            "${STEP_DISTANCE * 6}"
-        ).random()
+        else -> "${STEP_DISTANCE * 1}"
     }
 
     private fun getRotationAngle(modifier: Modifier?) = when (modifier) {
