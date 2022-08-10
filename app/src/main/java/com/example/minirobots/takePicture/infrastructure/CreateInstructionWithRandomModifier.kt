@@ -1,9 +1,9 @@
 package com.example.minirobots.takePicture.infrastructure
 
-import com.example.minirobots.Action
-import com.example.minirobots.Action.*
-import com.example.minirobots.Instruction
-import com.example.minirobots.Modifier.*
+import com.example.minirobots.common.domain.Action
+import com.example.minirobots.common.domain.Action.*
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.common.domain.Modifier.*
 import javax.inject.Inject
 
 class CreateInstructionWithRandomModifier @Inject constructor() {

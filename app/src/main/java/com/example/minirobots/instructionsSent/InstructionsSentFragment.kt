@@ -1,9 +1,10 @@
-package com.example.minirobots
+package com.example.minirobots.instructionsSent
 
 import android.os.Bundle
 import android.view.View
 import androidx.fragment.app.Fragment
 import androidx.navigation.fragment.findNavController
+import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentInstructionsSentBinding
 
 class InstructionsSentFragment : Fragment(R.layout.fragment_instructions_sent) {

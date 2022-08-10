@@ -1,4 +1,4 @@
-package com.example.minirobots
+package com.example.minirobots.common.domain
 
 import java.util.*
 

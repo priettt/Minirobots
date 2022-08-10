@@ -56,7 +56,7 @@
         tools:layout="@layout/fragment_edit_instruction" />
     <fragment
         android:id="@+id/instructionsSentFragment"
-        android:name="com.example.minirobots.InstructionsSentFragment"
+        android:name="com.example.minirobots.instructionsSent.InstructionsSentFragment"
         android:label="InstructionsSentFragment"
         tools:layout="@layout/fragment_instructions_sent">
         <action
@@ -66,7 +66,7 @@
     </fragment>
     <fragment
         android:id="@+id/networkFailureFragment"
-        android:name="com.example.minirobots.NetworkFailureFragment"
+        android:name="com.example.minirobots.networkFailure.NetworkFailureFragment"
         android:label="NetworkFailureFragment"
         tools:layout="@layout/fragment_network_failure">
         <action

@@ -1,9 +1,11 @@
 package com.example.minirobots.takePicture.infrastructure
 
 import android.graphics.Rect
+import com.example.minirobots.takePicture.domain.actions.GetLocalizedPieceName
 import com.example.minirobots.takePicture.domain.entities.LocalizedPieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName.*
+import com.example.minirobots.takePicture.domain.actions.GetPiecesFromMLKitText
 import com.google.mlkit.vision.text.Text
 import com.google.mlkit.vision.text.Text.*
 import io.mockk.every
@@ -11,10 +13,10 @@ import io.mockk.mockk
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
-class MLKitTextMapperTest {
+class GetPiecesFromMLKitTextTest {
 
     private val getLocalizedPieceName = mockk<GetLocalizedPieceName>(relaxed = true)
-    private val mlKitTextMapper = MLKitTextMapper(getLocalizedPieceName)
+    private val getPiecesFromMLKitText = GetPiecesFromMLKitText(getLocalizedPieceName)
 
     private val funcionLine = Line("", Rect(), listOf(), "", listOf(Element("", Rect(), listOf(), "FUNCION")))
     private val avanzarLine = Line("", Rect(), listOf(), "", listOf(Element("", Rect(), listOf(), "AVANZAR")))
@@ -53,7 +55,7 @@ class MLKitTextMapperTest {
         every { getLocalizedPieceName.invoke(stepsLine) } returns LocalizedPieceName(NUMERO_2, 4, 0)
     }
 
-    private fun whenInvokingWithoutText() = mlKitTextMapper.map(emptyText)
-    private fun whenInvokingWithTestText() = mlKitTextMapper.map(testText)
+    private fun whenInvokingWithoutText() = getPiecesFromMLKitText(emptyText)
+    private fun whenInvokingWithTestText() = getPiecesFromMLKitText(testText)
 
 }

@@ -1,9 +1,9 @@
 package com.example.minirobots.sendInstructions.infrastructure
 
-import com.example.minirobots.Action
-import com.example.minirobots.Instruction
-import com.example.minirobots.Modifier
-import com.example.minirobots.takePicture.infrastructure.FunctionsRepository
+import com.example.minirobots.common.domain.Action
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.common.domain.Modifier
+import com.example.minirobots.common.infrastructure.repository.FunctionsRepository
 import javax.inject.Inject
 
 private const val STEP_DISTANCE = 300

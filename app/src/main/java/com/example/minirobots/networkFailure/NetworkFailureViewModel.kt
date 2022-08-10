@@ -1,4 +1,4 @@
-package com.example.minirobots
+package com.example.minirobots.networkFailure
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope

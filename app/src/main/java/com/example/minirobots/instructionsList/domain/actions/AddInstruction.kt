@@ -3,7 +3,7 @@ package com.example.minirobots.instructionsList.domain.actions
 import com.example.minirobots.instructionsList.domain.entities.UIAction
 import com.example.minirobots.instructionsList.infrastructure.UIActionMapper
 import com.example.minirobots.takePicture.infrastructure.CreateInstructionWithRandomModifier
-import com.example.minirobots.takePicture.infrastructure.InstructionsRepository
+import com.example.minirobots.common.infrastructure.repository.InstructionsRepository
 import javax.inject.Inject
 
 class AddInstruction @Inject constructor(

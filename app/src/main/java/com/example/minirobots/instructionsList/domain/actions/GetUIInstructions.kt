@@ -2,7 +2,7 @@ package com.example.minirobots.instructionsList.domain.actions
 
 import com.example.minirobots.instructionsList.domain.entities.UIInstruction
 import com.example.minirobots.instructionsList.infrastructure.UIInstructionsMapper
-import com.example.minirobots.takePicture.infrastructure.InstructionsRepository
+import com.example.minirobots.common.infrastructure.repository.InstructionsRepository
 import javax.inject.Inject
 
 class GetUIInstructions @Inject constructor(

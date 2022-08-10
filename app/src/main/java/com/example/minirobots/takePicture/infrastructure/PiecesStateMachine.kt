@@ -1,12 +1,12 @@
 package com.example.minirobots.takePicture.infrastructure
 
-import com.example.minirobots.Action
-import com.example.minirobots.Instruction
-import com.example.minirobots.Modifier
+import com.example.minirobots.common.domain.Action
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.common.domain.Modifier
 import com.example.minirobots.instructionsList.domain.actions.GetAvailableModifiers
 import javax.inject.Inject
 
-class PieceNameMapperStateMachine @Inject constructor(
+class PiecesStateMachine @Inject constructor(
     private val createInstructionWithRandomModifier: CreateInstructionWithRandomModifier,
     private val getAvailableModifiers: GetAvailableModifiers,
 ) {
@@ -45,10 +45,10 @@ class PieceNameMapperStateMachine @Inject constructor(
         }
     }
 
-    private fun consumeSingleAction(action: Action): Instruction {
+    private fun consumeSingleAction(singleAction: Action): Instruction {
         return when (val state = state) {
-            is State.StoredAction -> stayInStoredActionState(state.action, action)
-            else -> Instruction(action, null)
+            is State.StoredAction -> stayInStoredActionState(state.action, singleAction)
+            else -> Instruction(singleAction, null)
         }
     }
 

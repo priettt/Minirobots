@@ -1,4 +1,4 @@
-package com.example.minirobots.takePicture.infrastructure
+package com.example.minirobots.takePicture.domain.actions
 
 import com.example.minirobots.takePicture.domain.entities.LocalizedPieceName
 import com.google.mlkit.vision.text.Text
@@ -10,12 +10,12 @@ import javax.inject.Inject
  */
 
 class GetLocalizedPieceName @Inject constructor(
-    private val getClosestPieceName: GetClosestPieceName
+    private val getMostSimilarPieceName: GetMostSimilarPieceName
 ) {
     operator fun invoke(mlKitLine: Text.Line): LocalizedPieceName? {
-        val closestPieceName = getClosestPieceName(mlKitLine.text) ?: return null
+        val mostSimilarPieceName = getMostSimilarPieceName(mlKitLine.text) ?: return null
         return LocalizedPieceName(
-            closestPieceName,
+            mostSimilarPieceName,
             mlKitLine.cornerPoints?.get(0)?.x ?: 0,
             mlKitLine.cornerPoints?.get(0)?.y ?: 0
         )

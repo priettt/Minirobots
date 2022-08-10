@@ -1,6 +1,6 @@
 package com.example.minirobots.instructionsList.domain.actions
 
-import com.example.minirobots.Action
+import com.example.minirobots.common.domain.Action
 import com.example.minirobots.instructionsList.domain.entities.UIAction
 import com.example.minirobots.instructionsList.infrastructure.UIActionMapper
 import javax.inject.Inject

@@ -1,7 +1,8 @@
-package com.example.minirobots.takePicture.infrastructure
+package com.example.minirobots.takePicture.infrastructure.mapper
 
-import com.example.minirobots.Instruction
+import com.example.minirobots.common.domain.Instruction
 import com.example.minirobots.takePicture.domain.entities.PieceName
+import com.example.minirobots.takePicture.infrastructure.PiecesStateMachine
 import javax.inject.Inject
 
 /*
@@ -44,19 +45,19 @@ import javax.inject.Inject
 
  */
 
-class PieceNamesMapper @Inject constructor(
+class GetInstructionsFromPieceNames @Inject constructor(
     private val pieceMapper: PieceNameMapper,
-    private val pieceNamesMapperStateMachine: PieceNameMapperStateMachine
+    private val piecesStateMachine: PiecesStateMachine
 ) {
-    fun map(pieceNames: List<PieceName>): List<Instruction> {
+    operator fun invoke(pieceNames: List<PieceName>): List<Instruction> {
         val result = mutableListOf<Instruction>()
         for (pieceName in pieceNames) {
             val action = pieceMapper.mapToAction(pieceName)
             val modifier = pieceMapper.mapToModifier(pieceName)
-            val instruction = pieceNamesMapperStateMachine.consumePiece(action, modifier)
+            val instruction = piecesStateMachine.consumePiece(action, modifier)
             instruction?.let { result.add(it) }
         }
-        val lastInstruction = pieceNamesMapperStateMachine.finish()
+        val lastInstruction = piecesStateMachine.finish()
         lastInstruction?.let { result.add(it) }
         return result
     }

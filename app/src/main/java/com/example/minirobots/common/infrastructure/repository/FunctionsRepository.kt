@@ -1,6 +1,6 @@
-package com.example.minirobots.takePicture.infrastructure
+package com.example.minirobots.common.infrastructure.repository
 
-import com.example.minirobots.Instruction
+import com.example.minirobots.common.domain.Instruction
 import javax.inject.Inject
 
 interface FunctionsRepository {

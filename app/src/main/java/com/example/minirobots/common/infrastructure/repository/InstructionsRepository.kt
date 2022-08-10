@@ -1,7 +1,7 @@
-package com.example.minirobots.takePicture.infrastructure
+package com.example.minirobots.common.infrastructure.repository
 
-import com.example.minirobots.Instruction
-import com.example.minirobots.Modifier
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.common.domain.Modifier
 
 import javax.inject.Inject
 

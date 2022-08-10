@@ -1,8 +1,8 @@
 package com.example.minirobots.instructionsList.infrastructure
 
-import com.example.minirobots.Action
-import com.example.minirobots.Instruction
-import com.example.minirobots.Modifier
+import com.example.minirobots.common.domain.Action
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.common.domain.Modifier
 import com.example.minirobots.R
 import com.example.minirobots.instructionsList.domain.entities.UIAction
 import com.example.minirobots.instructionsList.domain.entities.UIInstruction

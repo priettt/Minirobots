@@ -4,6 +4,10 @@ import com.example.minirobots.sendInstructions.infrastructure.InstructionsParser
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsParserImpl
 import com.example.minirobots.sendInstructions.infrastructure.InstructionsService
 import com.example.minirobots.takePicture.infrastructure.*
+import com.example.minirobots.common.infrastructure.repository.FunctionsRepository
+import com.example.minirobots.common.infrastructure.repository.InMemoryFunctionsRepository
+import com.example.minirobots.common.infrastructure.repository.InMemoryInstructionsRepository
+import com.example.minirobots.common.infrastructure.repository.InstructionsRepository
 import com.example.minirobots.utilities.network.SocketTimeoutRetryInterceptor
 import com.google.mlkit.vision.text.TextRecognition
 import com.google.mlkit.vision.text.latin.TextRecognizerOptions

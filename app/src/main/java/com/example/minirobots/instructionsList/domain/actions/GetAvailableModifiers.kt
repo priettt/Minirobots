@@ -1,7 +1,7 @@
 package com.example.minirobots.instructionsList.domain.actions
 
-import com.example.minirobots.Action
-import com.example.minirobots.Modifier
+import com.example.minirobots.common.domain.Action
+import com.example.minirobots.common.domain.Modifier
 import javax.inject.Inject
 
 class GetAvailableModifiers @Inject constructor() {

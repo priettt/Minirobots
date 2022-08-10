@@ -1,8 +1,8 @@
 package com.example.minirobots.instructionsList.domain.actions
 
-import com.example.minirobots.Action
-import com.example.minirobots.Instruction
-import com.example.minirobots.takePicture.infrastructure.InstructionsRepository
+import com.example.minirobots.common.domain.Action
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.common.infrastructure.repository.InstructionsRepository
 import javax.inject.Inject
 
 class GetInstructionsType @Inject constructor(

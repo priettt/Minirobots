@@ -1,4 +1,4 @@
-package com.example.minirobots
+package com.example.minirobots.networkFailure
 
 import android.os.Bundle
 import android.view.View
@@ -8,6 +8,7 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.flowWithLifecycle
 import androidx.lifecycle.lifecycleScope
 import androidx.navigation.fragment.findNavController
+import com.example.minirobots.R
 import com.example.minirobots.databinding.FragmentNetworkFailureBinding
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.flow.launchIn

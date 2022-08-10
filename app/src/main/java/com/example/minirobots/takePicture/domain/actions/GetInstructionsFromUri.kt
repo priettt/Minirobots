@@ -1,14 +1,13 @@
-package com.example.minirobots.takePicture.infrastructure
+package com.example.minirobots.takePicture.domain.actions
 
 import android.net.Uri
 import android.util.Log
-import com.example.minirobots.Instruction
-import com.example.minirobots.takePicture.domain.actions.GetInputImage
-import com.example.minirobots.takePicture.domain.actions.RecognizeImage
+import com.example.minirobots.common.domain.Instruction
+import com.example.minirobots.takePicture.infrastructure.mapper.GetInstructionsFromPieceNames
 import javax.inject.Inject
 
 /*
-    Get input image, recognize pieces with MLKIT, map them to instructions, store them in repository.
+    Get input image, recognize pieces with MLKIT, map them to instructions.
 
     There are a few ways we could do this:
 
@@ -97,19 +96,19 @@ import javax.inject.Inject
     We should also check what happens when the picture is taken in an angle, kind of in diagonal.
  */
 
-class MLKitInstructionsRecognizer @Inject constructor(
+class GetInstructionsFromUri @Inject constructor(
     private val getInputImage: GetInputImage,
     private val recognizeImage: RecognizeImage,
-    private val mlKitTextMapper: MLKitTextMapper,
-    private val pieceNamesMapper: PieceNamesMapper,
+    private val getPiecesFromMLKitText: GetPiecesFromMLKitText,
+    private val getInstructionsFromPieceNames: GetInstructionsFromPieceNames,
 ) {
 
-    suspend fun recognize(uri: Uri): List<Instruction> {
+    suspend operator fun invoke(uri: Uri): List<Instruction> {
         val inputImage = getInputImage(uri) ?: return emptyList()
         val mlKitText = recognizeImage(inputImage) ?: return emptyList()
-        val pieceNames = mlKitTextMapper.map(mlKitText)
+        val pieceNames = getPiecesFromMLKitText(mlKitText)
         Log.d("MinirobotsDebug", "Pieces found: $pieceNames")
-        return pieceNamesMapper.map(pieceNames)
+        return getInstructionsFromPieceNames(pieceNames)
     }
 
 }

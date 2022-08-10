@@ -1,4 +1,4 @@
-package com.example.minirobots.takePicture.infrastructure
+package com.example.minirobots.takePicture.domain.actions
 
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import com.google.mlkit.vision.text.Text
@@ -9,10 +9,10 @@ import javax.inject.Inject
     The list is sorted from left to right. For now, y position is disregarded.
  */
 
-class MLKitTextMapper @Inject constructor(
+class GetPiecesFromMLKitText @Inject constructor(
     private val getLocalizedPieceName: GetLocalizedPieceName
 ) {
-    fun map(mlKitText: Text): List<PieceName> =
+    operator fun invoke(mlKitText: Text): List<PieceName> =
         mlKitText.textBlocks
             .flatMap { it.lines }
             .mapNotNull { getLocalizedPieceName(it) }
