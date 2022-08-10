@@ -4,92 +4,65 @@ import com.example.minirobots.common.domain.Action
 import com.example.minirobots.common.domain.Instruction
 import com.example.minirobots.common.domain.Modifier
 import com.example.minirobots.instructionsList.domain.actions.GetAvailableModifiers
+import com.example.minirobots.instructionsList.domain.actions.IsSinglePieceInstruction
+import com.example.minirobots.takePicture.infrastructure.State.*
 import javax.inject.Inject
 
 class PiecesStateMachine @Inject constructor(
     private val createInstructionWithRandomModifier: CreateInstructionWithRandomModifier,
     private val getAvailableModifiers: GetAvailableModifiers,
+    private val isSinglePieceInstruction: IsSinglePieceInstruction
 ) {
-    private var state: State = State.Base
+    private var state: State = Base
+    private val instructionList = mutableListOf<Instruction>()
 
-    fun consumePiece(action: Action?, modifier: Modifier?): Instruction? = when {
-        action != null -> consumeAction(action)
-        modifier != null -> consumeModifier(modifier)
-        else -> null
-    }
+    fun consumeAction(action: Action) {
+        if (isSinglePieceInstruction(action)) {
+            instructionList.add(Instruction(action, null))
+            return
+        }
 
-    fun finish(): Instruction? {
-        val auxState = state
-        state = State.Base
-        return when (auxState) {
-            is State.StoredAction -> createInstructionWithRandomModifier(auxState.action)
-            else -> null
+        when (val currentState = state) {
+            Base -> state = StoredAction(action)
+            is StoredAction -> stayInStoredActionState(currentState.action, action)
+            is StoredModifier -> goToBaseState(action, currentState.modifier)
         }
     }
 
-    private fun consumeAction(action: Action): Instruction? {
-        if (action.isSinglePieceInstruction())
-            return consumeSingleAction(action)
-        return when (val state = state) {
-            State.Base -> goToStoredActionState(action)
-            is State.StoredAction -> stayInStoredActionState(state.action, action)
-            is State.StoredModifier -> goToBaseState(action, state.modifier)
+    fun consumeModifier(modifier: Modifier) {
+        when (val currentState = state) {
+            Base -> state = StoredModifier(modifier)
+            is StoredAction -> goToBaseState(currentState.action, modifier)
+            is StoredModifier -> state = StoredModifier(modifier)
         }
     }
 
-    private fun consumeModifier(modifier: Modifier): Instruction? {
-        return when (val state = state) {
-            State.Base -> goToStoredModifierState(modifier)
-            is State.StoredAction -> goToBaseState(state.action, modifier)
-            is State.StoredModifier -> goToStoredModifierState(modifier)
-        }
+    fun end(): List<Instruction> {
+        (state as? StoredAction)?.action?.let { instructionList.add(createInstructionWithRandomModifier(it)) }
+        state = Base
+        return instructionList
     }
 
-    private fun consumeSingleAction(singleAction: Action): Instruction {
-        return when (val state = state) {
-            is State.StoredAction -> stayInStoredActionState(state.action, singleAction)
-            else -> Instruction(singleAction, null)
-        }
+    private fun goToBaseState(action: Action, modifier: Modifier) {
+        instructionList.add(sanitizedInstruction(action, modifier))
+        state = Base
     }
 
-    private fun goToBaseState(action: Action, modifier: Modifier): Instruction {
-        state = State.Base
-        val availableModifiers = getAvailableModifiers(action)
-        return if (modifier in availableModifiers) {
+    private fun stayInStoredActionState(storedAction: Action, newAction: Action) {
+        instructionList.add(createInstructionWithRandomModifier(storedAction))
+        state = StoredAction(newAction)
+    }
+
+    private fun sanitizedInstruction(action: Action, modifier: Modifier): Instruction {
+        return if (isModifierValid(action, modifier)) {
             Instruction(action, modifier)
         } else {
             createInstructionWithRandomModifier(action)
         }
     }
 
-    private fun goToStoredModifierState(modifier: Modifier): Instruction? {
-        state = State.StoredModifier(modifier)
-        return null
-    }
+    private fun isModifierValid(action: Action, modifier: Modifier) = modifier in getAvailableModifiers(action)
 
-    private fun goToStoredActionState(action: Action): Instruction? {
-        state = State.StoredAction(action)
-        return null
-    }
-
-    private fun stayInStoredActionState(storedAction: Action, consumedAction: Action): Instruction {
-        state = State.StoredAction(consumedAction)
-        if (storedAction.isSinglePieceInstruction())
-            return Instruction(storedAction, null)
-        return createInstructionWithRandomModifier(storedAction)
-    }
-
-    private fun Action.isSinglePieceInstruction() = this in listOf(
-        Action.BAJAR_LAPIZ,
-        Action.FUNCION,
-        Action.FUNCION_COMIENZO,
-        Action.FUNCION_FIN,
-        Action.LEVANTAR_LAPIZ,
-        Action.PROGRAMA_COMIENZO,
-        Action.PROGRAMA_FIN,
-        Action.REPETIR_COMIENZO,
-        Action.REPETIR_FIN,
-    )
 }
 
 sealed class State {

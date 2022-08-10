@@ -50,15 +50,10 @@ class GetInstructionsFromPieceNames @Inject constructor(
     private val piecesStateMachine: PiecesStateMachine
 ) {
     operator fun invoke(pieceNames: List<PieceName>): List<Instruction> {
-        val result = mutableListOf<Instruction>()
         for (pieceName in pieceNames) {
-            val action = pieceMapper.mapToAction(pieceName)
-            val modifier = pieceMapper.mapToModifier(pieceName)
-            val instruction = piecesStateMachine.consumePiece(action, modifier)
-            instruction?.let { result.add(it) }
+            pieceMapper.mapToAction(pieceName)?.let { piecesStateMachine.consumeAction(it) }
+            pieceMapper.mapToModifier(pieceName)?.let { piecesStateMachine.consumeModifier(it) }
         }
-        val lastInstruction = piecesStateMachine.finish()
-        lastInstruction?.let { result.add(it) }
-        return result
+        return piecesStateMachine.end()
     }
 }

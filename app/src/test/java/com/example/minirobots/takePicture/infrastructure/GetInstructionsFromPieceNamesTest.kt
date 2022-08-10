@@ -4,17 +4,25 @@ import com.example.minirobots.common.domain.Action
 import com.example.minirobots.common.domain.Instruction
 import com.example.minirobots.common.domain.Modifier
 import com.example.minirobots.instructionsList.domain.actions.GetAvailableModifiers
+import com.example.minirobots.instructionsList.domain.actions.IsSinglePieceInstruction
 import com.example.minirobots.takePicture.domain.entities.PieceName
 import com.example.minirobots.takePicture.domain.entities.PieceName.*
-import com.example.minirobots.takePicture.infrastructure.mapper.PieceNameMapper
 import com.example.minirobots.takePicture.infrastructure.mapper.GetInstructionsFromPieceNames
+import com.example.minirobots.takePicture.infrastructure.mapper.PieceNameMapper
 import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class GetInstructionsFromPieceNamesTest {
 
     private val getInstructionsFromPieceNames =
-        GetInstructionsFromPieceNames(PieceNameMapper(), PiecesStateMachine(CreateInstructionWithRandomModifier(), GetAvailableModifiers()))
+        GetInstructionsFromPieceNames(
+            PieceNameMapper(),
+            PiecesStateMachine(
+                CreateInstructionWithRandomModifier(),
+                GetAvailableModifiers(),
+                IsSinglePieceInstruction()
+            )
+        )
 
     @Test
     fun `empty piece names list`() {
@@ -140,18 +148,18 @@ class GetInstructionsFromPieceNamesTest {
         )
         assertInstructionListsAreEquals(expected, result)
     }
-//
-//    @Test
-//    fun `list with three instructions - action, single action, modifier, modifier, action`() {
-//        val namesList = listOf(GIRAR_DERECHA, BAJAR_LAPIZ, ANGULO_30, ANGULO_36, GIRAR_IZQUIERDA)
-//        val result = whenMappingPieceNames(namesList)
-//        val expected = listOf(
-//            Instruction(Action.BAJAR_LAPIZ, null),
-//            Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
-//            Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
-//        )
-//        assertInstructionListsAreEquals(expected, result)
-//    }
+
+    @Test
+    fun `list with three instructions - action, single action, modifier, modifier, action`() {
+        val namesList = listOf(GIRAR_DERECHA, BAJAR_LAPIZ, ANGULO_30, ANGULO_36, GIRAR_IZQUIERDA)
+        val result = whenMappingPieceNames(namesList)
+        val expected = listOf(
+            Instruction(Action.BAJAR_LAPIZ, null),
+            Instruction(Action.GIRAR_DERECHA, Modifier.ANGULO_30),
+            Instruction(Action.GIRAR_IZQUIERDA, Modifier.ANGULO_36),
+        )
+        assertInstructionListsAreEquals(expected, result)
+    }
 
     @Test
     fun `list with two instructions - modifier, single action, action, modifier, action`() {
@@ -170,8 +178,8 @@ class GetInstructionsFromPieceNamesTest {
         val namesList = listOf(TOCAR_MELODIA, BAJAR_LAPIZ)
         val result = whenMappingPieceNames(namesList)
         val expected = listOf(
-            Instruction(Action.TOCAR_MELODIA, Modifier.NOTA_AL_AZAR),
             Instruction(Action.BAJAR_LAPIZ, null),
+            Instruction(Action.TOCAR_MELODIA, Modifier.NOTA_AL_AZAR),
         )
         assertInstructionListsAreEquals(expected, result)
     }
@@ -219,8 +227,8 @@ class GetInstructionsFromPieceNamesTest {
         val expected = listOf(
             Instruction(Action.AVANZAR, Modifier.NUMERO_AL_AZAR),
             Instruction(Action.TOCAR_MELODIA, Modifier.NOTA_AL_AZAR),
-            Instruction(Action.LEDS, Modifier.COLOR_AL_AZAR),
             Instruction(Action.BAJAR_LAPIZ, null),
+            Instruction(Action.LEDS, Modifier.COLOR_AL_AZAR),
         )
         assertInstructionListsAreEquals(expected, result)
     }
