@@ -40,7 +40,9 @@ class PiecesStateMachine @Inject constructor(
     fun end(): List<Instruction> {
         (state as? StoredAction)?.action?.let { instructionList.add(createInstructionWithRandomModifier(it)) }
         state = Base
-        return instructionList
+        val result = instructionList.toList()
+        instructionList.clear()
+        return result
     }
 
     private fun goToBaseState(action: Action, modifier: Modifier) {

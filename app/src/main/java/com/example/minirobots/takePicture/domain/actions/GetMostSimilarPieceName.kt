@@ -18,6 +18,7 @@ class GetMostSimilarPieceName @Inject constructor(
 ) {
 
     operator fun invoke(text: String): PieceName? {
+        if (text.length <= 1) return null
         var mostSimilarPiece = MostSimilarPiece(null, Int.MAX_VALUE)
 
         for (piece in PieceName.values()) {
